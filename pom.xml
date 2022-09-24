@@ -10,7 +10,7 @@
 	</parent>
 	<groupId>com.inventorymanagementsystem</groupId>
 	<artifactId>InventoryManagementSystem</artifactId>
-	<version>0.0.1</version>
+	<version>1.0</version>
 	<name>InventoryManagementSystem</name>
 	<description>Inventory management system</description>
 	<properties>
