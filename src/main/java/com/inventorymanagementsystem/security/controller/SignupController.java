@@ -2,7 +2,7 @@ package com.inventorymanagementsystem.security.controller;
 
 import com.inventorymanagementsystem.exception.IncorrectEmailException;
 import com.inventorymanagementsystem.exception.MissedFirstOrLastNameException;
-import com.inventorymanagementsystem.model.ResponseMessageBody;
+import com.inventorymanagementsystem.model.ResponseBody;
 import com.inventorymanagementsystem.model.User;
 import com.inventorymanagementsystem.repository.UserRepository;
 import lombok.SneakyThrows;
@@ -30,23 +30,26 @@ public class SignupController {
     @PostMapping
     public ResponseEntity<?> signup(@RequestBody User user) {
         if (user.getEmail() == null || !user.hasValidEmail()) {
-            throw new IncorrectEmailException("Incorrect email");
+            throw new IncorrectEmailException("Incorrect email", "/signup");
         }
 
         if (userRepository.existsByEmail(user.getEmail())) {
-            throw new MissedFirstOrLastNameException(String.format("User with %s email already exists", user.getEmail()));
+            throw new MissedFirstOrLastNameException(String.format("User with %s email already exists", user.getEmail()),
+                    "/signup");
         }
 
         if (user.getFirstname() == null || user.getLastname() == null
                 || user.getFirstname().isEmpty() || user.getLastname().isBlank()) {
-            throw new MissedFirstOrLastNameException("Please enter your first and last names. One of them or both are empty");
+            throw new MissedFirstOrLastNameException("Please enter your first and last names. One of them or both are empty",
+                    "/signup");
         }
 
         user.setPassword(passwordEncoder.encode(user.getPassword()));
 
         userRepository.save(user);
 
-        ResponseMessageBody messageBody = new ResponseMessageBody(HttpStatus.CREATED.value(), "Signed up successfully");
+        ResponseBody messageBody = new ResponseBody(HttpStatus.CREATED.value(), "Signed up successfully",
+                "/signup");
 
         return new ResponseEntity<>(messageBody, HttpStatus.CREATED);
     }

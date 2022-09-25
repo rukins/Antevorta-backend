@@ -1,6 +1,6 @@
 package com.inventorymanagementsystem.exception;
 
-import com.inventorymanagementsystem.model.ResponseMessageBody;
+import com.inventorymanagementsystem.model.ResponseBody;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.AuthenticationEntryPoint;
@@ -15,7 +15,8 @@ public class CustomAuthenticationEntryPoint implements AuthenticationEntryPoint 
     @Override
     public void commence(HttpServletRequest request, HttpServletResponse response, AuthenticationException authException)
             throws IOException {
-        ResponseMessageBody messageBody = new ResponseMessageBody(HttpStatus.UNAUTHORIZED.value(), "Unauthorized");
+        ResponseBody messageBody = new ResponseBody(HttpStatus.UNAUTHORIZED.value(), "Unauthorized",
+                request.getRequestURI());
 
         response.setHeader("Content-Type", "application/json");
         response.setStatus(messageBody.getStatus());

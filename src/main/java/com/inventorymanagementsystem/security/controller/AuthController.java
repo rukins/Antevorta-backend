@@ -1,6 +1,6 @@
 package com.inventorymanagementsystem.security.controller;
 
-import com.inventorymanagementsystem.model.ResponseMessageBody;
+import com.inventorymanagementsystem.model.ResponseBody;
 import com.inventorymanagementsystem.security.model.UserCredentials;
 import com.inventorymanagementsystem.security.provider.CustomAuthenticationProvider;
 import org.springframework.http.HttpStatus;
@@ -38,18 +38,20 @@ public class AuthController {
 
         setSessionAuth(request.getSession(), auth);
 
-        ResponseMessageBody messageBody = new ResponseMessageBody(HttpStatus.OK.value(), "Logged in successfully");
+        ResponseBody responseBody = new ResponseBody(HttpStatus.OK.value(), "Logged in successfully",
+                "/auth/login");
 
-        return new ResponseEntity<>(messageBody, HttpStatus.OK);
+        return new ResponseEntity<>(responseBody, HttpStatus.OK);
     }
 
     @PostMapping("/logout")
     public ResponseEntity<?> logout(HttpServletRequest request) throws ServletException {
         request.logout();
 
-        ResponseMessageBody messageBody = new ResponseMessageBody(HttpStatus.OK.value(), "Logged out successfully");
+        ResponseBody responseBody = new ResponseBody(HttpStatus.OK.value(), "Logged out successfully",
+                "/auth/logout");
 
-        return new ResponseEntity<>(messageBody, HttpStatus.OK);
+        return new ResponseEntity<>(responseBody, HttpStatus.OK);
     }
 
     private void setSessionAuth(HttpSession session, Authentication auth) {

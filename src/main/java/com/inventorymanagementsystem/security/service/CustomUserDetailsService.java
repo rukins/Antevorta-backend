@@ -31,6 +31,6 @@ public class CustomUserDetailsService implements UserDetailsService {
             );
         }
 
-        throw new WrongLoginOrPasswordException(String.format("User with %s email is not found", email));
+        throw new WrongLoginOrPasswordException(String.format("User with %s email is not found", email), "/auth/login");
     }
 }
