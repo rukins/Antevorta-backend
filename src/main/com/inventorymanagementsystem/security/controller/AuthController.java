@@ -3,6 +3,7 @@ package com.inventorymanagementsystem.security.controller;
 import com.inventorymanagementsystem.model.ResponseBody;
 import com.inventorymanagementsystem.security.model.UserCredentials;
 import com.inventorymanagementsystem.security.provider.CustomAuthenticationProvider;
+import com.inventorymanagementsystem.utils.RequestPaths;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationProvider;
@@ -21,7 +22,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 @RestController
-@RequestMapping("/auth")
+@RequestMapping(RequestPaths.AUTH)
 public class AuthController {
     private final AuthenticationProvider authenticationProvider;
 
@@ -29,7 +30,7 @@ public class AuthController {
         this.authenticationProvider = authenticationProvider;
     }
 
-    @PostMapping("/login")
+    @PostMapping(RequestPaths.LOGIN)
     public ResponseEntity<?> login(@RequestBody UserCredentials userCredentials, HttpServletRequest request) {
         Authentication auth = authenticationProvider.authenticate(new UsernamePasswordAuthenticationToken(
                 userCredentials.getEmail(),
@@ -39,17 +40,17 @@ public class AuthController {
         setSessionAuth(request.getSession(), auth);
 
         ResponseBody responseBody = new ResponseBody(HttpStatus.OK.value(), "Logged in successfully",
-                "/auth/login");
+                RequestPaths.AUTH + RequestPaths.LOGIN);
 
         return new ResponseEntity<>(responseBody, HttpStatus.OK);
     }
 
-    @PostMapping("/logout")
+    @PostMapping(RequestPaths.LOGOUT)
     public ResponseEntity<?> logout(HttpServletRequest request) throws ServletException {
         request.logout();
 
         ResponseBody responseBody = new ResponseBody(HttpStatus.OK.value(), "Logged out successfully",
-                "/auth/logout");
+                RequestPaths.AUTH + RequestPaths.LOGOUT);
 
         return new ResponseEntity<>(responseBody, HttpStatus.OK);
     }

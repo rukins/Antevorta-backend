@@ -1,10 +1,11 @@
 package com.inventorymanagementsystem.security.controller;
 
-import com.inventorymanagementsystem.exception.IncorrectEmailException;
-import com.inventorymanagementsystem.exception.MissedFirstOrLastNameException;
+import com.inventorymanagementsystem.exception.globalexception.IncorrectEmailException;
+import com.inventorymanagementsystem.exception.globalexception.MissedFirstOrLastNameException;
 import com.inventorymanagementsystem.model.ResponseBody;
 import com.inventorymanagementsystem.model.User;
 import com.inventorymanagementsystem.repository.UserRepository;
+import com.inventorymanagementsystem.utils.RequestPaths;
 import lombok.SneakyThrows;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -15,7 +16,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/signup")
+@RequestMapping(RequestPaths.SIGHUP)
 public class SignupController {
     private final UserRepository userRepository;
 
@@ -30,18 +31,18 @@ public class SignupController {
     @PostMapping
     public ResponseEntity<?> signup(@RequestBody User user) {
         if (user.getEmail() == null || !user.hasValidEmail()) {
-            throw new IncorrectEmailException("Incorrect email", "/signup");
+            throw new IncorrectEmailException("Incorrect email", RequestPaths.SIGHUP);
         }
 
         if (userRepository.existsByEmail(user.getEmail())) {
             throw new MissedFirstOrLastNameException(String.format("User with %s email already exists", user.getEmail()),
-                    "/signup");
+                    RequestPaths.SIGHUP);
         }
 
         if (user.getFirstname() == null || user.getLastname() == null
-                || user.getFirstname().isEmpty() || user.getLastname().isBlank()) {
+                || user.getFirstname().isEmpty() || user.getLastname().isEmpty()) {
             throw new MissedFirstOrLastNameException("Please enter your first and last names. One of them or both are empty",
-                    "/signup");
+                    RequestPaths.SIGHUP);
         }
 
         user.setPassword(passwordEncoder.encode(user.getPassword()));
@@ -49,7 +50,7 @@ public class SignupController {
         userRepository.save(user);
 
         ResponseBody messageBody = new ResponseBody(HttpStatus.CREATED.value(), "Signed up successfully",
-                "/signup");
+                RequestPaths.SIGHUP);
 
         return new ResponseEntity<>(messageBody, HttpStatus.CREATED);
     }
