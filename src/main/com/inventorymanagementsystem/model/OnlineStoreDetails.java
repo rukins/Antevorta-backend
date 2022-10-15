@@ -22,11 +22,10 @@ public class OnlineStoreDetails {
     @ManyToOne(fetch = FetchType.LAZY)
     private User user;
 
-    public OnlineStoreDetails(String arbitraryStoreName, OnlineStoreType type, String storeName, String accessKey) {
+    public OnlineStoreDetails(String id, String arbitraryStoreName, OnlineStoreType type) {
+        this.id = id;
         this.arbitraryStoreName = arbitraryStoreName;
         this.type = type;
-        this.storeName = storeName;
-        this.accessKey = accessKey;
     }
 
     public void generateId(String userEmail) {

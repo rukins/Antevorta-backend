@@ -9,11 +9,11 @@ import java.util.List;
 
 @Repository
 public interface OnlineStoreRepository extends JpaRepository<OnlineStoreDetails, String> {
-    @Query("select new com.inventorymanagementsystem.model.OnlineStore(u.id, u.arbitraryStoreName, u.type) " +
+    @Query("select new com.inventorymanagementsystem.model.OnlineStoreDetails(u.id, u.arbitraryStoreName, u.type) " +
             "from OnlineStoreDetails u where u.user = ?1")
-    List<OnlineStore> findAllByUser(User user);
+    List<OnlineStoreDetails> findAllByUser(User user);
 
-    @Query("select new com.inventorymanagementsystem.model.OnlineStore(u.id, u.arbitraryStoreName, u.type) " +
+    @Query("select new com.inventorymanagementsystem.model.OnlineStoreDetails(u.id, u.arbitraryStoreName, u.type) " +
             "from OnlineStoreDetails u where u.user = ?1 and u.type = ?2")
-    List<OnlineStore> findAllByUserAndType(User user, OnlineStoreType type);
+    List<OnlineStoreDetails> findAllByUserAndType(User user, OnlineStoreType type);
 }

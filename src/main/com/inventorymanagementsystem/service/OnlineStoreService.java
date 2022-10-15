@@ -43,11 +43,11 @@ public class OnlineStoreService {
         onlineStoreRepository.save(onlineStore);
     }
 
-    public List<OnlineStore> getAllOnlineStoresOfCurrentUser() {
+    public List<OnlineStoreDetails> getAllOnlineStoresOfCurrentUser() {
         return onlineStoreRepository.findAllByUser(getCurrentUser());
     }
 
-    public List<OnlineStore> getAllOnlineStoresOfCurrentUserByType(OnlineStoreType type) {
+    public List<OnlineStoreDetails> getAllOnlineStoresOfCurrentUserByType(OnlineStoreType type) {
         return onlineStoreRepository.findAllByUserAndType(getCurrentUser(), type);
     }
 
@@ -63,7 +63,7 @@ public class OnlineStoreService {
     @SneakyThrows
     private void checkIfArbitraryStoreNameIsUnique(User user, String arbitraryName) {
         List<String> arbitraryStoreNamesList = onlineStoreRepository.findAllByUser(user).stream()
-                .map(OnlineStore::getArbitraryStoreName)
+                .map(OnlineStoreDetails::getArbitraryStoreName)
                 .toList();
 
         if (arbitraryStoreNamesList.contains(arbitraryName)) {
@@ -74,7 +74,7 @@ public class OnlineStoreService {
 
     @SneakyThrows
     private void checkIfUserHasOneOnlineStoreByType(User user, OnlineStoreType type) {
-        List<OnlineStore> onlineStoreProjectionList = onlineStoreRepository.findAllByUserAndType(user, type);
+        List<OnlineStoreDetails> onlineStoreProjectionList = onlineStoreRepository.findAllByUserAndType(user, type);
 
         if (onlineStoreProjectionList.size() == 1) {
             throw new MultipleOnlineStoresException(
