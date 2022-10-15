@@ -4,7 +4,7 @@ import com.inventorymanagementsystem.exception.globalexception.IncorrectEmailExc
 import com.inventorymanagementsystem.exception.globalexception.MissedFirstOrLastNameException;
 import com.inventorymanagementsystem.model.User;
 import com.inventorymanagementsystem.repository.UserRepository;
-import com.inventorymanagementsystem.utils.RequestPaths;
+import com.inventorymanagementsystem.utils.RequestUtils;
 import lombok.SneakyThrows;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -24,18 +24,18 @@ public class SignupService {
     @SneakyThrows
     public void signup(@RequestBody User user) {
         if (user.getEmail() == null || !user.hasValidEmail()) {
-            throw new IncorrectEmailException("Incorrect email", RequestPaths.SIGHUP);
+            throw new IncorrectEmailException("Incorrect email", RequestUtils.SIGHUP_PATH);
         }
 
         if (userRepository.existsByEmail(user.getEmail())) {
             throw new MissedFirstOrLastNameException(String.format("User with %s email already exists", user.getEmail()),
-                    RequestPaths.SIGHUP);
+                    RequestUtils.SIGHUP_PATH);
         }
 
         if (user.getFirstname() == null || user.getLastname() == null
                 || user.getFirstname().isEmpty() || user.getLastname().isEmpty()) {
             throw new MissedFirstOrLastNameException("Please enter your first and last names. One of them or both are empty",
-                    RequestPaths.SIGHUP);
+                    RequestUtils.SIGHUP_PATH);
         }
 
         user.setPassword(passwordEncoder.encode(user.getPassword()));

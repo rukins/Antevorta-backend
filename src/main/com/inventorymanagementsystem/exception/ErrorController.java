@@ -1,5 +1,9 @@
 package com.inventorymanagementsystem.exception;
 
+import com.inventorymanagementsystem.model.ResponseBody;
+import com.inventorymanagementsystem.utils.RequestUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.boot.autoconfigure.web.ServerProperties;
 import org.springframework.boot.autoconfigure.web.servlet.error.BasicErrorController;
 import org.springframework.boot.web.servlet.error.ErrorAttributes;
@@ -15,6 +19,8 @@ import java.util.Map;
 @Component
 public class ErrorController extends BasicErrorController {
 
+    private static final Logger logger = LoggerFactory.getLogger(ErrorController.class);
+
     public ErrorController(ErrorAttributes errorAttributes, ServerProperties serverProperties) {
         super(errorAttributes, serverProperties.getError());
     }
@@ -29,6 +35,10 @@ public class ErrorController extends BasicErrorController {
         body.put("status", status.value());
         body.put("message", status.toString());
         body.put("path", request.getRequestURI());
+
+        logger.debug(request.getMethod());
+        logger.debug(RequestUtils.getHeadersString(request));
+        logger.debug(new ResponseBody(status.value(), status.toString(), request.getRequestURI()).toString());
 
         return new ResponseEntity<>(body, status);
     }

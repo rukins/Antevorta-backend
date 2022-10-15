@@ -7,7 +7,7 @@ import com.inventorymanagementsystem.exception.globalexception.UserNotFoundExcep
 import com.inventorymanagementsystem.model.*;
 import com.inventorymanagementsystem.repository.OnlineStoreRepository;
 import com.inventorymanagementsystem.repository.UserRepository;
-import com.inventorymanagementsystem.utils.RequestPaths;
+import com.inventorymanagementsystem.utils.RequestUtils;
 import lombok.SneakyThrows;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
@@ -29,7 +29,7 @@ public class OnlineStoreService {
     @SneakyThrows
     public void addOnlineStoreToUser(OnlineStoreDetails onlineStore) {
         if (onlineStore.getArbitraryStoreName() == null || onlineStore.getArbitraryStoreName().isEmpty()) {
-            throw new EmptyArbitraryStoreNameException("Arbitrary store name shouldn't be empty", RequestPaths.ONLINE_STORES);
+            throw new EmptyArbitraryStoreNameException("Arbitrary store name shouldn't be empty", RequestUtils.ONLINE_STORES_PATH);
         }
 
         User user = getCurrentUser();
@@ -68,7 +68,7 @@ public class OnlineStoreService {
 
         if (arbitraryStoreNamesList.contains(arbitraryName)) {
             throw new ArbitraryStoreNameNotUniqueException(
-                    String.format("Store with %s arbitrary name already exists", arbitraryName), RequestPaths.ONLINE_STORES);
+                    String.format("Store with %s arbitrary name already exists", arbitraryName), RequestUtils.ONLINE_STORES_PATH);
         }
     }
 
@@ -78,7 +78,7 @@ public class OnlineStoreService {
 
         if (onlineStoreProjectionList.size() == 1) {
             throw new MultipleOnlineStoresException(
-                    String.format("Store with %s type already exists", type), RequestPaths.ONLINE_STORES);
+                    String.format("Store with %s type already exists", type), RequestUtils.ONLINE_STORES_PATH);
         }
     }
 }

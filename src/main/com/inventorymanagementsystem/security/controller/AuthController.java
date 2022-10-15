@@ -3,7 +3,9 @@ package com.inventorymanagementsystem.security.controller;
 import com.inventorymanagementsystem.model.ResponseBody;
 import com.inventorymanagementsystem.security.model.UserCredentials;
 import com.inventorymanagementsystem.security.service.AuthService;
-import com.inventorymanagementsystem.utils.RequestPaths;
+import com.inventorymanagementsystem.utils.RequestUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -15,31 +17,41 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 
 @RestController
-@RequestMapping(RequestPaths.AUTH)
+@RequestMapping(RequestUtils.AUTH_PATH)
 public class AuthController {
+    private static final Logger logger = LoggerFactory.getLogger(AuthController.class);
+
     private final AuthService authService;
 
     public AuthController(AuthService authService) {
         this.authService = authService;
     }
 
-    @PostMapping(RequestPaths.LOGIN)
+    @PostMapping(RequestUtils.LOGIN_PATH)
     public ResponseEntity<?> login(@RequestBody UserCredentials userCredentials, HttpServletRequest request) {
         authService.login(userCredentials, request);
 
-        ResponseBody responseBody = new ResponseBody(HttpStatus.OK.value(), "Logged in successfully",
-                RequestPaths.AUTH + RequestPaths.LOGIN);
+        ResponseBody body = new ResponseBody(HttpStatus.OK.value(), "Logged in successfully",
+                RequestUtils.AUTH_PATH + RequestUtils.LOGIN_PATH);
 
-        return new ResponseEntity<>(responseBody, HttpStatus.OK);
+        logger.debug(request.getMethod());
+        logger.debug(RequestUtils.getHeadersString(request));
+        logger.debug(body.toString());
+
+        return new ResponseEntity<>(body, HttpStatus.OK);
     }
 
-    @PostMapping(RequestPaths.LOGOUT)
+    @PostMapping(RequestUtils.LOGOUT_PATH)
     public ResponseEntity<?> logout(HttpServletRequest request) throws ServletException {
         authService.logout(request);
 
-        ResponseBody responseBody = new ResponseBody(HttpStatus.OK.value(), "Logged out successfully",
-                RequestPaths.AUTH + RequestPaths.LOGOUT);
+        ResponseBody body = new ResponseBody(HttpStatus.OK.value(), "Logged out successfully",
+                RequestUtils.AUTH_PATH + RequestUtils.LOGOUT_PATH);
 
-        return new ResponseEntity<>(responseBody, HttpStatus.OK);
+        logger.debug(request.getMethod());
+        logger.debug(RequestUtils.getHeadersString(request));
+        logger.debug(body.toString());
+
+        return new ResponseEntity<>(body, HttpStatus.OK);
     }
 }
