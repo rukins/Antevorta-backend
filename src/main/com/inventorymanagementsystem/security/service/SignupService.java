@@ -4,9 +4,9 @@ import com.inventorymanagementsystem.exception.globalexception.IncorrectEmailExc
 import com.inventorymanagementsystem.exception.globalexception.MissedFirstOrLastNameException;
 import com.inventorymanagementsystem.model.User;
 import com.inventorymanagementsystem.repository.UserRepository;
+import com.inventorymanagementsystem.security.encryptor.Encryptor;
 import com.inventorymanagementsystem.utils.RequestUtils;
 import lombok.SneakyThrows;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RequestBody;
 
@@ -14,11 +14,11 @@ import org.springframework.web.bind.annotation.RequestBody;
 public class SignupService {
     private final UserRepository userRepository;
 
-    private final PasswordEncoder passwordEncoder;
+    private final Encryptor encryptor;
 
-    public SignupService(UserRepository userRepository, PasswordEncoder passwordEncoder) {
+    public SignupService(UserRepository userRepository, Encryptor encryptor) {
         this.userRepository = userRepository;
-        this.passwordEncoder = passwordEncoder;
+        this.encryptor = encryptor;
     }
 
     @SneakyThrows
@@ -38,7 +38,7 @@ public class SignupService {
                     RequestUtils.SIGHUP_PATH);
         }
 
-        user.setPassword(passwordEncoder.encode(user.getPassword()));
+        user.setPassword(encryptor.encrypt(user.getPassword()));
 
         userRepository.save(user);
     }

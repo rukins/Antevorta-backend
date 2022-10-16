@@ -4,9 +4,12 @@ import com.inventorymanagementsystem.exception.globalexception.ArbitraryStoreNam
 import com.inventorymanagementsystem.exception.globalexception.EmptyArbitraryStoreNameException;
 import com.inventorymanagementsystem.exception.globalexception.MultipleOnlineStoresException;
 import com.inventorymanagementsystem.exception.globalexception.UserNotFoundException;
-import com.inventorymanagementsystem.model.*;
+import com.inventorymanagementsystem.model.OnlineStoreDetails;
+import com.inventorymanagementsystem.model.OnlineStoreType;
+import com.inventorymanagementsystem.model.User;
 import com.inventorymanagementsystem.repository.OnlineStoreRepository;
 import com.inventorymanagementsystem.repository.UserRepository;
+import com.inventorymanagementsystem.security.encryptor.Encryptor;
 import com.inventorymanagementsystem.utils.RequestUtils;
 import lombok.SneakyThrows;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -19,13 +22,14 @@ import java.util.Optional;
 public class OnlineStoreService {
     private final OnlineStoreRepository onlineStoreRepository;
     private final UserRepository userRepository;
+    private final Encryptor encryptor;
 
-    public OnlineStoreService(OnlineStoreRepository onlineStoreRepository, UserRepository userRepository) {
+    public OnlineStoreService(OnlineStoreRepository onlineStoreRepository, UserRepository userRepository, Encryptor encryptor) {
         this.onlineStoreRepository = onlineStoreRepository;
         this.userRepository = userRepository;
+        this.encryptor = encryptor;
     }
 
-    // TODO: add encrypting of store accessKey
     @SneakyThrows
     public void addOnlineStoreToUser(OnlineStoreDetails onlineStore) {
         if (onlineStore.getArbitraryStoreName() == null || onlineStore.getArbitraryStoreName().isEmpty()) {
@@ -38,6 +42,7 @@ public class OnlineStoreService {
         checkIfArbitraryStoreNameIsUnique(user, onlineStore.getArbitraryStoreName());
 
         onlineStore.setUser(user);
+        onlineStore.setAccessKey(encryptor.encrypt(onlineStore.getAccessKey()));
         onlineStore.generateId(user.getEmail());
 
         onlineStoreRepository.save(onlineStore);

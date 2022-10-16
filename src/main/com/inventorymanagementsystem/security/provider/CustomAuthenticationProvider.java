@@ -1,6 +1,7 @@
 package com.inventorymanagementsystem.security.provider;
 
 import com.inventorymanagementsystem.exception.authexception.WrongLoginOrPasswordException;
+import com.inventorymanagementsystem.security.encryptor.Encryptor;
 import com.inventorymanagementsystem.security.service.CustomUserDetailsService;
 import com.inventorymanagementsystem.utils.RequestUtils;
 import lombok.SneakyThrows;
@@ -8,17 +9,15 @@ import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
  @Component
 public class CustomAuthenticationProvider implements AuthenticationProvider {
-
-    private final PasswordEncoder passwordEncoder;
+    private final Encryptor encryptor;
     private final CustomUserDetailsService userDetailsService;
 
-    public CustomAuthenticationProvider(PasswordEncoder passwordEncoder, CustomUserDetailsService userDetailsService) {
-        this.passwordEncoder = passwordEncoder;
+    public CustomAuthenticationProvider(Encryptor encryptor, CustomUserDetailsService userDetailsService) {
+        this.encryptor = encryptor;
         this.userDetailsService = userDetailsService;
     }
 
@@ -30,7 +29,7 @@ public class CustomAuthenticationProvider implements AuthenticationProvider {
 
         UserDetails user = userDetailsService.loadUserByUsername(username);
 
-        if (!passwordEncoder.matches(password, user.getPassword())) {
+        if (!encryptor.matches(password, user.getPassword())) {
             throw new WrongLoginOrPasswordException("Wrong password", RequestUtils.AUTH_PATH + RequestUtils.LOGIN_PATH);
         }
 
