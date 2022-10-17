@@ -28,7 +28,7 @@ public class SignupService {
         }
 
         if (userRepository.existsByEmail(user.getEmail())) {
-            throw new MissedFirstOrLastNameException(String.format("User with %s email already exists", user.getEmail()),
+            throw new MissedFirstOrLastNameException(String.format("User with '%s' email already exists", user.getEmail()),
                     RequestUtils.SIGHUP_PATH);
         }
 

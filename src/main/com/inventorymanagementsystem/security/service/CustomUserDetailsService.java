@@ -32,7 +32,7 @@ public class CustomUserDetailsService implements UserDetailsService {
             );
         }
 
-        throw new WrongLoginOrPasswordException(String.format("User with %s email is not found", email),
+        throw new WrongLoginOrPasswordException(String.format("User with '%s' email is not found", email),
                 RequestUtils.AUTH_PATH + RequestUtils.LOGIN_PATH);
     }
 }

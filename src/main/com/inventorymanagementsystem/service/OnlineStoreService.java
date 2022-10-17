@@ -3,7 +3,7 @@ package com.inventorymanagementsystem.service;
 import com.inventorymanagementsystem.exception.globalexception.ArbitraryStoreNameNotUniqueException;
 import com.inventorymanagementsystem.exception.globalexception.EmptyArbitraryStoreNameException;
 import com.inventorymanagementsystem.exception.globalexception.MultipleOnlineStoresException;
-import com.inventorymanagementsystem.exception.globalexception.UserNotFoundException;
+import com.inventorymanagementsystem.exception.globalexception.EntityNotFoundException;
 import com.inventorymanagementsystem.model.OnlineStoreDetails;
 import com.inventorymanagementsystem.model.OnlineStoreType;
 import com.inventorymanagementsystem.model.User;
@@ -30,6 +30,14 @@ public class OnlineStoreService {
         this.encryptor = encryptor;
     }
 
+    public List<OnlineStoreDetails> getAllOnlineStoresOfCurrentUser() {
+        return onlineStoreRepository.findAllByUser(getCurrentUser());
+    }
+
+    public List<OnlineStoreDetails> getAllOnlineStoresOfCurrentUserByType(OnlineStoreType type) {
+        return onlineStoreRepository.findAllByUserAndType(getCurrentUser(), type);
+    }
+
     @SneakyThrows
     public void addOnlineStoreToUser(OnlineStoreDetails onlineStore) {
         if (onlineStore.getArbitraryStoreName() == null || onlineStore.getArbitraryStoreName().isEmpty()) {
@@ -48,12 +56,43 @@ public class OnlineStoreService {
         onlineStoreRepository.save(onlineStore);
     }
 
-    public List<OnlineStoreDetails> getAllOnlineStoresOfCurrentUser() {
-        return onlineStoreRepository.findAllByUser(getCurrentUser());
+    @SneakyThrows
+    public void updateOnlineStoreName(String currentName, String newName) {
+        if (newName == null || newName.isEmpty()) {
+            throw new EmptyArbitraryStoreNameException("Arbitrary store name shouldn't be empty",
+                    RequestUtils.ONLINE_STORES_PATH + "/" + currentName);
+        }
+
+        User user = getCurrentUser();
+
+        Optional<OnlineStoreDetails> onlineStoreDetails = onlineStoreRepository.findByArbitraryStoreNameAndUser(currentName, user);
+
+        if (onlineStoreDetails.isPresent()) {
+            onlineStoreDetails.get().setArbitraryStoreName(newName);
+
+            onlineStoreRepository.save(onlineStoreDetails.get());
+
+            return;
+        }
+
+        throw new EntityNotFoundException(String.format("Online store with '%s' name not found", currentName),
+                RequestUtils.ONLINE_STORES_PATH + "/" + currentName);
     }
 
-    public List<OnlineStoreDetails> getAllOnlineStoresOfCurrentUserByType(OnlineStoreType type) {
-        return onlineStoreRepository.findAllByUserAndType(getCurrentUser(), type);
+    @SneakyThrows
+    public void deleteOnlineStoreByName(String name) {
+        User user = getCurrentUser();
+
+        Optional<OnlineStoreDetails> onlineStoreDetails = onlineStoreRepository.findByArbitraryStoreNameAndUser(name, user);
+
+        if (onlineStoreDetails.isPresent()) {
+            onlineStoreRepository.delete(onlineStoreDetails.get());
+
+            return;
+        }
+
+        throw new EntityNotFoundException(String.format("Online store with '%s' name not found", name),
+                RequestUtils.ONLINE_STORES_PATH + "/" + name);
     }
 
     @SneakyThrows
@@ -62,7 +101,7 @@ public class OnlineStoreService {
 
         Optional<User> user = userRepository.findByEmail(email);
 
-        return user.orElseThrow(() -> new UserNotFoundException("User not found", "/"));
+        return user.orElseThrow(() -> new EntityNotFoundException("User not found", "/"));
     }
 
     @SneakyThrows
@@ -73,7 +112,7 @@ public class OnlineStoreService {
 
         if (arbitraryStoreNamesList.contains(arbitraryName)) {
             throw new ArbitraryStoreNameNotUniqueException(
-                    String.format("Store with %s arbitrary name already exists", arbitraryName), RequestUtils.ONLINE_STORES_PATH);
+                    String.format("Store with '%s' arbitrary name already exists", arbitraryName), RequestUtils.ONLINE_STORES_PATH);
         }
     }
 
@@ -83,7 +122,7 @@ public class OnlineStoreService {
 
         if (onlineStoreProjectionList.size() == 1) {
             throw new MultipleOnlineStoresException(
-                    String.format("Store with %s type already exists", type), RequestUtils.ONLINE_STORES_PATH);
+                    String.format("Store with '%s' type already exists", type), RequestUtils.ONLINE_STORES_PATH);
         }
     }
 }

@@ -26,20 +26,6 @@ public class OnlineStoreController {
         this.onlineStoreService = onlineStoreService;
     }
 
-    @PostMapping("")
-    public ResponseEntity<?> addOnlineStoreToUser(@RequestBody OnlineStoreDetails onlineStoreDetails, HttpServletRequest request) {
-        onlineStoreService.addOnlineStoreToUser(onlineStoreDetails);
-
-        ResponseBody body = new ResponseBody(HttpStatus.CREATED.value(), "Online store successfully added",
-                RequestUtils.ONLINE_STORES_PATH);
-
-        logger.debug(request.getMethod());
-        logger.debug(RequestUtils.getHeadersString(request));
-        logger.debug(body.toString());
-
-        return new ResponseEntity<>(body, HttpStatus.CREATED);
-    }
-
     @GetMapping("")
     public ResponseEntity<?> getAllOnlineStoresOfCurrentUser(HttpServletRequest request) {
         String body = OnlineStoreJsonUtils.getString(onlineStoreService.getAllOnlineStoresOfCurrentUser());
@@ -63,5 +49,42 @@ public class OnlineStoreController {
         logger.debug(body);
 
         return ResponseEntity.status(HttpStatus.OK).header(HttpHeaders.CONTENT_TYPE, "application/json").body(body);
+    }
+
+    @PostMapping("")
+    public ResponseEntity<?> addOnlineStoreToUser(@RequestBody OnlineStoreDetails onlineStoreDetails, HttpServletRequest request) {
+        onlineStoreService.addOnlineStoreToUser(onlineStoreDetails);
+
+        ResponseBody body = new ResponseBody(HttpStatus.CREATED.value(),
+                String.format("Online store '%s' successfully added", onlineStoreDetails.getArbitraryStoreName()),
+                RequestUtils.ONLINE_STORES_PATH);
+
+        logger.debug(request.getMethod());
+        logger.debug(RequestUtils.getHeadersString(request));
+        logger.debug(body.toString());
+
+        return new ResponseEntity<>(body, HttpStatus.CREATED);
+    }
+
+    @PutMapping("/{currentName}")
+    public ResponseEntity<?> updateOnlineStoreName(@PathVariable String currentName, @RequestParam String newName) {
+        onlineStoreService.updateOnlineStoreName(currentName, newName);
+
+        ResponseBody body = new ResponseBody(HttpStatus.CREATED.value(),
+                String.format("Name '%s' of online store successfully updated to '%s'", currentName, newName),
+                RequestUtils.ONLINE_STORES_PATH + "/" + currentName);
+
+        return new ResponseEntity<>(body, HttpStatus.OK);
+    }
+
+    @DeleteMapping("/{name}")
+    public ResponseEntity<?> deleteOnlineStoreByName(@PathVariable String name) {
+        onlineStoreService.deleteOnlineStoreByName(name);
+
+        ResponseBody body = new ResponseBody(HttpStatus.CREATED.value(),
+                String.format("Online store '%s' successfully deleted", name),
+                RequestUtils.ONLINE_STORES_PATH + "/" + name);
+
+        return new ResponseEntity<>(body, HttpStatus.OK);
     }
 }

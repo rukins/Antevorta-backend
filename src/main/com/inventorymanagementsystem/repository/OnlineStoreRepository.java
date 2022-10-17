@@ -6,6 +6,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface OnlineStoreRepository extends JpaRepository<OnlineStoreDetails, String> {
@@ -16,4 +17,6 @@ public interface OnlineStoreRepository extends JpaRepository<OnlineStoreDetails,
     @Query("select new com.inventorymanagementsystem.model.OnlineStoreDetails(u.id, u.arbitraryStoreName, u.type) " +
             "from OnlineStoreDetails u where u.user = ?1 and u.type = ?2")
     List<OnlineStoreDetails> findAllByUserAndType(User user, OnlineStoreType type);
+
+    Optional<OnlineStoreDetails> findByArbitraryStoreNameAndUser(String arbitraryStoreName, User user);
 }
