@@ -3,7 +3,6 @@ package com.inventorymanagementsystem.security.provider;
 import com.inventorymanagementsystem.exception.authexception.WrongLoginOrPasswordException;
 import com.inventorymanagementsystem.security.encryptor.Encryptor;
 import com.inventorymanagementsystem.security.service.CustomUserDetailsService;
-import com.inventorymanagementsystem.utils.RequestUtils;
 import lombok.SneakyThrows;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -30,7 +29,7 @@ public class CustomAuthenticationProvider implements AuthenticationProvider {
         UserDetails user = userDetailsService.loadUserByUsername(username);
 
         if (!encryptor.matches(password, user.getPassword())) {
-            throw new WrongLoginOrPasswordException("Wrong password", RequestUtils.AUTH_PATH + RequestUtils.LOGIN_PATH);
+            throw new WrongLoginOrPasswordException("Wrong password");
         }
 
         return new UsernamePasswordAuthenticationToken(username, password, user.getAuthorities());

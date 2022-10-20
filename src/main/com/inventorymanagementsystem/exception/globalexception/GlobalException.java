@@ -4,11 +4,7 @@ import lombok.Getter;
 
 @Getter
 public class GlobalException extends Exception {
-    private final String path;
-
-    public GlobalException(String message, String path) {
+    public GlobalException(String message) {
         super(message);
-
-        this.path = path;
     }
 }

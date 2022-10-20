@@ -2,15 +2,14 @@ package com.inventorymanagementsystem.service;
 
 import com.inventorymanagementsystem.exception.globalexception.ArbitraryStoreNameNotUniqueException;
 import com.inventorymanagementsystem.exception.globalexception.EmptyArbitraryStoreNameException;
-import com.inventorymanagementsystem.exception.globalexception.MultipleOnlineStoresException;
 import com.inventorymanagementsystem.exception.globalexception.EntityNotFoundException;
+import com.inventorymanagementsystem.exception.globalexception.MultipleOnlineStoresException;
 import com.inventorymanagementsystem.model.OnlineStoreDetails;
 import com.inventorymanagementsystem.model.OnlineStoreType;
 import com.inventorymanagementsystem.model.User;
 import com.inventorymanagementsystem.repository.OnlineStoreRepository;
 import com.inventorymanagementsystem.repository.UserRepository;
 import com.inventorymanagementsystem.security.encryptor.Encryptor;
-import com.inventorymanagementsystem.utils.RequestUtils;
 import lombok.SneakyThrows;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
@@ -40,12 +39,12 @@ public class OnlineStoreService {
 
     @SneakyThrows
     public void addOnlineStoreToUser(OnlineStoreDetails onlineStore) {
-        checkIfArbitraryStoreNameIsNotNull(onlineStore.getArbitraryStoreName(), RequestUtils.ONLINE_STORES_PATH);
+        checkIfArbitraryStoreNameIsNotNull(onlineStore.getArbitraryStoreName());
 
         User user = getCurrentUser();
 
         checkIfUserHasOneOnlineStoreByType(user, onlineStore.getType());
-        checkIfArbitraryStoreNameIsUnique(user, onlineStore.getArbitraryStoreName(), RequestUtils.ONLINE_STORES_PATH);
+        checkIfArbitraryStoreNameIsUnique(user, onlineStore.getArbitraryStoreName());
 
         onlineStore.setUser(user);
         onlineStore.setAccessKey(encryptor.encrypt(onlineStore.getAccessKey()));
@@ -56,11 +55,11 @@ public class OnlineStoreService {
 
     @SneakyThrows
     public void updateOnlineStoreName(String currentName, String newName) {
-        checkIfArbitraryStoreNameIsNotNull(newName, RequestUtils.ONLINE_STORES_PATH + "/" + currentName + "?newName=" + newName);
+        checkIfArbitraryStoreNameIsNotNull(newName);
 
         User user = getCurrentUser();
 
-        checkIfArbitraryStoreNameIsUnique(user, newName, RequestUtils.ONLINE_STORES_PATH + "/" + currentName + "?newName=" + newName);
+        checkIfArbitraryStoreNameIsUnique(user, newName);
 
         Optional<OnlineStoreDetails> onlineStoreDetails = onlineStoreRepository.findByArbitraryStoreNameAndUser(currentName, user);
 
@@ -72,8 +71,7 @@ public class OnlineStoreService {
             return;
         }
 
-        throw new EntityNotFoundException(String.format("Online store with '%s' name not found", currentName),
-                RequestUtils.ONLINE_STORES_PATH + "/" + currentName + "?newName=" + newName);
+        throw new EntityNotFoundException(String.format("Online store with '%s' name not found", currentName));
     }
 
     @SneakyThrows
@@ -88,8 +86,7 @@ public class OnlineStoreService {
             return;
         }
 
-        throw new EntityNotFoundException(String.format("Online store with '%s' name not found", name),
-                RequestUtils.ONLINE_STORES_PATH + "/" + name);
+        throw new EntityNotFoundException(String.format("Online store with '%s' name not found", name));
     }
 
     @SneakyThrows
@@ -98,25 +95,25 @@ public class OnlineStoreService {
 
         Optional<User> user = userRepository.findByEmail(email);
 
-        return user.orElseThrow(() -> new EntityNotFoundException("User not found", "/"));
+        return user.orElseThrow(() -> new EntityNotFoundException("User not found"));
     }
 
     @SneakyThrows
-    private void checkIfArbitraryStoreNameIsNotNull(String arbitraryStoreName, String path) {
+    private void checkIfArbitraryStoreNameIsNotNull(String arbitraryStoreName) {
         if (arbitraryStoreName == null || arbitraryStoreName.isEmpty()) {
-            throw new EmptyArbitraryStoreNameException("Arbitrary store name shouldn't be empty", path);
+            throw new EmptyArbitraryStoreNameException("Arbitrary store name shouldn't be empty");
         }
     }
 
     @SneakyThrows
-    private void checkIfArbitraryStoreNameIsUnique(User user, String arbitraryName, String path) {
+    private void checkIfArbitraryStoreNameIsUnique(User user, String arbitraryName) {
         List<String> arbitraryStoreNamesList = onlineStoreRepository.findAllByUser(user).stream()
                 .map(OnlineStoreDetails::getArbitraryStoreName)
                 .toList();
 
         if (arbitraryStoreNamesList.contains(arbitraryName)) {
             throw new ArbitraryStoreNameNotUniqueException(
-                    String.format("Store with '%s' arbitrary name already exists", arbitraryName), path);
+                    String.format("Store with '%s' arbitrary name already exists", arbitraryName));
         }
     }
 
@@ -125,8 +122,7 @@ public class OnlineStoreService {
         List<OnlineStoreDetails> onlineStoreProjectionList = onlineStoreRepository.findAllByUserAndType(user, type);
 
         if (onlineStoreProjectionList.size() == 1) {
-            throw new MultipleOnlineStoresException(
-                    String.format("Store with '%s' type already exists", type), RequestUtils.ONLINE_STORES_PATH);
+            throw new MultipleOnlineStoresException(String.format("Store with '%s' type already exists", type));
         }
     }
 }

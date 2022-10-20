@@ -20,7 +20,7 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler({AuthException.class})
     public ResponseEntity<?> handleWrongLoginOrPasswordException(AuthException ex, HttpServletRequest request) {
-        ResponseBody body = new ResponseBody(HttpStatus.UNAUTHORIZED.value(), ex.getMessage(), ex.getPath());
+        ResponseBody body = new ResponseBody(HttpStatus.UNAUTHORIZED.value(), ex.getMessage());
 
         logger.debug(request.getMethod());
         logger.debug(RequestUtils.getHeadersString(request));
@@ -31,7 +31,7 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler({GlobalException.class})
     public ResponseEntity<?> handleGlobalException(GlobalException ex, HttpServletRequest request) {
-        ResponseBody body = new ResponseBody(HttpStatus.BAD_REQUEST.value(), ex.getMessage(), ex.getPath());
+        ResponseBody body = new ResponseBody(HttpStatus.BAD_REQUEST.value(), ex.getMessage());
 
         logger.debug(request.getMethod());
         logger.debug(RequestUtils.getHeadersString(request));

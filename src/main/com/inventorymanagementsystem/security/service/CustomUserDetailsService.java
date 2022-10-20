@@ -3,7 +3,6 @@ package com.inventorymanagementsystem.security.service;
 import com.inventorymanagementsystem.exception.authexception.WrongLoginOrPasswordException;
 import com.inventorymanagementsystem.model.User;
 import com.inventorymanagementsystem.repository.UserRepository;
-import com.inventorymanagementsystem.utils.RequestUtils;
 import lombok.SneakyThrows;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -32,7 +31,6 @@ public class CustomUserDetailsService implements UserDetailsService {
             );
         }
 
-        throw new WrongLoginOrPasswordException(String.format("User with '%s' email is not found", email),
-                RequestUtils.AUTH_PATH + RequestUtils.LOGIN_PATH);
+        throw new WrongLoginOrPasswordException(String.format("User with '%s' email is not found", email));
     }
 }

@@ -4,11 +4,7 @@ import lombok.Getter;
 
 @Getter
 public class AuthException extends Exception {
-    private final String path;
-
-    public AuthException(String message, String path) {
+    public AuthException(String message) {
         super(message);
-
-        this.path = path;
     }
 }

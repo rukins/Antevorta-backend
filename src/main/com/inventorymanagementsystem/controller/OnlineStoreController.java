@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpServletRequest;
 
 @RestController
-@RequestMapping(RequestUtils.ONLINE_STORES_PATH)
+@RequestMapping("/onlinestores")
 public class OnlineStoreController {
     private static final Logger logger = LoggerFactory.getLogger(OnlineStoreController.class);
 
@@ -56,8 +56,7 @@ public class OnlineStoreController {
         onlineStoreService.addOnlineStoreToUser(onlineStoreDetails);
 
         ResponseBody body = new ResponseBody(HttpStatus.CREATED.value(),
-                String.format("Online store '%s' successfully added", onlineStoreDetails.getArbitraryStoreName()),
-                RequestUtils.ONLINE_STORES_PATH);
+                String.format("Online store '%s' successfully added", onlineStoreDetails.getArbitraryStoreName()));
 
         logger.debug(request.getMethod());
         logger.debug(RequestUtils.getHeadersString(request));
@@ -71,8 +70,7 @@ public class OnlineStoreController {
         onlineStoreService.updateOnlineStoreName(currentName, newName);
 
         ResponseBody body = new ResponseBody(HttpStatus.OK.value(),
-                String.format("Name '%s' of online store successfully updated to '%s'", currentName, newName),
-                RequestUtils.ONLINE_STORES_PATH + "/" + currentName + "?newName=" + newName);
+                String.format("Name '%s' of online store successfully updated to '%s'", currentName, newName));
 
         return new ResponseEntity<>(body, HttpStatus.OK);
     }
@@ -81,9 +79,7 @@ public class OnlineStoreController {
     public ResponseEntity<?> deleteOnlineStoreByName(@PathVariable String name) {
         onlineStoreService.deleteOnlineStoreByName(name);
 
-        ResponseBody body = new ResponseBody(HttpStatus.OK.value(),
-                String.format("Online store '%s' successfully deleted", name),
-                RequestUtils.ONLINE_STORES_PATH + "/" + name);
+        ResponseBody body = new ResponseBody(HttpStatus.OK.value(), String.format("Online store '%s' successfully deleted", name));
 
         return new ResponseEntity<>(body, HttpStatus.OK);
     }

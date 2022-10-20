@@ -6,13 +6,6 @@ import java.util.Iterator;
 import java.util.Map;
 
 public class RequestUtils {
-    public final static String AUTH_PATH = "/auth";
-    public final static String LOGIN_PATH = "/login";
-    public final static String LOGOUT_PATH = "/logout";
-    public final static String SIGHUP_PATH = "/signup";
-    public final static String ONLINE_STORES_PATH = "/onlinestores";
-    public final static String PRODUCTS_PATH = "/products";
-
     public static String getHeadersString(HttpServletRequest request) {
         Map<String, String> headersList = new HashMap<>();
 

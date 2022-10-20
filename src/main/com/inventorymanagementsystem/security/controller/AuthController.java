@@ -17,7 +17,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 
 @RestController
-@RequestMapping(RequestUtils.AUTH_PATH)
+@RequestMapping("/auth")
 public class AuthController {
     private static final Logger logger = LoggerFactory.getLogger(AuthController.class);
 
@@ -27,12 +27,11 @@ public class AuthController {
         this.authService = authService;
     }
 
-    @PostMapping(RequestUtils.LOGIN_PATH)
+    @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody UserCredentials userCredentials, HttpServletRequest request) {
         authService.login(userCredentials, request);
 
-        ResponseBody body = new ResponseBody(HttpStatus.OK.value(), "Logged in successfully",
-                RequestUtils.AUTH_PATH + RequestUtils.LOGIN_PATH);
+        ResponseBody body = new ResponseBody(HttpStatus.OK.value(), "Logged in successfully");
 
         logger.debug(request.getMethod());
         logger.debug(RequestUtils.getHeadersString(request));
@@ -41,12 +40,11 @@ public class AuthController {
         return new ResponseEntity<>(body, HttpStatus.OK);
     }
 
-    @PostMapping(RequestUtils.LOGOUT_PATH)
+    @PostMapping("/logout")
     public ResponseEntity<?> logout(HttpServletRequest request) throws ServletException {
         authService.logout(request);
 
-        ResponseBody body = new ResponseBody(HttpStatus.OK.value(), "Logged out successfully",
-                RequestUtils.AUTH_PATH + RequestUtils.LOGOUT_PATH);
+        ResponseBody body = new ResponseBody(HttpStatus.OK.value(), "Logged out successfully");
 
         logger.debug(request.getMethod());
         logger.debug(RequestUtils.getHeadersString(request));

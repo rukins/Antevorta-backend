@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 import javax.servlet.http.HttpServletRequest;
 
 @RestController
-@RequestMapping(RequestUtils.SIGHUP_PATH)
+@RequestMapping("/signup")
 public class SignupController {
     private static final Logger logger = LoggerFactory.getLogger(AuthController.class);
     private final SignupService signupService;
@@ -29,8 +29,7 @@ public class SignupController {
     public ResponseEntity<?> signup(@RequestBody User user, HttpServletRequest request) {
         signupService.signup(user);
 
-        ResponseBody body = new ResponseBody(HttpStatus.CREATED.value(), "Signed up successfully",
-                RequestUtils.SIGHUP_PATH);
+        ResponseBody body = new ResponseBody(HttpStatus.CREATED.value(), "Signed up successfully");
 
         logger.debug(request.getMethod());
         logger.debug(RequestUtils.getHeadersString(request));

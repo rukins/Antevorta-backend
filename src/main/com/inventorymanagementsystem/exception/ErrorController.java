@@ -34,11 +34,10 @@ public class ErrorController extends BasicErrorController {
 
         body.put("status", status.value());
         body.put("message", status.toString());
-        body.put("path", request.getRequestURI());
 
         logger.debug(request.getMethod());
         logger.debug(RequestUtils.getHeadersString(request));
-        logger.debug(new ResponseBody(status.value(), status.toString(), request.getRequestURI()).toString());
+        logger.debug(new ResponseBody(status.value(), status.toString()).toString());
 
         return new ResponseEntity<>(body, status);
     }
