@@ -1,6 +1,6 @@
 package com.inventorymanagementsystem.security.service;
 
-import com.inventorymanagementsystem.exception.globalexception.IncorrectEmailException;
+import com.inventorymanagementsystem.exception.globalexception.EntityAlreadyExistsException;
 import com.inventorymanagementsystem.exception.globalexception.MissedFirstOrLastNameException;
 import com.inventorymanagementsystem.model.User;
 import com.inventorymanagementsystem.repository.UserRepository;
@@ -22,12 +22,8 @@ public class SignupService {
 
     @SneakyThrows
     public void signup(@RequestBody User user) {
-        if (user.getEmail() == null || !user.hasValidEmail()) {
-            throw new IncorrectEmailException("Incorrect email");
-        }
-
         if (userRepository.existsByEmail(user.getEmail())) {
-            throw new MissedFirstOrLastNameException(String.format("User with '%s' email already exists", user.getEmail()));
+            throw new EntityAlreadyExistsException(String.format("User with '%s' email already exists", user.getEmail()));
         }
 
         if (user.getFirstname() == null || user.getLastname() == null

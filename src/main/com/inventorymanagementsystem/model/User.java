@@ -1,9 +1,7 @@
 package com.inventorymanagementsystem.model;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import com.inventorymanagementsystem.exception.globalexception.IncorrectEmailException;
+import lombok.*;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;
@@ -23,7 +21,16 @@ public class User {
     private String firstname;
     private String lastname;
 
-    public Boolean hasValidEmail() {
-        return Pattern.compile("^[\\w-.]+@[\\w-]+\\.[\\w-]+$").matcher(this.email).matches();
+    @SneakyThrows
+    public void setEmail(String email) {
+        if (email == null || !isEmailCorrect(email)) {
+            throw new IncorrectEmailException("Incorrect email");
+        }
+
+        this.email = email;
+    }
+
+    private Boolean isEmailCorrect(String email) {
+        return Pattern.compile("^[\\w-.]+@[\\w-]+\\.[\\w-]+$").matcher(email).matches();
     }
 }
