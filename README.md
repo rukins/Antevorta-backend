@@ -16,24 +16,21 @@ POST /auth/login
 ```json
 {
   "status": 200,
-  "message": "Logged in successfully",
-  "path": "/auth/login"
+  "message": "Logged in successfully"
 }
 ```
 - Response if there are problems:
 ```json
 {
   "status": 401,
-  "message": "User with first@gmail.co email is not found",
-  "path": "/auth/login"
+  "message": "User with first@gmail.co email is not found"
 }
 ```
 OR
 ```json
 {
   "status": 401,
-  "message": "Wrong password",
-  "path": "/auth/login"
+  "message": "Wrong password"
 }
 ```
 
@@ -45,8 +42,7 @@ POST /auth/logout
 ```json
 {
   "status": 200,
-  "message": "Logged out successfully",
-  "path": "/auth/logout"
+  "message": "Logged out successfully"
 }
 ```
 
@@ -67,32 +63,28 @@ POST /signup
 ```json
 {
   "status": 201,
-  "message": "Signed up successfully",
-  "path": "/signup"
+  "message": "Signed up successfully"
 }
 ```
 - Response if there are problems:
 ```json
 {
   "status": 400,
-  "message": "User with first@gmail.com email already exists",
-  "path": "/signup"
+  "message": "User with first@gmail.com email already exists"
 }
 ```
 OR
 ```json
 {
   "status": 400,
-  "message": "Incorrect email",
-  "path": "/signup"
+  "message": "Incorrect email"
 }
 ```
 OR
 ```json
 {
   "status": 400,
-  "message": "Please enter your first and last names. One of them or both are empty",
-  "path": "/signup"
+  "message": "Please enter your first and last names. One of them or both are empty"
 }
 ```
 
@@ -130,40 +122,35 @@ POST /onlinestores
 ```json
 {
   "status": 201,
-  "message": "Online store 'storeName' successfully added",
-  "path": "/onlinestores"
+  "message": "Online store 'storeName' successfully added"
 }
 ```
 - Response if there are problems:
 ```json
 {
   "status": 400,
-  "message": "Arbitrary store name shouldn't be empty",
-  "path": "/onlinestores"
+  "message": "Arbitrary store name shouldn't be empty"
 }
 ```
 OR
 ```json
 {
   "status": 400,
-  "message": "Store with 'SHOPIFY' type already exists",
-  "path": "/onlinestores"
+  "message": "Store with 'SHOPIFY' type already exists"
 }
 ```
 OR
 ```json
 {
   "status": 400,
-  "message": "Store with 'storeName' arbitrary name already exists",
-  "path": "/onlinestores"
+  "message": "Store with 'storeName' arbitrary name already exists"
 }
 ```
 OR
 ```json
 {
   "status": 400,
-  "message": "Store with 'SHOPIFY' type already exists",
-  "path": "/onlinestores"
+  "message": "Store with 'SHOPIFY' type already exists"
 }
 ```
 
@@ -175,24 +162,21 @@ PUT /onlinestores/{currentName}?newName={newStoreName}
 ```json
 {
   "status": 200,
-  "message": "Name 'storeName' of online store successfully updated to 'newStoreName'",
-  "path": "/onlinestores/storeName?newName=newStoreName"
+  "message": "Name 'storeName' of online store successfully updated to 'newStoreName'"
 }
 ```
 - Response if there are problems:
 ```json
 {
   "status": 400,
-  "message": "Arbitrary store name shouldn't be empty",
-  "path": "/onlinestores/storeName?newName="
+  "message": "Arbitrary store name shouldn't be empty"
 }
 ```
 OR
 ```json
 {
   "status": 400,
-  "message": "Online store with 'anotherName' name not found",
-  "path": "/onlinestores/anotherName?newName=newStoreName"
+  "message": "Online store with 'anotherName' name not found"
 }
 ```
 
@@ -204,16 +188,14 @@ DELETE /onlinestores/{name}
 ```json
 {
   "status": 200, 
-  "message": "Online store 'storeName' successfully deleted",
-    "path": "/onlinestores/storeName"
+  "message": "Online store 'storeName' successfully deleted"
 }
 ```
 - Response if there are problems:
 ```json
 {
-    "status": 400,
-    "message": "Online store with 'storeNam' name not found",
-    "path": "/onlinestores/storeNam"
+  "status": 400,
+  "message": "Online store with 'storeNam' name not found"
 }
 ```
 
@@ -221,28 +203,24 @@ DELETE /onlinestores/{name}
 ```json
 {
   "status": 401,
-  "message": "Unauthorized",
-  "path": "/somePath"
+  "message": "Unauthorized"
 }
 ```
 ```json
 {
   "status": 404,
-  "message": "404 NOT_FOUND",
-  "path": "/error"
+  "message": "404 NOT_FOUND"
 }
 ```
 ```json
 {
   "status": 400,
-  "message": "400 BAD_REQUEST",
-  "path": "/error"
+  "message": "400 BAD_REQUEST"
 }
 ```
 ```json
 {
   "status": 405,
-  "message": "405 METHOD_NOT_ALLOWED",
-  "path": "/error"
+  "message": "405 METHOD_NOT_ALLOWED"
 }
 ```
