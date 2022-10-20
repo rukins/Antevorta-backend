@@ -1,11 +1,10 @@
 # Inventory_Management_System. Backend side
 
 ## Authentication
-- Http Method: POST
-- Headers: "Content-Type: application/json"
-
 ### Login
-- Path: ```/auth/login```
+```http request
+POST /auth/login
+```
 - Body:
 ```json
 {
@@ -39,7 +38,9 @@ OR
 ```
 
 ### Logout
-- Path: ```/auth/logout```
+```http request
+POST /auth/logout
+```
 - Response if there is no problem:
 ```json
 {
@@ -50,10 +51,9 @@ OR
 ```
 
 ## Signing up
-- Http Method: POST
-- Headers: "Content-Type: application/json"
-
-- Path: ```/signup```
+```http request
+POST /signup
+```
 - Body:
 ```json
 {
@@ -96,48 +96,135 @@ OR
 }
 ```
 
-
-## And only for testing 
-#### i have added one endpoint to see all users in database (work only if user who requests is authenticated). I will remove it later.
-- Http Method: GET
-
-- Path: ```/users```
+## Online stores
+### getAllOnlineStoresOfCurrentUser
+```http request
+GET /onlinestores
+```
+- Body:
+```json
+{
+  "onlineStores": [
+    {
+      "id": "first@gmail.com:storeName",
+      "arbitraryStoreName": "storeName",
+      "type": "SHOPIFY"
+    }
+  ]
+}
+```
+### addOnlineStoreToUser
+```http request
+POST /onlinestores
+```
+- Body:
+```json
+{
+  "type": "SHOPIFY",
+  "arbitraryStoreName": "storeName",
+  "storeName": "someStoreName",
+  "accessKey": "someAccessKey"
+}
+```
 - Response if there is no problem:
 ```json
-[
-  {
-    "id": 1,
-    "email": "first@email.com",
-    "password": "$2a$12$HRGF7Oe73XF4CcjAfqRpteQN3VDv3SIG3KC3Wo/5SgTUrf81Td2Fe",
-    "firstname": "firstname1",
-    "lastname": "lastname1"
-  },
-  {
-    "id": 2,
-    "email": "second@email.com",
-    "password": "$2a$12$tKKDv/mgIxa5ACmWylgpBOoz5AcRdaig68lFSmlI8tY9ct2uDIENK",
-    "firstname": "firstname2",
-    "lastname": "lastname2"
-  },
-  {
-    "id": 3,
-    "email": "third@email.co",
-    "password": "$2a$12$2IuZNiCt2DhpRkmiXA9LP.38oj/czL91y9zZZ5ZYAWZ9NNw5uPhuK",
-    "firstname": "firstname3",
-    "lastname": "firstname3"
-  }
-]
+{
+  "status": 201,
+  "message": "Online store 'storeName' successfully added",
+  "path": "/onlinestores"
+}
 ```
 - Response if there are problems:
 ```json
 {
-  "status": 401,
-  "message": "Unauthorized",
-  "path": "/users"
+  "status": 400,
+  "message": "Arbitrary store name shouldn't be empty",
+  "path": "/onlinestores"
+}
+```
+OR
+```json
+{
+  "status": 400,
+  "message": "Store with 'SHOPIFY' type already exists",
+  "path": "/onlinestores"
+}
+```
+OR
+```json
+{
+  "status": 400,
+  "message": "Store with 'storeName' arbitrary name already exists",
+  "path": "/onlinestores"
+}
+```
+OR
+```json
+{
+  "status": 400,
+  "message": "Store with 'SHOPIFY' type already exists",
+  "path": "/onlinestores"
+}
+```
+
+### updateOnlineStoreName
+```http request
+PUT /onlinestores/{currentName}?newName={newStoreName}
+```
+- Response if there is no problem:
+```json
+{
+  "status": 200,
+  "message": "Name 'storeName' of online store successfully updated to 'newStoreName'",
+  "path": "/onlinestores/storeName?newName=newStoreName"
+}
+```
+- Response if there are problems:
+```json
+{
+  "status": 400,
+  "message": "Arbitrary store name shouldn't be empty",
+  "path": "/onlinestores/storeName?newName="
+}
+```
+OR
+```json
+{
+  "status": 400,
+  "message": "Online store with 'anotherName' name not found",
+  "path": "/onlinestores/anotherName?newName=newStoreName"
+}
+```
+
+### deleteOnlineStoreByName
+```http request
+DELETE /onlinestores/{name}
+```
+- Response if there is no problem:
+```json
+{
+  "status": 200, 
+  "message": "Online store 'storeName' successfully deleted",
+    "path": "/onlinestores/storeName"
+}
+```
+- Response if there are problems:
+```json
+{
+    "status": 400,
+    "message": "Online store with 'storeNam' name not found",
+    "path": "/onlinestores/storeNam"
 }
 ```
 
 ## ___Other response bodies___
+```json
+{
+  "status": 401,
+  "message": "Unauthorized",
+  "path": "/somePath"
+}
+```
 ```json
 {
   "status": 404,
