@@ -70,9 +70,9 @@ public class OnlineStoreController {
     public ResponseEntity<?> updateOnlineStoreName(@PathVariable String currentName, @RequestParam String newName) {
         onlineStoreService.updateOnlineStoreName(currentName, newName);
 
-        ResponseBody body = new ResponseBody(HttpStatus.CREATED.value(),
+        ResponseBody body = new ResponseBody(HttpStatus.OK.value(),
                 String.format("Name '%s' of online store successfully updated to '%s'", currentName, newName),
-                RequestUtils.ONLINE_STORES_PATH + "/" + currentName);
+                RequestUtils.ONLINE_STORES_PATH + "/" + currentName + "?newName=" + newName);
 
         return new ResponseEntity<>(body, HttpStatus.OK);
     }
@@ -81,7 +81,7 @@ public class OnlineStoreController {
     public ResponseEntity<?> deleteOnlineStoreByName(@PathVariable String name) {
         onlineStoreService.deleteOnlineStoreByName(name);
 
-        ResponseBody body = new ResponseBody(HttpStatus.CREATED.value(),
+        ResponseBody body = new ResponseBody(HttpStatus.OK.value(),
                 String.format("Online store '%s' successfully deleted", name),
                 RequestUtils.ONLINE_STORES_PATH + "/" + name);
 
