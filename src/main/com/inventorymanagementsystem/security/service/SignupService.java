@@ -5,7 +5,6 @@ import com.inventorymanagementsystem.exception.globalexception.MissedFirstOrLast
 import com.inventorymanagementsystem.model.User;
 import com.inventorymanagementsystem.repository.UserRepository;
 import com.inventorymanagementsystem.security.encryptor.Encryptor;
-import lombok.SneakyThrows;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RequestBody;
 
@@ -20,8 +19,7 @@ public class SignupService {
         this.encryptor = encryptor;
     }
 
-    @SneakyThrows
-    public void signup(@RequestBody User user) {
+    public void signup(@RequestBody User user) throws EntityAlreadyExistsException, MissedFirstOrLastNameException {
         if (userRepository.existsByEmail(user.getEmail())) {
             throw new EntityAlreadyExistsException(String.format("User with '%s' email already exists", user.getEmail()));
         }

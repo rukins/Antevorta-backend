@@ -1,5 +1,7 @@
 package com.inventorymanagementsystem.security.controller;
 
+import com.inventorymanagementsystem.exception.globalexception.EntityAlreadyExistsException;
+import com.inventorymanagementsystem.exception.globalexception.MissedFirstOrLastNameException;
 import com.inventorymanagementsystem.model.ResponseBody;
 import com.inventorymanagementsystem.model.User;
 import com.inventorymanagementsystem.security.service.SignupService;
@@ -26,7 +28,8 @@ public class SignupController {
     }
 
     @PostMapping
-    public ResponseEntity<?> signup(@RequestBody User user, HttpServletRequest request) {
+    public ResponseEntity<?> signup(@RequestBody User user, HttpServletRequest request)
+            throws EntityAlreadyExistsException, MissedFirstOrLastNameException {
         signupService.signup(user);
 
         ResponseBody body = new ResponseBody(HttpStatus.CREATED.value(), "Signed up successfully");

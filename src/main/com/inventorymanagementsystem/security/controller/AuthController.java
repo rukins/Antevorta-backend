@@ -13,7 +13,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 
 @RestController
@@ -41,7 +40,7 @@ public class AuthController {
     }
 
     @PostMapping("/logout")
-    public ResponseEntity<?> logout(HttpServletRequest request) throws ServletException {
+    public ResponseEntity<?> logout(HttpServletRequest request) {
         authService.logout(request);
 
         ResponseBody body = new ResponseBody(HttpStatus.OK.value(), "Logged out successfully");

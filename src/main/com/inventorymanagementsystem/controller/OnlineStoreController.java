@@ -1,5 +1,9 @@
 package com.inventorymanagementsystem.controller;
 
+import com.inventorymanagementsystem.exception.globalexception.ArbitraryStoreNameNotUniqueException;
+import com.inventorymanagementsystem.exception.globalexception.EmptyArbitraryStoreNameException;
+import com.inventorymanagementsystem.exception.globalexception.EntityNotFoundException;
+import com.inventorymanagementsystem.exception.globalexception.MultipleOnlineStoresException;
 import com.inventorymanagementsystem.model.OnlineStoreDetails;
 import com.inventorymanagementsystem.model.OnlineStoreType;
 import com.inventorymanagementsystem.model.ResponseBody;
@@ -52,7 +56,8 @@ public class OnlineStoreController {
     }
 
     @PostMapping("")
-    public ResponseEntity<?> addOnlineStoreToUser(@RequestBody OnlineStoreDetails onlineStoreDetails, HttpServletRequest request) {
+    public ResponseEntity<?> addOnlineStoreToUser(@RequestBody OnlineStoreDetails onlineStoreDetails, HttpServletRequest request)
+            throws EmptyArbitraryStoreNameException, MultipleOnlineStoresException, ArbitraryStoreNameNotUniqueException {
         onlineStoreService.addOnlineStoreToUser(onlineStoreDetails);
 
         ResponseBody body = new ResponseBody(HttpStatus.CREATED.value(),
@@ -66,7 +71,8 @@ public class OnlineStoreController {
     }
 
     @PutMapping("/{currentName}")
-    public ResponseEntity<?> updateOnlineStoreName(@PathVariable String currentName, @RequestParam String newName) {
+    public ResponseEntity<?> updateOnlineStoreName(@PathVariable String currentName, @RequestParam String newName)
+            throws EmptyArbitraryStoreNameException, EntityNotFoundException, ArbitraryStoreNameNotUniqueException {
         onlineStoreService.updateOnlineStoreName(currentName, newName);
 
         ResponseBody body = new ResponseBody(HttpStatus.OK.value(),
@@ -76,7 +82,7 @@ public class OnlineStoreController {
     }
 
     @DeleteMapping("/{name}")
-    public ResponseEntity<?> deleteOnlineStoreByName(@PathVariable String name) {
+    public ResponseEntity<?> deleteOnlineStoreByName(@PathVariable String name) throws EntityNotFoundException {
         onlineStoreService.deleteOnlineStoreByName(name);
 
         ResponseBody body = new ResponseBody(HttpStatus.OK.value(), String.format("Online store '%s' successfully deleted", name));

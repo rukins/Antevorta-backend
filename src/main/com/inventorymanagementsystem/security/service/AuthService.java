@@ -1,6 +1,7 @@
 package com.inventorymanagementsystem.security.service;
 
 import com.inventorymanagementsystem.security.model.UserCredentials;
+import lombok.SneakyThrows;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -10,7 +11,6 @@ import org.springframework.security.web.context.HttpSessionSecurityContextReposi
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RequestBody;
 
-import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
@@ -31,7 +31,8 @@ public class AuthService {
         setSessionAuth(request.getSession(), auth);
     }
 
-    public void logout(HttpServletRequest request) throws ServletException {
+    @SneakyThrows
+    public void logout(HttpServletRequest request) {
         request.logout();
     }
 

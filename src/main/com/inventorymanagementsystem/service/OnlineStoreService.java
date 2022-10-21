@@ -37,8 +37,8 @@ public class OnlineStoreService {
         return onlineStoreRepository.findAllByUserAndType(getCurrentUser(), type);
     }
 
-    @SneakyThrows
-    public void addOnlineStoreToUser(OnlineStoreDetails onlineStore) {
+    public void addOnlineStoreToUser(OnlineStoreDetails onlineStore)
+            throws EmptyArbitraryStoreNameException, MultipleOnlineStoresException, ArbitraryStoreNameNotUniqueException {
         checkIfArbitraryStoreNameIsNotNull(onlineStore.getArbitraryStoreName());
 
         User user = getCurrentUser();
@@ -53,8 +53,8 @@ public class OnlineStoreService {
         onlineStoreRepository.save(onlineStore);
     }
 
-    @SneakyThrows
-    public void updateOnlineStoreName(String currentName, String newName) {
+    public void updateOnlineStoreName(String currentName, String newName)
+            throws EntityNotFoundException, EmptyArbitraryStoreNameException, ArbitraryStoreNameNotUniqueException {
         checkIfArbitraryStoreNameIsNotNull(newName);
 
         User user = getCurrentUser();
@@ -74,8 +74,7 @@ public class OnlineStoreService {
         throw new EntityNotFoundException(String.format("Online store with '%s' name not found", currentName));
     }
 
-    @SneakyThrows
-    public void deleteOnlineStoreByName(String name) {
+    public void deleteOnlineStoreByName(String name) throws EntityNotFoundException {
         User user = getCurrentUser();
 
         Optional<OnlineStoreDetails> onlineStoreDetails = onlineStoreRepository.findByArbitraryStoreNameAndUser(name, user);
@@ -89,24 +88,13 @@ public class OnlineStoreService {
         throw new EntityNotFoundException(String.format("Online store with '%s' name not found", name));
     }
 
-    @SneakyThrows
-    private User getCurrentUser() {
-        String email = (String) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-
-        Optional<User> user = userRepository.findByEmail(email);
-
-        return user.orElseThrow(() -> new EntityNotFoundException("User not found"));
-    }
-
-    @SneakyThrows
-    private void checkIfArbitraryStoreNameIsNotNull(String arbitraryStoreName) {
+    private void checkIfArbitraryStoreNameIsNotNull(String arbitraryStoreName) throws EmptyArbitraryStoreNameException {
         if (arbitraryStoreName == null || arbitraryStoreName.isEmpty()) {
             throw new EmptyArbitraryStoreNameException("Arbitrary store name shouldn't be empty");
         }
     }
 
-    @SneakyThrows
-    private void checkIfArbitraryStoreNameIsUnique(User user, String arbitraryName) {
+    private void checkIfArbitraryStoreNameIsUnique(User user, String arbitraryName) throws ArbitraryStoreNameNotUniqueException {
         List<String> arbitraryStoreNamesList = onlineStoreRepository.findAllByUser(user).stream()
                 .map(OnlineStoreDetails::getArbitraryStoreName)
                 .toList();
@@ -117,12 +105,20 @@ public class OnlineStoreService {
         }
     }
 
-    @SneakyThrows
-    private void checkIfUserHasOneOnlineStoreByType(User user, OnlineStoreType type) {
+    private void checkIfUserHasOneOnlineStoreByType(User user, OnlineStoreType type) throws MultipleOnlineStoresException {
         List<OnlineStoreDetails> onlineStoreProjectionList = onlineStoreRepository.findAllByUserAndType(user, type);
 
         if (onlineStoreProjectionList.size() == 1) {
             throw new MultipleOnlineStoresException(String.format("Store with '%s' type already exists", type));
         }
+    }
+
+    @SneakyThrows
+    private User getCurrentUser() {
+        String email = (String) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+
+        Optional<User> user = userRepository.findByEmail(email);
+
+        return user.orElseThrow(() -> new EntityNotFoundException("User not found"));
     }
 }
