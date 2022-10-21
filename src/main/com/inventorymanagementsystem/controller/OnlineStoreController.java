@@ -71,21 +71,31 @@ public class OnlineStoreController {
     }
 
     @PutMapping("/{currentName}")
-    public ResponseEntity<?> updateOnlineStoreName(@PathVariable String currentName, @RequestParam String newName)
+    public ResponseEntity<?> updateOnlineStoreName(@PathVariable String currentName, @RequestParam String newName,
+                                                   HttpServletRequest request)
             throws EmptyArbitraryStoreNameException, EntityNotFoundException, ArbitraryStoreNameNotUniqueException {
         onlineStoreService.updateOnlineStoreName(currentName, newName);
 
         ResponseBody body = new ResponseBody(HttpStatus.OK.value(),
                 String.format("Name '%s' of online store successfully updated to '%s'", currentName, newName));
 
+        logger.debug(request.getMethod());
+        logger.debug(RequestUtils.getHeadersString(request));
+        logger.debug(body.toString());
+
         return new ResponseEntity<>(body, HttpStatus.OK);
     }
 
     @DeleteMapping("/{name}")
-    public ResponseEntity<?> deleteOnlineStoreByName(@PathVariable String name) throws EntityNotFoundException {
+    public ResponseEntity<?> deleteOnlineStoreByName(@PathVariable String name, HttpServletRequest request)
+            throws EntityNotFoundException {
         onlineStoreService.deleteOnlineStoreByName(name);
 
         ResponseBody body = new ResponseBody(HttpStatus.OK.value(), String.format("Online store '%s' successfully deleted", name));
+
+        logger.debug(request.getMethod());
+        logger.debug(RequestUtils.getHeadersString(request));
+        logger.debug(body.toString());
 
         return new ResponseEntity<>(body, HttpStatus.OK);
     }
