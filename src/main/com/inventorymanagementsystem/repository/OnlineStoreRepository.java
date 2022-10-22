@@ -10,13 +10,15 @@ import java.util.Optional;
 
 @Repository
 public interface OnlineStoreRepository extends JpaRepository<OnlineStoreDetails, String> {
+    Long countByUser(User user);
+    List<OnlineStoreDetails> findAllByUser(User user);
     @Query("select new com.inventorymanagementsystem.model.OnlineStoreDetails(u.id, u.arbitraryStoreName, u.type) " +
             "from OnlineStoreDetails u where u.user = ?1")
-    List<OnlineStoreDetails> findAllByUser(User user);
+    List<OnlineStoreDetails> findAllByUserWithoutCredentials(User user);
 
     @Query("select new com.inventorymanagementsystem.model.OnlineStoreDetails(u.id, u.arbitraryStoreName, u.type) " +
             "from OnlineStoreDetails u where u.user = ?1 and u.type = ?2")
-    List<OnlineStoreDetails> findAllByUserAndType(User user, OnlineStoreType type);
+    List<OnlineStoreDetails> findAllByUserAndTypeWithoutCredentials(User user, OnlineStoreType type);
 
-    Optional<OnlineStoreDetails> findByArbitraryStoreNameAndUser(String arbitraryStoreName, User user);
+    Optional<OnlineStoreDetails> findByUserAndArbitraryStoreName(User user, String arbitraryStoreName);
 }
