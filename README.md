@@ -98,9 +98,20 @@ GET /onlinestores
 {
   "onlineStores": [
     {
-      "id": "first@gmail.com:storeName",
+      "id": {
+        "ordinal": 1,
+        "email": "first@gmail.com"
+      },
       "arbitraryStoreName": "storeName",
       "type": "SHOPIFY"
+    },
+    {
+      "id": {
+        "ordinal": 2,
+        "email": "first@gmail.com"
+      },
+      "arbitraryStoreName": "anotherStoreName",
+      "type": "AMAZON"
     }
   ]
 }
