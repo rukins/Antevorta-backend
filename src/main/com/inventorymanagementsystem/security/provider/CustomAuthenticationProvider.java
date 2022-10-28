@@ -1,6 +1,6 @@
 package com.inventorymanagementsystem.security.provider;
 
-import com.inventorymanagementsystem.exception.authexception.WrongLoginOrPasswordException;
+import com.inventorymanagementsystem.exception.authexception.WrongPasswordException;
 import com.inventorymanagementsystem.security.encryptor.Encryptor;
 import com.inventorymanagementsystem.security.service.CustomUserDetailsService;
 import lombok.SneakyThrows;
@@ -29,7 +29,7 @@ public class CustomAuthenticationProvider implements AuthenticationProvider {
         UserDetails user = userDetailsService.loadUserByUsername(username);
 
         if (!encryptor.matches(password, user.getPassword())) {
-            throw new WrongLoginOrPasswordException("Wrong password");
+            throw new WrongPasswordException("Wrong password");
         }
 
         return new UsernamePasswordAuthenticationToken(username, password, user.getAuthorities());

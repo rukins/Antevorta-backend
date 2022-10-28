@@ -1,6 +1,6 @@
 package com.inventorymanagementsystem.security.service;
 
-import com.inventorymanagementsystem.exception.authexception.WrongLoginOrPasswordException;
+import com.inventorymanagementsystem.exception.globalexception.EntityNotFoundException;
 import com.inventorymanagementsystem.model.User;
 import com.inventorymanagementsystem.repository.UserRepository;
 import lombok.SneakyThrows;
@@ -31,6 +31,6 @@ public class CustomUserDetailsService implements UserDetailsService {
             );
         }
 
-        throw new WrongLoginOrPasswordException(String.format("User with '%s' email is not found", email));
+        throw new EntityNotFoundException(String.format("User with '%s' email is not found", email));
     }
 }
