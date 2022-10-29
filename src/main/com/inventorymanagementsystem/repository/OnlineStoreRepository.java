@@ -12,11 +12,11 @@ import java.util.Optional;
 public interface OnlineStoreRepository extends JpaRepository<OnlineStoreDetails, String> {
     Long countByUser(User user);
     List<OnlineStoreDetails> findAllByUser(User user);
-    @Query("select new com.inventorymanagementsystem.model.OnlineStoreDetails(u.id, u.arbitraryStoreName, u.type) " +
+    @Query("select new OnlineStoreDetails(u.id, u.arbitraryStoreName, u.type) " +
             "from OnlineStoreDetails u where u.user = ?1")
     List<OnlineStoreDetails> findAllByUserWithoutCredentials(User user);
 
-    @Query("select new com.inventorymanagementsystem.model.OnlineStoreDetails(u.id, u.arbitraryStoreName, u.type) " +
+    @Query("select new OnlineStoreDetails(u.id, u.arbitraryStoreName, u.type) " +
             "from OnlineStoreDetails u where u.user = ?1 and u.type = ?2")
     List<OnlineStoreDetails> findAllByUserAndTypeWithoutCredentials(User user, OnlineStoreType type);
 
