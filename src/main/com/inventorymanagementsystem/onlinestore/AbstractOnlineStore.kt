@@ -17,7 +17,7 @@ abstract class AbstractOnlineStore {
 
     companion object {
         @JvmStatic
-        fun createOnlineStore(type: OnlineStoreType, storeName: String, accessToken: String): AbstractOnlineStore {
+        fun create(type: OnlineStoreType, storeName: String, accessToken: String): AbstractOnlineStore {
             return when (type) {
                 OnlineStoreType.SHOPIFY -> ShopifyOnlineStore(storeName, accessToken)
                 OnlineStoreType.AMAZON -> AmazonOnlineStore(storeName, accessToken)
