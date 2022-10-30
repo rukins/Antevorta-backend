@@ -1,5 +1,6 @@
 package com.inventorymanagementsystem.onlinestore.shopify
 
+import com.inventorymanagementsystem.model.OnlineStoreType
 import com.inventorymanagementsystem.onlinestore.AbstractOnlineStore
 import com.inventorymanagementsystem.onlinestore.AbstractOnlineStoreProduct
 import com.inventorymanagementsystem.onlinestore.shopify.model.Product
@@ -33,5 +34,9 @@ class ShopifyOnlineStore (private var storeName: String, private var accessKey: 
 
     override fun delete(id: Long): Void {
         return client.delete(id, accessKey)
+    }
+
+    override fun getType(): OnlineStoreType {
+        return OnlineStoreType.SHOPIFY
     }
 }

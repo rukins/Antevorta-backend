@@ -15,6 +15,8 @@ abstract class AbstractOnlineStore {
 
     abstract fun delete(id: Long): Void
 
+    abstract fun getType(): OnlineStoreType
+
     companion object {
         @JvmStatic
         fun create(type: OnlineStoreType, storeName: String, accessToken: String): AbstractOnlineStore {
