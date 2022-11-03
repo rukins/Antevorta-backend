@@ -8,10 +8,7 @@ import com.inventorymanagementsystem.model.OnlineStoreDetails;
 import com.inventorymanagementsystem.model.OnlineStoreType;
 import com.inventorymanagementsystem.model.User;
 import com.inventorymanagementsystem.repository.OnlineStoreRepository;
-import com.inventorymanagementsystem.repository.UserRepository;
 import com.inventorymanagementsystem.security.encryptor.Encryptor;
-import lombok.SneakyThrows;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -20,28 +17,28 @@ import java.util.Optional;
 @Service
 public class OnlineStoreService {
     private final OnlineStoreRepository onlineStoreRepository;
-    private final UserRepository userRepository;
+    private final CurrentUserService currentUserService;
     private final Encryptor encryptor;
 
-    public OnlineStoreService(OnlineStoreRepository onlineStoreRepository, UserRepository userRepository, Encryptor encryptor) {
+    public OnlineStoreService(OnlineStoreRepository onlineStoreRepository, CurrentUserService currentUserService, Encryptor encryptor) {
         this.onlineStoreRepository = onlineStoreRepository;
-        this.userRepository = userRepository;
+        this.currentUserService = currentUserService;
         this.encryptor = encryptor;
     }
 
     public List<OnlineStoreDetails> getAllOnlineStoresOfCurrentUser() {
-        return onlineStoreRepository.findAllByUserWithoutCredentials(getCurrentUser());
+        return onlineStoreRepository.findAllByUserWithoutCredentials(currentUserService.getAuthorizedUser());
     }
 
     public List<OnlineStoreDetails> getAllOnlineStoresOfCurrentUserByType(OnlineStoreType type) {
-        return onlineStoreRepository.findAllByUserAndTypeWithoutCredentials(getCurrentUser(), type);
+        return onlineStoreRepository.findAllByUserAndTypeWithoutCredentials(currentUserService.getAuthorizedUser(), type);
     }
 
     public void addOnlineStoreToUser(OnlineStoreDetails onlineStore)
             throws EmptyArbitraryStoreNameException, MultipleOnlineStoresException, ArbitraryStoreNameNotUniqueException {
         checkIfArbitraryStoreNameIsNotNull(onlineStore.getArbitraryStoreName());
 
-        User user = getCurrentUser();
+        User user = currentUserService.getAuthorizedUser();
 
         checkIfUserHasOneOnlineStoreByType(user, onlineStore.getType());
         checkIfArbitraryStoreNameIsUnique(user, onlineStore.getArbitraryStoreName());
@@ -57,7 +54,7 @@ public class OnlineStoreService {
             throws EntityNotFoundException, EmptyArbitraryStoreNameException, ArbitraryStoreNameNotUniqueException {
         checkIfArbitraryStoreNameIsNotNull(newName);
 
-        User user = getCurrentUser();
+        User user = currentUserService.getAuthorizedUser();
 
         checkIfArbitraryStoreNameIsUnique(user, newName);
 
@@ -75,7 +72,7 @@ public class OnlineStoreService {
     }
 
     public void deleteOnlineStoreByName(String name) throws EntityNotFoundException {
-        User user = getCurrentUser();
+        User user = currentUserService.getAuthorizedUser();
 
         Optional<OnlineStoreDetails> onlineStoreDetails = onlineStoreRepository.findByUserAndArbitraryStoreName(user, name);
 
@@ -111,14 +108,5 @@ public class OnlineStoreService {
         if (onlineStoreProjectionList.size() == 1) {
             throw new MultipleOnlineStoresException(String.format("Store with '%s' type already exists", type));
         }
-    }
-
-    @SneakyThrows
-    private User getCurrentUser() {
-        String email = (String) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-
-        Optional<User> user = userRepository.findByEmail(email);
-
-        return user.orElseThrow(() -> new EntityNotFoundException("User not found"));
     }
 }

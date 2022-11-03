@@ -1,7 +1,7 @@
 package com.inventorymanagementsystem.service;
 
-import com.inventorymanagementsystem.exception.serverexception.ServerException;
 import com.inventorymanagementsystem.exception.serverexception.EntityNotFoundException;
+import com.inventorymanagementsystem.exception.serverexception.ServerException;
 import com.inventorymanagementsystem.model.OnlineStoreDetails;
 import com.inventorymanagementsystem.model.Product;
 import com.inventorymanagementsystem.model.User;
@@ -9,12 +9,9 @@ import com.inventorymanagementsystem.onlinestore.AbstractOnlineStore;
 import com.inventorymanagementsystem.onlinestore.AbstractOnlineStoreProduct;
 import com.inventorymanagementsystem.repository.OnlineStoreRepository;
 import com.inventorymanagementsystem.repository.ProductRepository;
-import com.inventorymanagementsystem.repository.UserRepository;
 import com.inventorymanagementsystem.security.encryptor.Encryptor;
 import com.inventorymanagementsystem.utils.ProductJsonUtils;
-import lombok.SneakyThrows;
 import org.springframework.http.HttpStatus;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -25,20 +22,19 @@ import java.util.Optional;
 public class ProductService {
     private final ProductRepository productRepository;
     private final OnlineStoreRepository onlineStoreRepository;
-    private final UserRepository userRepository;
-
+    private final CurrentUserService currentUserService;
     private final Encryptor encryptor;
 
     public ProductService(ProductRepository productRepository, OnlineStoreRepository onlineStoreRepository,
-                          UserRepository userRepository, Encryptor encryptor) {
+                          CurrentUserService currentUserService, Encryptor encryptor) {
         this.productRepository = productRepository;
         this.onlineStoreRepository = onlineStoreRepository;
-        this.userRepository = userRepository;
+        this.currentUserService = currentUserService;
         this.encryptor = encryptor;
     }
 
     public Product getById(Long id) throws ServerException {
-        User user = getCurrentUser();
+        User user = currentUserService.getAuthorizedUser();
 
         Optional<Product> product = productRepository.findByUserAndId(user, id);
 
@@ -46,13 +42,13 @@ public class ProductService {
     }
 
     public List<Product> getAll() {
-        User user = getCurrentUser();
+        User user = currentUserService.getAuthorizedUser();
 
         return productRepository.findAllByUser(user);
     }
 
     public Product create(String productJson, String arbitraryStoreName) throws ServerException {
-        User user = getCurrentUser();
+        User user = currentUserService.getAuthorizedUser();
 
         Optional<OnlineStoreDetails> onlineStoreDetails = onlineStoreRepository
                 .findByUserAndArbitraryStoreName(user, arbitraryStoreName);
@@ -83,7 +79,7 @@ public class ProductService {
     }
 
     public Product update(String productJson, Long id) throws ServerException {
-        User user = getCurrentUser();
+        User user = currentUserService.getAuthorizedUser();
 
         Optional<Product> product = productRepository.findByUserAndId(user, id);
 
@@ -119,7 +115,7 @@ public class ProductService {
     }
 
     public void delete(Long id) throws ServerException {
-        User user = getCurrentUser();
+        User user = currentUserService.getAuthorizedUser();
 
         Optional<Product> product = productRepository.findByUserAndId(user, id);
 
@@ -144,7 +140,7 @@ public class ProductService {
     }
 
     public void updateProductList() {
-        User user = getCurrentUser();
+        User user = currentUserService.getAuthorizedUser();
 
         List<Product> products = new ArrayList<>();
 
@@ -172,14 +168,5 @@ public class ProductService {
         }
 
         productRepository.saveAll(products);
-    }
-
-    @SneakyThrows
-    private User getCurrentUser() {
-        String email = (String) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-
-        Optional<User> user = userRepository.findByEmail(email);
-
-        return user.orElseThrow(() -> new EntityNotFoundException("User not found"));
     }
 }
