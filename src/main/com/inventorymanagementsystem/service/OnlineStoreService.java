@@ -1,9 +1,6 @@
 package com.inventorymanagementsystem.service;
 
-import com.inventorymanagementsystem.exception.serverexception.ArbitraryStoreNameNotUniqueException;
-import com.inventorymanagementsystem.exception.serverexception.EmptyArbitraryStoreNameException;
-import com.inventorymanagementsystem.exception.serverexception.EntityNotFoundException;
-import com.inventorymanagementsystem.exception.serverexception.MultipleOnlineStoresException;
+import com.inventorymanagementsystem.exception.serverexception.*;
 import com.inventorymanagementsystem.model.OnlineStoreDetails;
 import com.inventorymanagementsystem.model.OnlineStoreType;
 import com.inventorymanagementsystem.model.User;
@@ -34,8 +31,7 @@ public class OnlineStoreService {
         return onlineStoreRepository.findAllByUserAndTypeWithoutCredentials(currentUserService.getAuthorizedUser(), type);
     }
 
-    public void addOnlineStoreToUser(OnlineStoreDetails onlineStore)
-            throws EmptyArbitraryStoreNameException, MultipleOnlineStoresException, ArbitraryStoreNameNotUniqueException {
+    public void addOnlineStoreToUser(OnlineStoreDetails onlineStore) throws ServerException {
         checkIfArbitraryStoreNameIsNotNull(onlineStore.getArbitraryStoreName());
 
         User user = currentUserService.getAuthorizedUser();
@@ -50,8 +46,7 @@ public class OnlineStoreService {
         onlineStoreRepository.save(onlineStore);
     }
 
-    public void updateOnlineStoreName(String currentName, String newName)
-            throws EntityNotFoundException, EmptyArbitraryStoreNameException, ArbitraryStoreNameNotUniqueException {
+    public void updateOnlineStoreName(String currentName, String newName) throws ServerException {
         checkIfArbitraryStoreNameIsNotNull(newName);
 
         User user = currentUserService.getAuthorizedUser();
@@ -71,7 +66,7 @@ public class OnlineStoreService {
         throw new EntityNotFoundException(String.format("Online store with '%s' name not found", currentName));
     }
 
-    public void deleteOnlineStoreByName(String name) throws EntityNotFoundException {
+    public void deleteOnlineStoreByName(String name) throws ServerException {
         User user = currentUserService.getAuthorizedUser();
 
         Optional<OnlineStoreDetails> onlineStoreDetails = onlineStoreRepository.findByUserAndArbitraryStoreName(user, name);
