@@ -61,7 +61,7 @@ public class OnlineStoreController {
         onlineStoreService.addOnlineStoreToUser(onlineStoreDetails);
 
         ResponseBody body = new ResponseBody(HttpStatus.CREATED.value(),
-                String.format("Online store '%s' successfully added", onlineStoreDetails.getArbitraryStoreName()));
+                String.format("Online store '%s' has been successfully added", onlineStoreDetails.getArbitraryStoreName()));
 
         logger.debug(request.getMethod());
         logger.debug(RequestUtils.getHeadersString(request));
@@ -77,7 +77,7 @@ public class OnlineStoreController {
         onlineStoreService.updateOnlineStoreName(currentName, newName);
 
         ResponseBody body = new ResponseBody(HttpStatus.OK.value(),
-                String.format("Name '%s' of online store successfully updated to '%s'", currentName, newName));
+                String.format("Name '%s' of online store has been successfully updated to '%s'", currentName, newName));
 
         logger.debug(request.getMethod());
         logger.debug(RequestUtils.getHeadersString(request));
@@ -91,7 +91,8 @@ public class OnlineStoreController {
             throws EntityNotFoundException {
         onlineStoreService.deleteOnlineStoreByName(name);
 
-        ResponseBody body = new ResponseBody(HttpStatus.OK.value(), String.format("Online store '%s' successfully deleted", name));
+        ResponseBody body = new ResponseBody(HttpStatus.OK.value(),
+                String.format("Online store '%s' has been successfully deleted", name));
 
         logger.debug(request.getMethod());
         logger.debug(RequestUtils.getHeadersString(request));

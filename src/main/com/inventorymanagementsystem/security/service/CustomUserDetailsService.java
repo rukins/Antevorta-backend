@@ -31,6 +31,6 @@ public class CustomUserDetailsService implements UserDetailsService {
             );
         }
 
-        throw new EntityNotFoundException(String.format("User with '%s' email is not found", email));
+        throw new EntityNotFoundException(String.format("User with '%s' email not found", email));
     }
 }
