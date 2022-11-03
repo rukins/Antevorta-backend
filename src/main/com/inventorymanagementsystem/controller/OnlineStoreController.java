@@ -28,8 +28,8 @@ public class OnlineStoreController {
     }
 
     @GetMapping("")
-    public ResponseEntity<?> getAllOnlineStoresOfCurrentUser(HttpServletRequest request) {
-        String body = OnlineStoreJsonUtils.getString(onlineStoreService.getAllOnlineStoresOfCurrentUser());
+    public ResponseEntity<?> getAll(HttpServletRequest request) {
+        String body = OnlineStoreJsonUtils.getString(onlineStoreService.getAll());
 
         logger.debug(request.getMethod());
         logger.debug(RequestUtils.getHeadersString(request));
@@ -39,9 +39,9 @@ public class OnlineStoreController {
     }
 
     @GetMapping("/{type}")
-    public ResponseEntity<?> getAllOnlineStoresOfCurrentUserByType(@PathVariable String type, HttpServletRequest request) {
+    public ResponseEntity<?> getAllByType(@PathVariable String type, HttpServletRequest request) {
         String body = OnlineStoreJsonUtils.getString(
-                onlineStoreService.getAllOnlineStoresOfCurrentUserByType(OnlineStoreType.valueOf(type.toUpperCase())),
+                onlineStoreService.getAllByType(OnlineStoreType.valueOf(type.toUpperCase())),
                 OnlineStoreType.valueOf(type.toUpperCase())
         );
 
@@ -53,9 +53,9 @@ public class OnlineStoreController {
     }
 
     @PostMapping("")
-    public ResponseEntity<?> addOnlineStoreToUser(@RequestBody OnlineStoreDetails onlineStoreDetails, HttpServletRequest request)
+    public ResponseEntity<?> addToUser(@RequestBody OnlineStoreDetails onlineStoreDetails, HttpServletRequest request)
             throws ServerException {
-        onlineStoreService.addOnlineStoreToUser(onlineStoreDetails);
+        onlineStoreService.addToUser(onlineStoreDetails);
 
         ResponseBody body = new ResponseBody(HttpStatus.CREATED.value(),
                 String.format("Online store '%s' has been successfully added", onlineStoreDetails.getArbitraryStoreName()));
@@ -68,12 +68,13 @@ public class OnlineStoreController {
     }
 
     @PutMapping("/{currentName}")
-    public ResponseEntity<?> updateOnlineStoreName(@PathVariable String currentName, @RequestParam String newName,
+    public ResponseEntity<?> updateArbitraryStoreName(@PathVariable String currentName, @RequestParam("new") String newName,
                                                    HttpServletRequest request) throws ServerException {
-        onlineStoreService.updateOnlineStoreName(currentName, newName);
+        onlineStoreService.updateArbitraryStoreName(currentName, newName);
 
         ResponseBody body = new ResponseBody(HttpStatus.OK.value(),
-                String.format("Name '%s' of online store has been successfully updated to '%s'", currentName, newName));
+                String.format("Arbitrary store name '%s' of online store has been successfully updated to '%s'",
+                        currentName, newName));
 
         logger.debug(request.getMethod());
         logger.debug(RequestUtils.getHeadersString(request));
@@ -83,8 +84,9 @@ public class OnlineStoreController {
     }
 
     @DeleteMapping("/{name}")
-    public ResponseEntity<?> deleteOnlineStoreByName(@PathVariable String name, HttpServletRequest request) throws ServerException {
-        onlineStoreService.deleteOnlineStoreByName(name);
+    public ResponseEntity<?> deleteByArbitraryStoreName(@PathVariable String name, HttpServletRequest request)
+            throws ServerException {
+        onlineStoreService.deleteByArbitraryStoreName(name);
 
         ResponseBody body = new ResponseBody(HttpStatus.OK.value(),
                 String.format("Online store '%s' has been successfully deleted", name));

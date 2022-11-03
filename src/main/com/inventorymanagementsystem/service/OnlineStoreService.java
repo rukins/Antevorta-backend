@@ -23,15 +23,15 @@ public class OnlineStoreService {
         this.encryptor = encryptor;
     }
 
-    public List<OnlineStoreDetails> getAllOnlineStoresOfCurrentUser() {
+    public List<OnlineStoreDetails> getAll() {
         return onlineStoreRepository.findAllByUserWithoutCredentials(currentUserService.getAuthorizedUser());
     }
 
-    public List<OnlineStoreDetails> getAllOnlineStoresOfCurrentUserByType(OnlineStoreType type) {
+    public List<OnlineStoreDetails> getAllByType(OnlineStoreType type) {
         return onlineStoreRepository.findAllByUserAndTypeWithoutCredentials(currentUserService.getAuthorizedUser(), type);
     }
 
-    public void addOnlineStoreToUser(OnlineStoreDetails onlineStore) throws ServerException {
+    public void addToUser(OnlineStoreDetails onlineStore) throws ServerException {
         checkIfArbitraryStoreNameIsNotNull(onlineStore.getArbitraryStoreName());
 
         User user = currentUserService.getAuthorizedUser();
@@ -46,7 +46,7 @@ public class OnlineStoreService {
         onlineStoreRepository.save(onlineStore);
     }
 
-    public void updateOnlineStoreName(String currentName, String newName) throws ServerException {
+    public void updateArbitraryStoreName(String currentName, String newName) throws ServerException {
         checkIfArbitraryStoreNameIsNotNull(newName);
 
         User user = currentUserService.getAuthorizedUser();
@@ -66,7 +66,7 @@ public class OnlineStoreService {
         throw new EntityNotFoundException(String.format("Online store with '%s' name not found", currentName));
     }
 
-    public void deleteOnlineStoreByName(String name) throws ServerException {
+    public void deleteByArbitraryStoreName(String name) throws ServerException {
         User user = currentUserService.getAuthorizedUser();
 
         Optional<OnlineStoreDetails> onlineStoreDetails = onlineStoreRepository.findByUserAndArbitraryStoreName(user, name);
