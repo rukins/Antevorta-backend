@@ -245,7 +245,6 @@ POST /products/update
 }
 ```
 
-
 ## ___Response If there is some problem___
 ```json lines
 {
