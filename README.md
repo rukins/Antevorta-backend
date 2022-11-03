@@ -1,6 +1,6 @@
 # Inventory_Management_System. Backend side
 
-## Authentication
+## Authorization
 ### Login
 ```http request
 POST /auth/login
@@ -12,33 +12,18 @@ POST /auth/login
   "password": "password"
 }
  ```
-- Response if there is no problem:
+- Returns:
 ```json
 {
   "status": 200,
   "message": "Logged in successfully"
 }
 ```
-- Response if there are problems:
-```json
-{
-  "status": 401,
-  "message": "User with first@gmail.co email is not found"
-}
-```
-OR
-```json
-{
-  "status": 401,
-  "message": "Wrong password"
-}
-```
-
 ### Logout
 ```http request
 POST /auth/logout
 ```
-- Response if there is no problem:
+- Returns:
 ```json
 {
   "status": 200,
@@ -59,41 +44,20 @@ POST /signup
   "password": "password"
 }
 ```
-- Response if there is no problem:
+- Returns:
 ```json
 {
   "status": 201,
   "message": "Signed up successfully"
 }
 ```
-- Response if there are problems:
-```json
-{
-  "status": 400,
-  "message": "User with first@gmail.com email already exists"
-}
-```
-OR
-```json
-{
-  "status": 400,
-  "message": "Incorrect email"
-}
-```
-OR
-```json
-{
-  "status": 400,
-  "message": "Please enter your first and last names. One of them or both are empty"
-}
-```
 
 ## Online stores
-### getAllOnlineStoresOfCurrentUser
+### getAll
 ```http request
 GET /onlinestores
 ```
-- Body:
+- Returns:
 ```json
 {
   "onlineStores": [
@@ -116,7 +80,7 @@ GET /onlinestores
   ]
 }
 ```
-### addOnlineStoreToUser
+### addToUser
 ```http request
 POST /onlinestores
 ```
@@ -129,109 +93,163 @@ POST /onlinestores
   "accessKey": "someAccessKey"
 }
 ```
-- Response if there is no problem:
+- Returns:
 ```json
 {
   "status": 201,
-  "message": "Online store 'storeName' successfully added"
+  "message": "Online store 'storeName' has been successfully added"
 }
 ```
-- Response if there are problems:
-```json
-{
-  "status": 400,
-  "message": "Arbitrary store name shouldn't be empty"
-}
-```
-OR
-```json
-{
-  "status": 400,
-  "message": "Store with 'SHOPIFY' type already exists"
-}
-```
-OR
-```json
-{
-  "status": 400,
-  "message": "Store with 'storeName' arbitrary name already exists"
-}
-```
-OR
-```json
-{
-  "status": 400,
-  "message": "Store with 'SHOPIFY' type already exists"
-}
-```
-
-### updateOnlineStoreName
+### updateArbitraryStoreName
 ```http request
-PUT /onlinestores/{currentName}?newName={newStoreName}
+PUT /onlinestores/{currentName}?new={newName}
 ```
-- Response if there is no problem:
+- Returns:
 ```json
 {
   "status": 200,
-  "message": "Name 'storeName' of online store successfully updated to 'newStoreName'"
+  "message": "Arbitrary store name 'storeName' of online store has been successfully updated to 'newStoreName'"
 }
 ```
-- Response if there are problems:
-```json
-{
-  "status": 400,
-  "message": "Arbitrary store name shouldn't be empty"
-}
-```
-OR
-```json
-{
-  "status": 400,
-  "message": "Online store with 'anotherName' name not found"
-}
-```
-
-### deleteOnlineStoreByName
+### deleteByArbitraryStoreName
 ```http request
 DELETE /onlinestores/{name}
 ```
-- Response if there is no problem:
+- Returns:
 ```json
 {
   "status": 200, 
-  "message": "Online store 'storeName' successfully deleted"
-}
-```
-- Response if there are problems:
-```json
-{
-  "status": 400,
-  "message": "Online store with 'storeNam' name not found"
+  "message": "Online store 'storeName' has been successfully deleted"
 }
 ```
 
-## ___Other response bodies___
+## Products
+### getAll
+```http request
+GET /products
+```
+- Returns:
 ```json
 {
-  "status": 401,
-  "message": "Unauthorized"
+  "products": [
+    {
+      "id": 1,
+      "productId": 999999,
+      "title": "Some title",
+      "product": {
+        
+      },
+      "type": "SHOPIFY",
+      "arbitraryStoreName": "storeName"
+    }
+  ]
 }
 ```
+`product` can have any json, depends on the type.
+### getAllByArbitraryStoreName
+```http request
+GET /products/{arbitraryStoreName}
+```
+- Returns:
 ```json
 {
-  "status": 404,
-  "message": "404 NOT_FOUND"
+  "products": [
+    {
+      "id": 1,
+      "productId": 999999,
+      "title": "Some title",
+      "product": {
+        
+      },
+      "type": "SHOPIFY",
+      "arbitraryStoreName": "storeName"
+    }
+  ]
 }
 ```
+`product` can have any json, depends on the type.
+### getById
+```http request
+GET /products/{id}
+```
+- Returns:
 ```json
 {
-  "status": 400,
-  "message": "400 BAD_REQUEST"
+  "id": 1,
+  "productId": 999999,
+  "title": "Some title",
+  "product": {
+
+  },
+  "type": "SHOPIFY",
+  "arbitraryStoreName": "storeName"
 }
 ```
+`product` can have any json, depends on the type.
+### create
+```http request
+POST /products/{arbitraryStoreName}
+```
+- Returns created product:
 ```json
 {
-  "status": 405,
-  "message": "405 METHOD_NOT_ALLOWED"
+  "id": 1,
+  "productId": 999999,
+  "title": "Some title",
+  "product": {
+
+  },
+  "type": "SHOPIFY",
+  "arbitraryStoreName": "storeName"
+}
+```
+`product` can have any json, depends on the type.
+### update
+```http request
+PUT /products/{id}
+```
+- Returns updated product:
+```json
+{
+  "id": 1,
+  "productId": 999999,
+  "title": "Some title",
+  "product": {
+
+  },
+  "type": "SHOPIFY",
+  "arbitraryStoreName": "storeName"
+}
+```
+`product` can have any json, depends on the type.
+### delete
+```http request
+DELETE /products/{id}
+```
+- Returns:
+```json
+{
+  "status": 200,
+  "message": "Product with id '1' has been successfully deleted"
+}
+```
+### updateProductList
+```http request
+POST /products/update
+```
+- Returns:
+```json
+{
+  "status": 200,
+  "message": "Product list has been successfully updated"
+}
+```
+
+
+## ___Response If there is some problem___
+```json lines
+{
+  "status": STATUS_CODE,
+  "message": "MESSAGE"
 }
 ```
