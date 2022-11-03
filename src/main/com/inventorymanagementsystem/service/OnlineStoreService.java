@@ -1,9 +1,9 @@
 package com.inventorymanagementsystem.service;
 
-import com.inventorymanagementsystem.exception.globalexception.ArbitraryStoreNameNotUniqueException;
-import com.inventorymanagementsystem.exception.globalexception.EmptyArbitraryStoreNameException;
-import com.inventorymanagementsystem.exception.globalexception.EntityNotFoundException;
-import com.inventorymanagementsystem.exception.globalexception.MultipleOnlineStoresException;
+import com.inventorymanagementsystem.exception.serverexception.ArbitraryStoreNameNotUniqueException;
+import com.inventorymanagementsystem.exception.serverexception.EmptyArbitraryStoreNameException;
+import com.inventorymanagementsystem.exception.serverexception.EntityNotFoundException;
+import com.inventorymanagementsystem.exception.serverexception.MultipleOnlineStoresException;
 import com.inventorymanagementsystem.model.OnlineStoreDetails;
 import com.inventorymanagementsystem.model.OnlineStoreType;
 import com.inventorymanagementsystem.model.User;

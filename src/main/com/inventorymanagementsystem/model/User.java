@@ -1,6 +1,6 @@
 package com.inventorymanagementsystem.model;
 
-import com.inventorymanagementsystem.exception.globalexception.IncorrectEmailException;
+import com.inventorymanagementsystem.exception.serverexception.IncorrectEmailException;
 import lombok.*;
 
 import javax.persistence.Entity;

@@ -1,4 +1,4 @@
-package com.inventorymanagementsystem.exception;
+package com.inventorymanagementsystem.security.exception;
 
 import com.inventorymanagementsystem.model.ResponseBody;
 import com.inventorymanagementsystem.utils.RequestUtils;
@@ -20,7 +20,7 @@ public class CustomAuthenticationEntryPoint implements AuthenticationEntryPoint 
     @Override
     public void commence(HttpServletRequest request, HttpServletResponse response, AuthenticationException authException)
             throws IOException {
-        ResponseBody body = new ResponseBody(HttpStatus.UNAUTHORIZED.value(), HttpStatus.UNAUTHORIZED.toString());
+        ResponseBody body = new ResponseBody(HttpStatus.FORBIDDEN.value(), HttpStatus.FORBIDDEN.getReasonPhrase());
 
         response.setHeader("Content-Type", "application/json");
         response.setStatus(body.getStatus());

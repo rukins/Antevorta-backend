@@ -1,7 +1,7 @@
 package com.inventorymanagementsystem.security.controller;
 
-import com.inventorymanagementsystem.exception.globalexception.EntityAlreadyExistsException;
-import com.inventorymanagementsystem.exception.globalexception.MissedFirstOrLastNameException;
+import com.inventorymanagementsystem.exception.serverexception.EntityAlreadyExistsException;
+import com.inventorymanagementsystem.exception.serverexception.MissedFirstOrLastNameException;
 import com.inventorymanagementsystem.model.ResponseBody;
 import com.inventorymanagementsystem.model.User;
 import com.inventorymanagementsystem.security.service.SignupService;

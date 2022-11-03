@@ -1,6 +1,6 @@
 package com.inventorymanagementsystem.security.service;
 
-import com.inventorymanagementsystem.exception.globalexception.EntityNotFoundException;
+import com.inventorymanagementsystem.exception.serverexception.EntityNotFoundException;
 import com.inventorymanagementsystem.model.User;
 import com.inventorymanagementsystem.repository.UserRepository;
 import lombok.SneakyThrows;
