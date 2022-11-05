@@ -28,6 +28,13 @@ public class ProductController {
         return ResponseEntity.status(HttpStatus.OK).header(HttpHeaders.CONTENT_TYPE, "application/json").body(body);
     }
 
+    @GetMapping("/{arbitraryStoreName}")
+    public ResponseEntity<?> getAllByArbitraryStoreName(@PathVariable String arbitraryStoreName) {
+        String body = ProductJsonUtils.getString(productService.getAllByArbitraryStoreName(arbitraryStoreName));
+
+        return ResponseEntity.status(HttpStatus.OK).header(HttpHeaders.CONTENT_TYPE, "application/json").body(body);
+    }
+
     @GetMapping("/{id}")
     public ResponseEntity<?> getById(@PathVariable Long id) throws ServerException {
         String body = ProductJsonUtils.getString(productService.getById(id));

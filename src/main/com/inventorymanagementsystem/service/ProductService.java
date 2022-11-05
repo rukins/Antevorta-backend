@@ -35,18 +35,24 @@ public class ProductService {
         this.encryptor = encryptor;
     }
 
+    public List<Product> getAll() {
+        User user = currentUserService.getAuthorizedUser();
+
+        return productRepository.findAllByUser(user);
+    }
+
+    public List<Product> getAllByArbitraryStoreName(String arbitraryStoreName) {
+        User user = currentUserService.getAuthorizedUser();
+
+        return productRepository.findAllByUserAndArbitraryStoreName(user, arbitraryStoreName);
+    }
+
     public Product getById(Long id) throws ServerException {
         User user = currentUserService.getAuthorizedUser();
 
         Optional<Product> product = productRepository.findByUserAndId(user, id);
 
         return product.orElseThrow(() -> new EntityNotFoundException(String.format("Product with id '%o' not found", id)));
-    }
-
-    public List<Product> getAll() {
-        User user = currentUserService.getAuthorizedUser();
-
-        return productRepository.findAllByUser(user);
     }
 
     public Product create(String productJson, String arbitraryStoreName) throws ServerException {
@@ -64,7 +70,7 @@ public class ProductService {
                 abstractOnlineStoreProduct = onlineStore.post(
                         ProductJsonUtils.getAbstractProduct(productJson, onlineStore.getType())
                 );
-            } catch (Exception E) {
+            } catch (Exception e) {
                 throw new ServerException(HttpStatus.BAD_REQUEST.toString());
             }
 
@@ -99,7 +105,7 @@ public class ProductService {
                             ProductJsonUtils.getAbstractProduct(productJson, onlineStore.getType()),
                             product.get().getProductId()
                     );
-                } catch (Exception E) {
+                } catch (Exception e) {
                     throw new ServerException(HttpStatus.BAD_REQUEST.toString());
                 }
 
