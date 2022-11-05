@@ -148,7 +148,7 @@ GET /products
 `product` can have any json, depends on the type.
 ### getAllByArbitraryStoreName
 ```http request
-GET /products/{arbitraryStoreName}
+GET /products?arbitraryStoreName={arbitraryStoreName}
 ```
 - Returns:
 ```json
@@ -188,7 +188,7 @@ GET /products/{id}
 `product` can have any json, depends on the type.
 ### create
 ```http request
-POST /products/{arbitraryStoreName}
+POST /products?arbitraryStoreName={arbitraryStoreName}
 ```
 - Returns created product:
 ```json
