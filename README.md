@@ -64,7 +64,7 @@ GET /onlinestores
     {
       "id": {
         "ordinal": 1,
-        "email": "first@gmail.com"
+        "email": "email@email.com"
       },
       "arbitraryStoreName": "storeName",
       "type": "SHOPIFY"
@@ -72,7 +72,7 @@ GET /onlinestores
     {
       "id": {
         "ordinal": 2,
-        "email": "first@gmail.com"
+        "email": "email@email.com"
       },
       "arbitraryStoreName": "anotherStoreName",
       "type": "AMAZON"
@@ -96,8 +96,14 @@ POST /onlinestores
 - Returns:
 ```json
 {
-  "status": 201,
-  "message": "Online store 'storeName' has been successfully added"
+  "onlineStore": {
+    "id": {
+      "ordinal": 1,
+      "email": "email@email.com"
+    },
+    "arbitraryStoreName": "storeName",
+    "type": "SHOPIFY"
+  }
 }
 ```
 ### updateArbitraryStoreName
@@ -107,8 +113,14 @@ PUT /onlinestores/{currentName}?new={newName}
 - Returns:
 ```json
 {
-  "status": 200,
-  "message": "Arbitrary store name 'storeName' of online store has been successfully updated to 'newStoreName'"
+  "onlineStore": {
+    "id": {
+      "ordinal": 1,
+      "email": "email@email.com"
+    },
+    "arbitraryStoreName": "newName",
+    "type": "SHOPIFY"
+  }
 }
 ```
 ### deleteByArbitraryStoreName
@@ -124,6 +136,24 @@ DELETE /onlinestores/{name}
 ```
 
 ## Products
+### getById
+```http request
+GET /products/{id}
+```
+- Returns:
+```json
+{
+  "id": 1,
+  "productId": 999999,
+  "title": "Some title",
+  "product": {
+
+  },
+  "type": "SHOPIFY",
+  "arbitraryStoreName": "storeName"
+}
+```
+`product` can have any json, depends on the type.
 ### getAll
 ```http request
 GET /products
@@ -148,7 +178,7 @@ GET /products
 `product` can have any json, depends on the type.
 ### getAllByArbitraryStoreName
 ```http request
-GET /products?arbitraryStoreName={arbitraryStoreName}
+GET /onlinestores/{arbitraryStoreName}/products
 ```
 - Returns:
 ```json
@@ -159,7 +189,8 @@ GET /products?arbitraryStoreName={arbitraryStoreName}
       "productId": 999999,
       "title": "Some title",
       "product": {
-        
+        "productId": 999999,
+        "title": "Some title"
       },
       "type": "SHOPIFY",
       "arbitraryStoreName": "storeName"
@@ -168,27 +199,9 @@ GET /products?arbitraryStoreName={arbitraryStoreName}
 }
 ```
 `product` can have any json, depends on the type.
-### getById
-```http request
-GET /products/{id}
-```
-- Returns:
-```json
-{
-  "id": 1,
-  "productId": 999999,
-  "title": "Some title",
-  "product": {
-
-  },
-  "type": "SHOPIFY",
-  "arbitraryStoreName": "storeName"
-}
-```
-`product` can have any json, depends on the type.
 ### create
 ```http request
-POST /products?arbitraryStoreName={arbitraryStoreName}
+POST /onlinestores/{arbitraryStoreName}/products
 ```
 - Returns created product:
 ```json
@@ -197,7 +210,8 @@ POST /products?arbitraryStoreName={arbitraryStoreName}
   "productId": 999999,
   "title": "Some title",
   "product": {
-
+    "productId": 999999,
+    "title": "Some title",
   },
   "type": "SHOPIFY",
   "arbitraryStoreName": "storeName"
@@ -215,7 +229,8 @@ PUT /products/{id}
   "productId": 999999,
   "title": "Some title",
   "product": {
-
+    "productId": 999999,
+    "title": "Some title",
   },
   "type": "SHOPIFY",
   "arbitraryStoreName": "storeName"
