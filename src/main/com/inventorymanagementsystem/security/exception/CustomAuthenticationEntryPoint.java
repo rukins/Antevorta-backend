@@ -5,6 +5,7 @@ import com.inventorymanagementsystem.utils.RequestUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.stereotype.Component;
@@ -22,7 +23,7 @@ public class CustomAuthenticationEntryPoint implements AuthenticationEntryPoint 
             throws IOException {
         ResponseBody body = new ResponseBody(HttpStatus.FORBIDDEN.value(), HttpStatus.FORBIDDEN.getReasonPhrase());
 
-        response.setHeader("Content-Type", "application/json");
+        response.setHeader("Content-Type", MediaType.APPLICATION_JSON_VALUE);
         response.setStatus(body.getStatus());
         response.getWriter().write(body.toString());
 
