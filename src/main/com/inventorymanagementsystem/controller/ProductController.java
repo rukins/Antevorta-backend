@@ -21,16 +21,9 @@ public class ProductController {
         this.productService = productService;
     }
 
-    @GetMapping
+    @GetMapping("")
     public ResponseEntity<?> getAll() {
         String body = ProductJsonUtils.getString(productService.getAll());
-
-        return ResponseEntity.status(HttpStatus.OK).header(HttpHeaders.CONTENT_TYPE, "application/json").body(body);
-    }
-
-    @GetMapping("")
-    public ResponseEntity<?> getAllByArbitraryStoreName(@RequestParam String arbitraryStoreName) {
-        String body = ProductJsonUtils.getString(productService.getAllByArbitraryStoreName(arbitraryStoreName));
 
         return ResponseEntity.status(HttpStatus.OK).header(HttpHeaders.CONTENT_TYPE, "application/json").body(body);
     }
@@ -38,13 +31,6 @@ public class ProductController {
     @GetMapping("/{id}")
     public ResponseEntity<?> getById(@PathVariable Long id) throws ServerException {
         String body = ProductJsonUtils.getString(productService.getById(id));
-
-        return ResponseEntity.status(HttpStatus.OK).header(HttpHeaders.CONTENT_TYPE, "application/json").body(body);
-    }
-
-    @PostMapping("")
-    public ResponseEntity<?> create(@RequestBody String requestBody, @RequestParam String arbitraryStoreName) throws ServerException {
-        String body = ProductJsonUtils.getString(productService.create(requestBody, arbitraryStoreName));
 
         return ResponseEntity.status(HttpStatus.OK).header(HttpHeaders.CONTENT_TYPE, "application/json").body(body);
     }

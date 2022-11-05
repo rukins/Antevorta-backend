@@ -5,7 +5,9 @@ import com.inventorymanagementsystem.model.OnlineStoreDetails;
 import com.inventorymanagementsystem.model.OnlineStoreType;
 import com.inventorymanagementsystem.model.ResponseBody;
 import com.inventorymanagementsystem.service.OnlineStoreService;
+import com.inventorymanagementsystem.service.ProductService;
 import com.inventorymanagementsystem.utils.OnlineStoreJsonUtils;
+import com.inventorymanagementsystem.utils.ProductJsonUtils;
 import com.inventorymanagementsystem.utils.RequestUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -23,10 +25,12 @@ public class OnlineStoreController {
     private static final Logger logger = LoggerFactory.getLogger(OnlineStoreController.class);
 
     private final OnlineStoreService onlineStoreService;
+    private final ProductService productService;
 
     @Autowired
-    public OnlineStoreController(OnlineStoreService onlineStoreService) {
+    public OnlineStoreController(OnlineStoreService onlineStoreService, ProductService productService) {
         this.onlineStoreService = onlineStoreService;
+        this.productService = productService;
     }
 
     @GetMapping("")
@@ -85,18 +89,32 @@ public class OnlineStoreController {
         return new ResponseEntity<>(body, HttpStatus.OK);
     }
 
-    @DeleteMapping("/{name}")
-    public ResponseEntity<?> deleteByArbitraryStoreName(@PathVariable String name, HttpServletRequest request)
+    @DeleteMapping("/{arbitraryStoreName}")
+    public ResponseEntity<?> deleteByArbitraryStoreName(@PathVariable String arbitraryStoreName, HttpServletRequest request)
             throws ServerException {
-        onlineStoreService.deleteByArbitraryStoreName(name);
+        onlineStoreService.deleteByArbitraryStoreName(arbitraryStoreName);
 
         ResponseBody body = new ResponseBody(HttpStatus.OK.value(),
-                String.format("Online store '%s' has been successfully deleted", name));
+                String.format("Online store '%s' has been successfully deleted", arbitraryStoreName));
 
         logger.debug(request.getMethod());
         logger.debug(RequestUtils.getHeadersString(request));
         logger.debug(body.toString());
 
         return new ResponseEntity<>(body, HttpStatus.OK);
+    }
+
+    @GetMapping("/{arbitraryStoreName}/products")
+    public ResponseEntity<?> getAllProductsByArbitraryStoreName(@PathVariable String arbitraryStoreName) {
+        String body = ProductJsonUtils.getString(productService.getAllByArbitraryStoreName(arbitraryStoreName));
+
+        return ResponseEntity.status(HttpStatus.OK).header(HttpHeaders.CONTENT_TYPE, "application/json").body(body);
+    }
+
+    @PostMapping("/{arbitraryStoreName}/products")
+    public ResponseEntity<?> createProduct(@RequestBody String requestBody, @PathVariable String arbitraryStoreName) throws ServerException {
+        String body = ProductJsonUtils.getString(productService.create(requestBody, arbitraryStoreName));
+
+        return ResponseEntity.status(HttpStatus.OK).header(HttpHeaders.CONTENT_TYPE, "application/json").body(body);
     }
 }
