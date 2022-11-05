@@ -147,7 +147,8 @@ GET /products/{id}
   "productId": 999999,
   "title": "Some title",
   "product": {
-
+    "productId": 999999,
+    "title": "Some title"
   },
   "type": "SHOPIFY",
   "arbitraryStoreName": "storeName"
@@ -167,7 +168,8 @@ GET /products
       "productId": 999999,
       "title": "Some title",
       "product": {
-        
+        "productId": 999999,
+        "title": "Some title"
       },
       "type": "SHOPIFY",
       "arbitraryStoreName": "storeName"
@@ -211,7 +213,7 @@ POST /onlinestores/{arbitraryStoreName}/products
   "title": "Some title",
   "product": {
     "productId": 999999,
-    "title": "Some title",
+    "title": "Some title"
   },
   "type": "SHOPIFY",
   "arbitraryStoreName": "storeName"
@@ -230,7 +232,7 @@ PUT /products/{id}
   "title": "Some title",
   "product": {
     "productId": 999999,
-    "title": "Some title",
+    "title": "Some title"
   },
   "type": "SHOPIFY",
   "arbitraryStoreName": "storeName"
