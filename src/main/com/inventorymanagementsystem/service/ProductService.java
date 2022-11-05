@@ -40,7 +40,7 @@ public class ProductService {
 
         Optional<Product> product = productRepository.findByUserAndId(user, id);
 
-        return product.orElseThrow(() -> new  EntityNotFoundException(""));
+        return product.orElseThrow(() -> new EntityNotFoundException(String.format("Product with id '%o' not found", id)));
     }
 
     public List<Product> getAll() {
