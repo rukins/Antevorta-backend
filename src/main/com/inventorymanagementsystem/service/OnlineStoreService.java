@@ -33,7 +33,7 @@ public class OnlineStoreService {
         return onlineStoreRepository.findAllByUserAndTypeWithoutCredentials(currentUserService.getAuthorizedUser(), type);
     }
 
-    public void addToUser(OnlineStoreDetails onlineStore) throws ServerException {
+    public OnlineStoreDetails addToUser(OnlineStoreDetails onlineStore) throws ServerException {
         checkIfArbitraryStoreNameIsNotNull(onlineStore.getArbitraryStoreName());
 
         User user = currentUserService.getAuthorizedUser();
@@ -46,9 +46,11 @@ public class OnlineStoreService {
         onlineStore.generateId(onlineStoreRepository.countByUser(user));
 
         onlineStoreRepository.save(onlineStore);
+
+        return new OnlineStoreDetails(onlineStore.getId(), onlineStore.getArbitraryStoreName(), onlineStore.getType());
     }
 
-    public void updateArbitraryStoreName(String currentName, String newName) throws ServerException {
+    public OnlineStoreDetails updateArbitraryStoreName(String currentName, String newName) throws ServerException {
         checkIfArbitraryStoreNameIsNotNull(newName);
 
         User user = currentUserService.getAuthorizedUser();
@@ -62,7 +64,10 @@ public class OnlineStoreService {
 
             onlineStoreRepository.save(onlineStoreDetails.get());
 
-            return;
+            return new OnlineStoreDetails(onlineStoreDetails.get().getId(),
+                    onlineStoreDetails.get().getArbitraryStoreName(),
+                    onlineStoreDetails.get().getType()
+            );
         }
 
         throw new EntityNotFoundException(String.format("Online store with '%s' name not found", currentName));

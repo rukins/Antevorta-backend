@@ -61,16 +61,13 @@ public class OnlineStoreController {
     @PostMapping("")
     public ResponseEntity<?> addToUser(@RequestBody OnlineStoreDetails onlineStoreDetails, HttpServletRequest request)
             throws ServerException {
-        onlineStoreService.addToUser(onlineStoreDetails);
-
-        ResponseBody body = new ResponseBody(HttpStatus.CREATED.value(),
-                String.format("Online store '%s' has been successfully added", onlineStoreDetails.getArbitraryStoreName()));
+        String body = OnlineStoreJsonUtils.getString(onlineStoreService.addToUser(onlineStoreDetails));
 
         logger.debug(request.getMethod());
         logger.debug(RequestUtils.getHeadersString(request));
-        logger.debug(body.toString());
+        logger.debug(body);
 
-        return new ResponseEntity<>(body, HttpStatus.CREATED);
+        return ResponseEntity.status(HttpStatus.OK).header(HttpHeaders.CONTENT_TYPE, "application/json").body(body);
     }
 
     @PutMapping("/{currentName}")
@@ -78,15 +75,13 @@ public class OnlineStoreController {
                                                    HttpServletRequest request) throws ServerException {
         onlineStoreService.updateArbitraryStoreName(currentName, newName);
 
-        ResponseBody body = new ResponseBody(HttpStatus.OK.value(),
-                String.format("Arbitrary store name '%s' of online store has been successfully updated to '%s'",
-                        currentName, newName));
+        String body = OnlineStoreJsonUtils.getString(onlineStoreService.updateArbitraryStoreName(currentName, newName));
 
         logger.debug(request.getMethod());
         logger.debug(RequestUtils.getHeadersString(request));
-        logger.debug(body.toString());
+        logger.debug(body);
 
-        return new ResponseEntity<>(body, HttpStatus.OK);
+        return ResponseEntity.status(HttpStatus.OK).header(HttpHeaders.CONTENT_TYPE, "application/json").body(body);
     }
 
     @DeleteMapping("/{arbitraryStoreName}")
