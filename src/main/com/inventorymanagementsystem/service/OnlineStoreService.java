@@ -6,6 +6,7 @@ import com.inventorymanagementsystem.model.OnlineStoreType;
 import com.inventorymanagementsystem.model.User;
 import com.inventorymanagementsystem.repository.OnlineStoreRepository;
 import com.inventorymanagementsystem.security.encryptor.Encryptor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -17,6 +18,7 @@ public class OnlineStoreService {
     private final CurrentUserService currentUserService;
     private final Encryptor encryptor;
 
+    @Autowired
     public OnlineStoreService(OnlineStoreRepository onlineStoreRepository, CurrentUserService currentUserService, Encryptor encryptor) {
         this.onlineStoreRepository = onlineStoreRepository;
         this.currentUserService = currentUserService;

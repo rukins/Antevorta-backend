@@ -18,14 +18,17 @@ import org.springframework.security.web.SecurityFilterChain;
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig {
+    private final CustomUserDetailsService userDetailsService;
+    private final CustomAuthenticationProvider authenticationProvider;
+    private final AuthenticationEntryPoint authenticationEntryPoint;
+
     @Autowired
-    private CustomUserDetailsService userDetailsService;
-
-     @Autowired
-     private CustomAuthenticationProvider authenticationProvider;
-
-     @Autowired
-     private AuthenticationEntryPoint authenticationEntryPoint;
+    public SecurityConfig(CustomUserDetailsService userDetailsService, CustomAuthenticationProvider authenticationProvider,
+                          AuthenticationEntryPoint authenticationEntryPoint) {
+        this.userDetailsService = userDetailsService;
+        this.authenticationProvider = authenticationProvider;
+        this.authenticationEntryPoint = authenticationEntryPoint;
+    }
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {

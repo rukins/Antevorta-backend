@@ -9,6 +9,7 @@ import com.inventorymanagementsystem.utils.OnlineStoreJsonUtils;
 import com.inventorymanagementsystem.utils.RequestUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -23,6 +24,7 @@ public class OnlineStoreController {
 
     private final OnlineStoreService onlineStoreService;
 
+    @Autowired
     public OnlineStoreController(OnlineStoreService onlineStoreService) {
         this.onlineStoreService = onlineStoreService;
     }

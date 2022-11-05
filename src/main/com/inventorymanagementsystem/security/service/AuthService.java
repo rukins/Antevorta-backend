@@ -2,6 +2,7 @@ package com.inventorymanagementsystem.security.service;
 
 import com.inventorymanagementsystem.security.model.UserCredentials;
 import lombok.SneakyThrows;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -18,6 +19,7 @@ import javax.servlet.http.HttpSession;
 public class AuthService {
     private final AuthenticationProvider authenticationProvider;
 
+    @Autowired
     public AuthService(AuthenticationProvider authenticationProvider) {
         this.authenticationProvider = authenticationProvider;
     }

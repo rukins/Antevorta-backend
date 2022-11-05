@@ -4,6 +4,7 @@ import com.inventorymanagementsystem.exception.serverexception.EntityNotFoundExc
 import com.inventorymanagementsystem.model.User;
 import com.inventorymanagementsystem.repository.UserRepository;
 import lombok.SneakyThrows;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
@@ -13,6 +14,7 @@ import java.util.Optional;
 public class CurrentUserService {
     private final UserRepository userRepository;
 
+    @Autowired
     public CurrentUserService(UserRepository userRepository) {
         this.userRepository = userRepository;
     }

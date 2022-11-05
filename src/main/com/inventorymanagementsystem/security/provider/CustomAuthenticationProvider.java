@@ -4,17 +4,19 @@ import com.inventorymanagementsystem.exception.authexception.WrongPasswordExcept
 import com.inventorymanagementsystem.security.encryptor.Encryptor;
 import com.inventorymanagementsystem.security.service.CustomUserDetailsService;
 import lombok.SneakyThrows;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 
- @Component
+@Component
 public class CustomAuthenticationProvider implements AuthenticationProvider {
     private final Encryptor encryptor;
     private final CustomUserDetailsService userDetailsService;
 
+    @Autowired
     public CustomAuthenticationProvider(Encryptor encryptor, CustomUserDetailsService userDetailsService) {
         this.encryptor = encryptor;
         this.userDetailsService = userDetailsService;

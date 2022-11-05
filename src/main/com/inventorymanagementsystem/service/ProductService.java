@@ -11,6 +11,7 @@ import com.inventorymanagementsystem.repository.OnlineStoreRepository;
 import com.inventorymanagementsystem.repository.ProductRepository;
 import com.inventorymanagementsystem.security.encryptor.Encryptor;
 import com.inventorymanagementsystem.utils.ProductJsonUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
@@ -25,6 +26,7 @@ public class ProductService {
     private final CurrentUserService currentUserService;
     private final Encryptor encryptor;
 
+    @Autowired
     public ProductService(ProductRepository productRepository, OnlineStoreRepository onlineStoreRepository,
                           CurrentUserService currentUserService, Encryptor encryptor) {
         this.productRepository = productRepository;

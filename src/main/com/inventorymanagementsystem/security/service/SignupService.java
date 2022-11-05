@@ -5,6 +5,7 @@ import com.inventorymanagementsystem.exception.serverexception.MissedFirstOrLast
 import com.inventorymanagementsystem.model.User;
 import com.inventorymanagementsystem.repository.UserRepository;
 import com.inventorymanagementsystem.security.encryptor.Encryptor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RequestBody;
 
@@ -14,6 +15,7 @@ public class SignupService {
 
     private final Encryptor encryptor;
 
+    @Autowired
     public SignupService(UserRepository userRepository, Encryptor encryptor) {
         this.userRepository = userRepository;
         this.encryptor = encryptor;
