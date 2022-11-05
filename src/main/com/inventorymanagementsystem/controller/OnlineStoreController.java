@@ -73,8 +73,6 @@ public class OnlineStoreController {
     @PutMapping("/{currentName}")
     public ResponseEntity<?> updateArbitraryStoreName(@PathVariable String currentName, @RequestParam("new") String newName,
                                                    HttpServletRequest request) throws ServerException {
-        onlineStoreService.updateArbitraryStoreName(currentName, newName);
-
         String body = OnlineStoreJsonUtils.getString(onlineStoreService.updateArbitraryStoreName(currentName, newName));
 
         logger.debug(request.getMethod());
