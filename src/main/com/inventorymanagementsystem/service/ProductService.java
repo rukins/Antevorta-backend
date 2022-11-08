@@ -74,12 +74,8 @@ public class ProductService {
                 throw new ServerException(HttpStatus.BAD_REQUEST.toString());
             }
 
-            return productRepository.save(Product.builder()
-                                                    .product(ProductJsonUtils.getString(abstractOnlineStoreProduct))
-                                                    .title(abstractOnlineStoreProduct.getTitle())
-                                                    .productId(abstractOnlineStoreProduct.getId())
-                                                    .onlineStoreDetails(onlineStoreDetails.get())
-                                                .build()
+            return productRepository.save(
+                    new Product(ProductJsonUtils.getString(abstractOnlineStoreProduct), onlineStoreDetails.get())
             );
         }
 
@@ -162,12 +158,7 @@ public class ProductService {
 
             products.addAll(
                     storeProducts.stream()
-                            .map(p -> Product.builder()
-                                        .product(ProductJsonUtils.getString(p))
-                                        .title(p.getTitle())
-                                        .productId(p.getId())
-                                        .onlineStoreDetails(onlineStoreDetails)
-                                    .build()
+                            .map(p -> new Product(ProductJsonUtils.getString(p), onlineStoreDetails)
                             )
                             .filter(p -> !productRepository
                                     .existsByProductIdAndArbitraryStoreName(p.getProductId(), p.getArbitraryStoreName()))
