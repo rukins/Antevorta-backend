@@ -133,6 +133,8 @@ public class ProductService {
 
                 onlineStore.delete(product.get().getProductId());
                 productRepository.deleteById(id);
+
+                return;
             }
 
             throw new EntityNotFoundException(String.format("Online store with '%s' name not found",
