@@ -17,7 +17,7 @@ import java.util.Objects;
 public class OnlineStoreDetails {
     @EmbeddedId
     private Id id = new Id();
-    @Column(unique = true)
+    @Column(nullable = false)
     private String arbitraryStoreName;
     private OnlineStoreType type;
     private String storeName;
