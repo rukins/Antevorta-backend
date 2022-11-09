@@ -17,7 +17,9 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class ProductService {
@@ -156,16 +158,41 @@ public class ProductService {
             AbstractOnlineStore onlineStore = AbstractOnlineStore.create(onlineStoreDetails.getType(),
                     onlineStoreDetails.getStoreName(), encryptor.decrypt(onlineStoreDetails.getAccessKey()));
 
-            List<AbstractOnlineStoreProduct> storeProducts = onlineStore.getAll();
+            Map<Long, String> productIdAndProductMap = onlineStore.getAll().stream()
+                    .collect(Collectors.toMap(AbstractOnlineStoreProduct::getId, ProductJsonUtils::getString));
+            List<Long> productIdsFromRepo = productRepository
+                    .findAllProductIdsByUserAndArbitraryStoreName(user, onlineStoreDetails.getArbitraryStoreName());
 
-            products.addAll(
-                    storeProducts.stream()
-                            .map(p -> new Product(ProductJsonUtils.getString(p), onlineStoreDetails)
-                            )
-                            .filter(p -> !productRepository
-                                    .existsByProductIdAndArbitraryStoreName(p.getProductId(), p.getArbitraryStoreName()))
-                            .toList()
+            // delete if product doesn't exist in online store
+            productIdsFromRepo.stream().filter(pId -> !productIdAndProductMap.containsKey(pId)).forEach(
+                    pId -> productRepository
+                            .deleteByUserAndProductIdAndArbitraryStoreName(user, pId, onlineStoreDetails.getArbitraryStoreName())
             );
+
+            List<Product> productsToSave = new ArrayList<>();
+
+            // update if product json is updated and add to productsToSave if it doesn't exist
+            productIdAndProductMap.keySet().forEach(
+                    id -> {
+                        Optional<Product> product = productRepository
+                                .findByUserAndProductIdAndArbitraryStoreName(user, id, onlineStoreDetails.getArbitraryStoreName());
+
+                        if (product.isPresent()) {
+                            if (!product.get().getProduct().equals(productIdAndProductMap.get(id))) {
+                                product.get().setProduct(productIdAndProductMap.get(id));
+
+                                productsToSave.add(product.get());
+                            }
+                        }
+
+                        if (!productRepository
+                                .existsByUserAndProductIdAndArbitraryStoreName(user, id, onlineStoreDetails.getArbitraryStoreName())) {
+                            productsToSave.add(new Product(productIdAndProductMap.get(id), onlineStoreDetails));
+                        }
+                    }
+            );
+
+            products.addAll(productsToSave);
         }
 
         productRepository.saveAll(products);
