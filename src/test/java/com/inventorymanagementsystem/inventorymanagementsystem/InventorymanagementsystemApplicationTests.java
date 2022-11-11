@@ -1,4 +1,4 @@
-package com.inventorymanagementsystem.inventorymanagementsystem;
+package com.antevorta.inventorymanagementsystem;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;

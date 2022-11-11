@@ -13,8 +13,8 @@ services:
       interval: 10s
       timeout: 5s
       retries: 5
-  inventory:
-    image: 'inventory-docker'
+  antevorta:
+    image: 'antevorta-docker'
     ports:
       - "8081:8081"
     environment:
