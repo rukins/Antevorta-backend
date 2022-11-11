@@ -117,7 +117,7 @@ public class ProductService {
             );
         }
 
-        throw new EntityNotFoundException(String.format("Online store with id '%o' not found", id));
+        throw new EntityNotFoundException(String.format("Product with id '%o' not found", id));
     }
 
     public void delete(Long id) throws ServerException {
