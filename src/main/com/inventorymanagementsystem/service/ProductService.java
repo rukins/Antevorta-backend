@@ -1,6 +1,7 @@
 package com.inventorymanagementsystem.service;
 
 import com.inventorymanagementsystem.exception.serverexception.EntityNotFoundException;
+import com.inventorymanagementsystem.exception.serverexception.JsonSyntaxException;
 import com.inventorymanagementsystem.exception.serverexception.ServerException;
 import com.inventorymanagementsystem.model.OnlineStoreDetails;
 import com.inventorymanagementsystem.model.Product;
@@ -10,6 +11,7 @@ import com.inventorymanagementsystem.onlinestore.AbstractOnlineStoreProduct;
 import com.inventorymanagementsystem.repository.OnlineStoreRepository;
 import com.inventorymanagementsystem.repository.ProductRepository;
 import com.inventorymanagementsystem.security.encryptor.Encryptor;
+import com.inventorymanagementsystem.utils.JsonUtils;
 import com.inventorymanagementsystem.utils.ProductJsonUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -58,6 +60,10 @@ public class ProductService {
     }
 
     public Product create(String productJson, String arbitraryStoreName) throws ServerException {
+        if (!JsonUtils.isValid(productJson)) {
+            throw new JsonSyntaxException("Json is invalid");
+        }
+
         User user = currentUserService.getAuthorizedUser();
 
         Optional<OnlineStoreDetails> onlineStoreDetails = onlineStoreRepository
@@ -85,6 +91,10 @@ public class ProductService {
     }
 
     public Product update(String productJson, Long id) throws ServerException {
+        if (!JsonUtils.isValid(productJson)) {
+            throw new JsonSyntaxException("Json is invalid");
+        }
+
         User user = currentUserService.getAuthorizedUser();
 
         Optional<Product> product = productRepository.findByUserAndId(user, id);
