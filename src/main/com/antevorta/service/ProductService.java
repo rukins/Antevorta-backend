@@ -17,10 +17,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -155,6 +152,31 @@ public class ProductService {
         }
 
         throw new EntityNotFoundException(String.format("Product with id '%o' not found", id));
+    }
+
+    public Product merge(String productJson, String productIds) throws ServerException {
+        if (!JsonUtils.isValid(productJson)) {
+            throw new JsonSyntaxException("Json is invalid");
+        }
+
+        User user = currentUserService.getAuthorizedUser();
+
+        List<Long> productIdsList = Arrays.stream(productIds.split(","))
+                .map(id -> Long.parseLong(id.trim()))
+                .toList();
+
+        List<Product> mergedProducts = new ArrayList<>();
+        for (Long id : productIdsList) {
+            Optional<Product> product = productRepository.findByUserAndId(user, id);
+
+            if (product.isPresent() && !product.get().isLinker()) {
+                mergedProducts.add(product.get());
+            }
+        }
+
+        return productRepository.save(
+                new Product(productJson, mergedProducts)
+        );
     }
 
     public void updateProductList() {

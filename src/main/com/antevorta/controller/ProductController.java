@@ -59,6 +59,15 @@ public class ProductController {
         return new ResponseEntity<>(body, HttpStatus.OK);
     }
 
+    @PostMapping("/merge")
+    public ResponseEntity<?> merge(@RequestBody String productJson, @RequestParam("id") String productIds) throws ServerException {
+        String body = ProductJsonUtils.getString(productService.merge(productJson, productIds));
+
+        return ResponseEntity.status(HttpStatus.OK)
+                .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
+                .body(body);
+    }
+
     @PostMapping("/update")
     public ResponseEntity<?> updateProductList() {
         productService.updateProductList();

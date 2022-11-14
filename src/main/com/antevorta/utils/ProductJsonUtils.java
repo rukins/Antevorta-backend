@@ -42,8 +42,20 @@ public class ProductJsonUtils {
         productJson.addProperty("productId", product.getProductId());
         productJson.addProperty("title", product.getTitle());
         productJson.add("product", JsonParser.parseString(product.getProduct()));
+
+        if (product.isLinker()) {
+            JsonArray mergedProductJsonArray = new JsonArray();
+            for (Product mergedProduct : product.getMergedProducts()) {
+                mergedProductJsonArray.add(getJsonObject(mergedProduct));
+            }
+            productJson.add("mergedProducts", mergedProductJsonArray);
+        }
+
         productJson.addProperty("type", product.getType().toString());
-        productJson.addProperty("arbitraryStoreName", product.getArbitraryStoreName());
+
+        if (!product.isLinker()) {
+            productJson.addProperty("arbitraryStoreName", product.getArbitraryStoreName());
+        }
 
         return productJson;
     }

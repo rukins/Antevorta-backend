@@ -5,10 +5,12 @@ import com.antevorta.utils.ProductJsonUtils;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
 import javax.persistence.*;
+import java.util.List;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -38,6 +40,14 @@ public class Product {
     })
     private OnlineStoreDetails onlineStoreDetails;
 
+    @Getter
+    @ManyToMany
+    private List<Product> mergedProducts = null;
+
+    @Getter
+    @Setter
+    private boolean isLinker = false;
+
     public Product(String product, OnlineStoreDetails onlineStoreDetails) {
         this.product = product;
         this.onlineStoreDetails = onlineStoreDetails;
@@ -45,8 +55,26 @@ public class Product {
         setProductIdAndTitle(product);
     }
 
-    public OnlineStoreType getType() {
-        return this.onlineStoreDetails.getType();
+    public Product(Long id, Long productId, String title, String product, OnlineStoreDetails onlineStoreDetails) {
+        this.id = id;
+        this.productId = productId;
+        this.title = title;
+        this.product = product;
+        this.onlineStoreDetails = onlineStoreDetails;
+    }
+
+    public Product(String product, List<Product> mergedProducts) {
+        this.product = product;
+        this.mergedProducts = mergedProducts;
+        this.isLinker = true;
+    }
+
+    public ProductType getType() {
+        if (this.isLinker) {
+            return ProductType.PRODUCT_LINKER;
+        }
+
+        return ProductType.valueOf(this.onlineStoreDetails.getType().toString());
     }
 
     public String getArbitraryStoreName() {
@@ -56,11 +84,14 @@ public class Product {
     public void setProduct(String product) {
         this.product = product;
 
-        setProductIdAndTitle(product);
+        if (!this.isLinker) {
+            setProductIdAndTitle(product);
+        }
     }
 
     private void setProductIdAndTitle(String product) {
-        AbstractOnlineStoreProduct storeProduct = ProductJsonUtils.getAbstractProduct(product, getType());
+        AbstractOnlineStoreProduct storeProduct = ProductJsonUtils
+                .getAbstractProduct(product, OnlineStoreType.valueOf(this.getType().toString()));
 
         this.productId = storeProduct.getId();
         this.title = storeProduct.getTitle();
