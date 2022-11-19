@@ -1,6 +1,7 @@
 package com.antevorta.model;
 
 import com.antevorta.exception.serverexception.IncorrectEmailException;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.*;
 
 import javax.persistence.*;
@@ -18,6 +19,7 @@ public class User {
 
     @Column(unique = true)
     private String email;
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private String password;
     private String firstname;
     private String lastname;
