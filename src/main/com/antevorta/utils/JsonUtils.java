@@ -1,19 +1,13 @@
 package com.antevorta.utils;
 
-import com.google.gson.Gson;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonSyntaxException;
-import com.google.gson.TypeAdapter;
-
-import java.io.IOException;
+import com.fasterxml.jackson.core.JacksonException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 public class JsonUtils {
-    private static final TypeAdapter<JsonElement> adapter = new Gson().getAdapter(JsonElement.class);
-
     public static boolean isValid(String json) {
         try {
-            adapter.fromJson(json);
-        } catch (JsonSyntaxException | IOException e) {
+            new ObjectMapper().readTree(json);
+        } catch (JacksonException e) {
             return false;
         }
         return true;

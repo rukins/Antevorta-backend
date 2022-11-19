@@ -175,7 +175,7 @@ public class ProductService {
         }
 
         return productRepository.save(
-                new Product(productJson, mergedProducts)
+                new Product(productJson, mergedProducts, user)
         );
     }
 

@@ -66,29 +66,15 @@ public class OnlineStoreController {
     @PostMapping("")
     public ResponseEntity<?> addToUser(@RequestBody OnlineStoreDetails onlineStoreDetails, HttpServletRequest request)
             throws ServerException {
-        String body = OnlineStoreJsonUtils.getString(onlineStoreService.addToUser(onlineStoreDetails));
-
-        logger.debug(request.getMethod());
-        logger.debug(RequestUtils.getHeadersString(request));
-        logger.debug(body);
-
-        return ResponseEntity.status(HttpStatus.OK)
-                .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
-                .body(body);
+        return ResponseEntity.status(HttpStatus.OK).contentType(MediaType.APPLICATION_JSON)
+                .body(OnlineStoreJsonUtils.getString(onlineStoreService.addToUser(onlineStoreDetails)));
     }
 
     @PutMapping("/{currentName}")
-    public ResponseEntity<?> updateArbitraryStoreName(@PathVariable String currentName, @RequestParam("new") String newName,
-                                                   HttpServletRequest request) throws ServerException {
-        String body = OnlineStoreJsonUtils.getString(onlineStoreService.updateArbitraryStoreName(currentName, newName));
-
-        logger.debug(request.getMethod());
-        logger.debug(RequestUtils.getHeadersString(request));
-        logger.debug(body);
-
-        return ResponseEntity.status(HttpStatus.OK)
-                .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
-                .body(body);
+    public ResponseEntity<?> updateArbitraryStoreName(@PathVariable String currentName, @RequestParam("new") String newName)
+            throws ServerException {
+        return ResponseEntity.status(HttpStatus.OK).contentType(MediaType.APPLICATION_JSON)
+                .body(OnlineStoreJsonUtils.getString(onlineStoreService.updateArbitraryStoreName(currentName, newName)));
     }
 
     @DeleteMapping("/{arbitraryStoreName}")
@@ -96,31 +82,21 @@ public class OnlineStoreController {
             throws ServerException {
         onlineStoreService.deleteByArbitraryStoreName(arbitraryStoreName);
 
-        ResponseBody body = new ResponseBody(HttpStatus.OK.value(),
-                String.format("Online store '%s' has been successfully deleted", arbitraryStoreName));
-
-        logger.debug(request.getMethod());
-        logger.debug(RequestUtils.getHeadersString(request));
-        logger.debug(body.toString());
-
-        return new ResponseEntity<>(body, HttpStatus.OK);
+        return ResponseEntity.ok(
+                new ResponseBody(HttpStatus.OK.value(),
+                        String.format("Online store '%s' has been successfully deleted", arbitraryStoreName))
+        );
     }
 
     @GetMapping("/{arbitraryStoreName}/products")
     public ResponseEntity<?> getAllProductsByArbitraryStoreName(@PathVariable String arbitraryStoreName) {
-        String body = ProductJsonUtils.getString(productService.getAllByArbitraryStoreName(arbitraryStoreName));
-
-        return ResponseEntity.status(HttpStatus.OK)
-                .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
-                .body(body);
+        return ResponseEntity.status(HttpStatus.OK).contentType(MediaType.APPLICATION_JSON)
+                .body(ProductJsonUtils.getString(productService.getAllByArbitraryStoreName(arbitraryStoreName)));
     }
 
     @PostMapping("/{arbitraryStoreName}/products")
-    public ResponseEntity<?> createProduct(@RequestBody String requestBody, @PathVariable String arbitraryStoreName) throws ServerException {
-        String body = ProductJsonUtils.getString(productService.create(requestBody, arbitraryStoreName));
-
-        return ResponseEntity.status(HttpStatus.OK)
-                .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
-                .body(body);
+    public ResponseEntity<?> createProduct(@RequestBody String requestBody, @PathVariable String arbitraryStoreName)
+            throws ServerException {
+        return ResponseEntity.ok(productService.create(requestBody, arbitraryStoreName));
     }
 }

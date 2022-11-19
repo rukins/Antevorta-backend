@@ -1,5 +1,8 @@
 package com.antevorta.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -9,24 +12,36 @@ import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Objects;
 
-@Getter
+@JsonInclude(JsonInclude.Include.NON_NULL)
 @Setter
+@Getter
 @NoArgsConstructor
 @Entity
 @Table(name = "online_stores")
 public class OnlineStoreDetails {
+    @Getter
     @EmbeddedId
     private Id id = new Id();
+
+    @Getter
     @Column(nullable = false)
     private String arbitraryStoreName;
+
+    @Getter
     private OnlineStoreType type;
+
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private String storeName;
+
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private String accessKey;
 
+    @JsonIgnore
+    @Getter
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(
-            name = "USER_EMAIL",
-            insertable = false, updatable = false, nullable = false
+            name = "USER_ID",
+            updatable = false, nullable = false
     )
     private User user;
 
@@ -44,6 +59,7 @@ public class OnlineStoreDetails {
     @Embeddable
     @NoArgsConstructor
     @AllArgsConstructor
+    @Getter
     @Setter
     public static class Id implements Serializable {
         private Long ordinal;

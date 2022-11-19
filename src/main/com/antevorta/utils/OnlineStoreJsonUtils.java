@@ -1,45 +1,44 @@
 package com.antevorta.utils;
 
-import com.google.gson.Gson;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
 import com.antevorta.model.OnlineStoreDetails;
 import com.antevorta.model.OnlineStoreType;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ArrayNode;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 
 import java.util.List;
 
 public class OnlineStoreJsonUtils {
-    private final static Gson gson = new Gson();
-
     public static String getString(OnlineStoreDetails onlineStore) {
-        JsonObject jsonObject = new JsonObject();
+        ObjectMapper objectMapper = new ObjectMapper();
 
-        JsonElement jsonElement = JsonParser.parseString(gson.toJson(onlineStore));
+        ObjectNode objectNode = objectMapper.createObjectNode();
 
-        jsonObject.add("onlineStore", jsonElement);
+        objectNode.put("onlineStore", objectMapper.valueToTree(onlineStore));
 
-        return jsonObject.toString();
+        return objectNode.toString();
     }
 
     public static String getString(List<OnlineStoreDetails> onlineStores) {
-        JsonObject jsonObject = new JsonObject();
+        ObjectMapper objectMapper = new ObjectMapper();
 
-        JsonElement jsonElement = JsonParser.parseString(gson.toJson(onlineStores));
+        ObjectNode objectNode = objectMapper.createObjectNode();
+        ArrayNode arrayNode = objectMapper.valueToTree(onlineStores);
 
-        jsonObject.add("onlineStores", jsonElement);
+        objectNode.putArray("onlineStores").addAll(arrayNode);
 
-        return jsonObject.toString();
+        return objectNode.toString();
     }
 
-    public static String getString(List<OnlineStoreDetails> onlineStoreJson, OnlineStoreType type) {
-        JsonObject jsonObject = new JsonObject();
+    public static String getString(List<OnlineStoreDetails> onlineStores, OnlineStoreType type) {
+        ObjectMapper objectMapper = new ObjectMapper();
 
-        JsonElement jsonElement = JsonParser.parseString(gson.toJson(onlineStoreJson));
+        ObjectNode objectNode = objectMapper.createObjectNode();
+        ArrayNode arrayNode = objectMapper.valueToTree(onlineStores);
 
-        jsonObject.add("onlineStores", jsonElement);
-        jsonObject.addProperty("type", type.toString());
+        objectNode.putArray("onlineStores").addAll(arrayNode);
+        objectNode.put("type", type.toString());
 
-        return jsonObject.toString();
+        return objectNode.toString();
     }
 }

@@ -2,17 +2,18 @@ package com.antevorta.model;
 
 import com.antevorta.onlinestore.AbstractOnlineStoreProduct;
 import com.antevorta.utils.ProductJsonUtils;
-import lombok.AllArgsConstructor;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonRawValue;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
 import javax.persistence.*;
 import java.util.List;
 
-@AllArgsConstructor
+@JsonInclude(JsonInclude.Include.NON_NULL)
 @NoArgsConstructor
 @Entity
 @Table(name = "products")
@@ -28,6 +29,7 @@ public class Product {
     @Getter
     private String title;
 
+    @JsonRawValue
     @Getter
     @Column(columnDefinition = "TEXT")
     private String product;
@@ -40,19 +42,26 @@ public class Product {
     })
     private OnlineStoreDetails onlineStoreDetails;
 
-    @Getter
-    @ManyToMany
-    private List<Product> mergedProducts = null;
+    @JsonIgnore
+    @ManyToOne
+    @OnDelete(action = OnDeleteAction.CASCADE)
+    private User user;
 
-    @Getter
-    @Setter
+    @ManyToMany(fetch = FetchType.EAGER)
+    private List<Product> mergedProducts;
+
     private boolean isLinker = false;
 
     public Product(String product, OnlineStoreDetails onlineStoreDetails) {
-        this.product = product;
-        this.onlineStoreDetails = onlineStoreDetails;
+        setOnlineStoreDetails(onlineStoreDetails);
+        setProduct(product);
+    }
 
-        setProductIdAndTitle(product);
+    public Product(String product, List<Product> mergedProducts, User user) {
+        this.product = product;
+        this.mergedProducts = mergedProducts;
+        this.user = user;
+        this.isLinker = true;
     }
 
     public Product(Long id, Long productId, String title, String product, OnlineStoreDetails onlineStoreDetails) {
@@ -61,12 +70,6 @@ public class Product {
         this.title = title;
         this.product = product;
         this.onlineStoreDetails = onlineStoreDetails;
-    }
-
-    public Product(String product, List<Product> mergedProducts) {
-        this.product = product;
-        this.mergedProducts = mergedProducts;
-        this.isLinker = true;
     }
 
     public ProductType getType() {
@@ -78,7 +81,29 @@ public class Product {
     }
 
     public String getArbitraryStoreName() {
+        if (this.onlineStoreDetails == null) {
+            return null;
+        }
+
         return this.onlineStoreDetails.getArbitraryStoreName();
+    }
+
+    @JsonIgnore
+    public boolean isLinker() {
+        return isLinker;
+    }
+
+    public List<Product> getMergedProducts() {
+        if (this.isLinker()) {
+            return this.mergedProducts;
+        }
+
+        return null;
+    }
+
+    public void setOnlineStoreDetails(OnlineStoreDetails onlineStoreDetails) {
+        this.onlineStoreDetails = onlineStoreDetails;
+        this.user = onlineStoreDetails.getUser();
     }
 
     public void setProduct(String product) {

@@ -26,11 +26,11 @@ public class OnlineStoreService {
     }
 
     public List<OnlineStoreDetails> getAll() {
-        return onlineStoreRepository.findAllByUserWithoutCredentials(currentUserService.getAuthorizedUser());
+        return onlineStoreRepository.findAllByUser(currentUserService.getAuthorizedUser());
     }
 
     public List<OnlineStoreDetails> getAllByType(OnlineStoreType type) {
-        return onlineStoreRepository.findAllByUserAndTypeWithoutCredentials(currentUserService.getAuthorizedUser(), type);
+        return onlineStoreRepository.findAllByUserAndType(currentUserService.getAuthorizedUser(), type);
     }
 
     public OnlineStoreDetails addToUser(OnlineStoreDetails onlineStore) throws ServerException {
@@ -45,9 +45,7 @@ public class OnlineStoreService {
         onlineStore.setAccessKey(encryptor.encrypt(onlineStore.getAccessKey()));
         onlineStore.generateId(onlineStoreRepository.countByUser(user));
 
-        onlineStoreRepository.save(onlineStore);
-
-        return new OnlineStoreDetails(onlineStore.getId(), onlineStore.getArbitraryStoreName(), onlineStore.getType());
+        return onlineStoreRepository.save(onlineStore);
     }
 
     public OnlineStoreDetails updateArbitraryStoreName(String currentName, String newName) throws ServerException {
@@ -62,12 +60,7 @@ public class OnlineStoreService {
         if (onlineStoreDetails.isPresent()) {
             onlineStoreDetails.get().setArbitraryStoreName(newName);
 
-            onlineStoreRepository.save(onlineStoreDetails.get());
-
-            return new OnlineStoreDetails(onlineStoreDetails.get().getId(),
-                    onlineStoreDetails.get().getArbitraryStoreName(),
-                    onlineStoreDetails.get().getType()
-            );
+            return onlineStoreRepository.save(onlineStoreDetails.get());
         }
 
         throw new EntityNotFoundException(String.format("Online store with '%s' name not found", currentName));
@@ -94,7 +87,7 @@ public class OnlineStoreService {
     }
 
     private void checkIfArbitraryStoreNameIsUnique(User user, String arbitraryName) throws ArbitraryStoreNameNotUniqueException {
-        List<String> arbitraryStoreNamesList = onlineStoreRepository.findAllByUserWithoutCredentials(user).stream()
+        List<String> arbitraryStoreNamesList = onlineStoreRepository.findAllByUser(user).stream()
                 .map(OnlineStoreDetails::getArbitraryStoreName)
                 .toList();
 
@@ -105,7 +98,7 @@ public class OnlineStoreService {
     }
 
     private void checkIfUserHasOneOnlineStoreByType(User user, OnlineStoreType type) throws MultipleOnlineStoresException {
-        List<OnlineStoreDetails> onlineStoreProjectionList = onlineStoreRepository.findAllByUserAndTypeWithoutCredentials(user, type);
+        List<OnlineStoreDetails> onlineStoreProjectionList = onlineStoreRepository.findAllByUserAndType(user, type);
 
         if (onlineStoreProjectionList.size() == 1) {
             throw new MultipleOnlineStoresException(String.format("Store with '%s' type already exists", type));
