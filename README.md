@@ -52,6 +52,21 @@ POST /signup
 }
 ```
 
+## User
+### getUserinfo
+```http request
+GET /userinfo
+```
+- Returns:
+```json
+{
+  "id": 1,
+  "email": "email@email.com",
+  "firstname": "firstname",
+  "lastname": "lastname"
+}
+```
+
 ## Online stores
 ### getAll
 ```http request
@@ -173,6 +188,26 @@ GET /products
       },
       "type": "SHOPIFY",
       "arbitraryStoreName": "storeName"
+    },
+    {
+      "id": 2,
+      "product": {
+        "title": "some product linker"
+      },
+      "mergedProducts": [
+        {
+          "id": 1,
+          "productId": 999999,
+          "title": "Some title",
+          "product": {
+            "productId": 999999,
+            "title": "Some title"
+          },
+          "type": "SHOPIFY",
+          "arbitraryStoreName": "storeName"
+        }
+      ],
+      "type": "PRODUCT_LINKER"
     }
   ]
 }
@@ -205,7 +240,14 @@ GET /onlinestores/{arbitraryStoreName}/products
 ```http request
 POST /onlinestores/{arbitraryStoreName}/products
 ```
-- Returns created product:
+- Body (can have any json, depends on the type.):
+```json
+{
+  "productId": 999999,
+  "title": "Some title"
+}
+```
+- Returns:
 ```json
 {
   "id": 1,
@@ -219,26 +261,31 @@ POST /onlinestores/{arbitraryStoreName}/products
   "arbitraryStoreName": "storeName"
 }
 ```
-`product` can have any json, depends on the type.
 ### update
 ```http request
 PUT /products/{id}
 ```
-- Returns updated product:
+- Body (can have any json, depends on the type):
+```json
+{
+  "productId": 999999,
+  "title": "Some updated title"
+}
+```
+- Returns:
 ```json
 {
   "id": 1,
   "productId": 999999,
-  "title": "Some title",
+  "title": "Some updated title",
   "product": {
     "productId": 999999,
-    "title": "Some title"
+    "title": "Some updated title"
   },
   "type": "SHOPIFY",
   "arbitraryStoreName": "storeName"
 }
 ```
-`product` can have any json, depends on the type.
 ### delete
 ```http request
 DELETE /products/{id}
@@ -248,6 +295,50 @@ DELETE /products/{id}
 {
   "status": 200,
   "message": "Product with id '1' has been successfully deleted"
+}
+```
+### merge
+```http request
+POST /products/merge?id=1,2
+```
+- Body (can have any json):
+```json
+{
+  "title": "some product linker"
+}
+```
+- Returns:
+```json
+{
+  "id": 1,
+  "product": {
+    "title": "some product linker"
+  },
+  "mergedProducts": [
+    {
+      "id": 1,
+      "productId": 888888,
+      "title": "Some title",
+      "product": {
+        "productId": 888888,
+        "title": "Some title"
+      },
+      "type": "SHOPIFY",
+      "arbitraryStoreName": "storeName"
+    },
+    {
+      "id": 2,
+      "productId": 999999,
+      "title": "Some title",
+      "product": {
+        "productId": 999999,
+        "title": "Some title"
+      },
+      "type": "AMAZON",
+      "arbitraryStoreName": "anotherStoreName"
+    }
+  ],
+  "type": "PRODUCT_LINKER"
 }
 ```
 ### updateProductList
