@@ -3,23 +3,31 @@ package com.antevorta.model;
 import com.antevorta.exception.serverexception.IncorrectEmailException;
 import lombok.*;
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 import java.util.regex.Pattern;
 
 @Getter
 @Setter
-@AllArgsConstructor
 @NoArgsConstructor
 @Entity
 @Table(name = "users")
 public class User {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    @Column(unique = true)
     private String email;
     private String password;
     private String firstname;
     private String lastname;
+
+    public User(String email, String password, String firstname, String lastname) {
+        this.email = email;
+        this.password = password;
+        this.firstname = firstname;
+        this.lastname = lastname;
+    }
 
     @SneakyThrows
     public void setEmail(String email) {
