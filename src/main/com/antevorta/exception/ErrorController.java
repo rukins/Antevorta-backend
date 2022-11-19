@@ -12,6 +12,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import javax.servlet.RequestDispatcher;
 import javax.servlet.http.HttpServletRequest;
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -37,7 +38,10 @@ public class ErrorController extends BasicErrorController {
 
         logger.debug(request.getMethod());
         logger.debug(RequestUtils.getHeadersString(request));
-        logger.debug(new ResponseBody(status.value(), status.toString()).toString());
+        logger.debug(
+                new ResponseBody(status.value(), status.toString()).toString(),
+                request.getAttribute(RequestDispatcher.ERROR_EXCEPTION)
+        );
 
         return new ResponseEntity<>(body, status);
     }
