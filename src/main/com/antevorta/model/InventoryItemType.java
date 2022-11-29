@@ -1,6 +1,6 @@
 package com.antevorta.model;
 
-public enum ProductType {
+public enum InventoryItemType {
     SHOPIFY,
     AMAZON,
     PRODUCT_LINKER;

@@ -16,15 +16,15 @@ import java.util.List;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @NoArgsConstructor
 @Entity
-@Table(name = "products")
-public class Product {
+@Table(name = "inventory_items")
+public class InventoryItemDetails {
     @Getter
     @Id
     @GeneratedValue
     private Long id;
 
     @Getter
-    private Long productId;
+    private Long inventoryId;
 
     @Getter
     private String title;
@@ -32,7 +32,7 @@ public class Product {
     @JsonRawValue
     @Getter
     @Column(columnDefinition = "TEXT")
-    private String product;
+    private String inventoryItem;
 
     @ManyToOne
     @OnDelete(action = OnDeleteAction.CASCADE)
@@ -48,36 +48,36 @@ public class Product {
     private User user;
 
     @ManyToMany(fetch = FetchType.EAGER)
-    private List<Product> mergedProducts;
+    private List<InventoryItemDetails> mergedInventoryItems;
 
     private boolean isLinker = false;
 
-    public Product(String product, OnlineStoreDetails onlineStoreDetails) {
+    public InventoryItemDetails(String product, OnlineStoreDetails onlineStoreDetails) {
         setOnlineStoreDetails(onlineStoreDetails);
-        setProduct(product);
+        setInventoryItem(product);
     }
 
-    public Product(String product, List<Product> mergedProducts, User user) {
-        this.product = product;
-        this.mergedProducts = mergedProducts;
+    public InventoryItemDetails(String inventoryItem, List<InventoryItemDetails> mergedInventoryItems, User user) {
+        this.inventoryItem = inventoryItem;
+        this.mergedInventoryItems = mergedInventoryItems;
         this.user = user;
         this.isLinker = true;
     }
 
-    public Product(Long id, Long productId, String title, String product, OnlineStoreDetails onlineStoreDetails) {
+    public InventoryItemDetails(Long id, Long inventoryId, String title, String inventoryItem, OnlineStoreDetails onlineStoreDetails) {
         this.id = id;
-        this.productId = productId;
+        this.inventoryId = inventoryId;
         this.title = title;
-        this.product = product;
+        this.inventoryItem = inventoryItem;
         this.onlineStoreDetails = onlineStoreDetails;
     }
 
-    public ProductType getType() {
+    public InventoryItemType getType() {
         if (this.isLinker) {
-            return ProductType.PRODUCT_LINKER;
+            return InventoryItemType.PRODUCT_LINKER;
         }
 
-        return ProductType.valueOf(this.onlineStoreDetails.getType().toString());
+        return InventoryItemType.valueOf(this.onlineStoreDetails.getType().toString());
     }
 
     public String getArbitraryStoreName() {
@@ -93,9 +93,9 @@ public class Product {
         return isLinker;
     }
 
-    public List<Product> getMergedProducts() {
+    public List<InventoryItemDetails> getMergedInventoryItems() {
         if (this.isLinker()) {
-            return this.mergedProducts;
+            return this.mergedInventoryItems;
         }
 
         return null;
@@ -106,19 +106,19 @@ public class Product {
         this.user = onlineStoreDetails.getUser();
     }
 
-    public void setProduct(String product) {
-        this.product = product;
+    public void setInventoryItem(String inventoryItem) {
+        this.inventoryItem = inventoryItem;
 
         if (!this.isLinker) {
-            setProductIdAndTitle(product);
+            setInventoryIdAndTitle(inventoryItem);
         }
     }
 
-    private void setProductIdAndTitle(String product) {
+    private void setInventoryIdAndTitle(String product) {
         AbstractOnlineStoreProduct storeProduct = ProductJsonUtils
                 .getAbstractProduct(product, OnlineStoreType.valueOf(this.getType().toString()));
 
-        this.productId = storeProduct.getId();
+        this.inventoryId = storeProduct.getId();
         this.title = storeProduct.getTitle();
     }
 }

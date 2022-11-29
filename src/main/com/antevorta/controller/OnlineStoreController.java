@@ -4,10 +4,10 @@ import com.antevorta.exception.serverexception.ServerException;
 import com.antevorta.model.OnlineStoreDetails;
 import com.antevorta.model.OnlineStoreType;
 import com.antevorta.model.ResponseBody;
+import com.antevorta.service.InventoryItemService;
 import com.antevorta.service.OnlineStoreService;
-import com.antevorta.service.ProductService;
+import com.antevorta.utils.InventoryItemJsonUtils;
 import com.antevorta.utils.OnlineStoreJsonUtils;
-import com.antevorta.utils.ProductJsonUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -18,12 +18,12 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/onlinestores")
 public class OnlineStoreController {
     private final OnlineStoreService onlineStoreService;
-    private final ProductService productService;
+    private final InventoryItemService inventoryItemService;
 
     @Autowired
-    public OnlineStoreController(OnlineStoreService onlineStoreService, ProductService productService) {
+    public OnlineStoreController(OnlineStoreService onlineStoreService, InventoryItemService inventoryItemService) {
         this.onlineStoreService = onlineStoreService;
-        this.productService = productService;
+        this.inventoryItemService = inventoryItemService;
     }
 
     @GetMapping("")
@@ -71,17 +71,17 @@ public class OnlineStoreController {
         );
     }
 
-    @GetMapping("/{arbitraryStoreName}/products")
+    @GetMapping("/{arbitraryStoreName}/inventoryitems")
     public ResponseEntity<?> getAllProductsByArbitraryStoreName(@PathVariable String arbitraryStoreName) {
         return ResponseEntity.status(HttpStatus.OK).contentType(MediaType.APPLICATION_JSON)
                 .body(
-                        ProductJsonUtils.getString(productService.getAllByArbitraryStoreName(arbitraryStoreName))
+                        InventoryItemJsonUtils.getString(inventoryItemService.getAllByArbitraryStoreName(arbitraryStoreName))
                 );
     }
 
-    @PostMapping("/{arbitraryStoreName}/products")
+    @PostMapping("/{arbitraryStoreName}/inventoryitems")
     public ResponseEntity<?> createProduct(@RequestBody String requestBody, @PathVariable String arbitraryStoreName)
             throws ServerException {
-        return ResponseEntity.ok(productService.create(requestBody, arbitraryStoreName));
+        return ResponseEntity.ok(inventoryItemService.create(requestBody, arbitraryStoreName));
     }
 }

@@ -2,8 +2,8 @@ package com.antevorta.controller;
 
 import com.antevorta.exception.serverexception.ServerException;
 import com.antevorta.model.ResponseBody;
-import com.antevorta.service.ProductService;
-import com.antevorta.utils.ProductJsonUtils;
+import com.antevorta.service.InventoryItemService;
+import com.antevorta.utils.InventoryItemJsonUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -11,34 +11,34 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/products")
-public class ProductController {
-    private final ProductService productService;
+@RequestMapping("/inventoryitems")
+public class InventoryItemController {
+    private final InventoryItemService inventoryItemService;
 
     @Autowired
-    public ProductController(ProductService productService) {
-        this.productService = productService;
+    public InventoryItemController(InventoryItemService inventoryItemService) {
+        this.inventoryItemService = inventoryItemService;
     }
 
     @GetMapping("")
     public ResponseEntity<?> getAll() {
         return ResponseEntity.status(HttpStatus.OK).contentType(MediaType.APPLICATION_JSON)
-                .body(ProductJsonUtils.getString(productService.getAll()));
+                .body(InventoryItemJsonUtils.getString(inventoryItemService.getAll()));
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<?> getById(@PathVariable Long id) throws ServerException {
-        return ResponseEntity.ok(productService.getById(id));
+        return ResponseEntity.ok(inventoryItemService.getById(id));
     }
 
     @PutMapping("/{id}")
     public ResponseEntity<?> update(@RequestBody String requestBody, @PathVariable Long id) throws ServerException {
-        return ResponseEntity.ok(productService.update(requestBody, id));
+        return ResponseEntity.ok(inventoryItemService.update(requestBody, id));
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<?> delete(@PathVariable Long id) throws ServerException {
-        productService.delete(id);
+        inventoryItemService.delete(id);
 
         return ResponseEntity.ok(
                 new ResponseBody(HttpStatus.OK.value(),
@@ -47,16 +47,16 @@ public class ProductController {
     }
 
     @PostMapping("/merge")
-    public ResponseEntity<?> merge(@RequestBody String productJson, @RequestParam("id") String productIds) throws ServerException {
-        return ResponseEntity.ok(productService.merge(productJson, productIds));
+    public ResponseEntity<?> merge(@RequestBody String productJson, @RequestParam("id") String inventoryIds) throws ServerException {
+        return ResponseEntity.ok(inventoryItemService.merge(productJson, inventoryIds));
     }
 
     @PostMapping("/update")
-    public ResponseEntity<?> updateProductList() {
-        productService.updateProductList();
+    public ResponseEntity<?> updateInventoryItemList() {
+        inventoryItemService.updateInventoryItemList();
 
         return ResponseEntity.ok(
-                new ResponseBody(HttpStatus.OK.value(), "Product list has been successfully updated")
+                new ResponseBody(HttpStatus.OK.value(), "Inventory item list has been successfully updated")
         );
     }
 }
