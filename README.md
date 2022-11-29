@@ -153,7 +153,7 @@ DELETE /onlinestores/{name}
 ## Products
 ### getById
 ```http request
-GET /products/{id}
+GET /inventoryitems/{id}
 ```
 - Returns:
 ```json
@@ -172,7 +172,7 @@ GET /products/{id}
 `product` can have any json, depends on the type.
 ### getAll
 ```http request
-GET /products
+GET /inventoryitems
 ```
 - Returns:
 ```json
@@ -215,7 +215,7 @@ GET /products
 `product` can have any json, depends on the type.
 ### getAllByArbitraryStoreName
 ```http request
-GET /onlinestores/{arbitraryStoreName}/products
+GET /onlinestores/{arbitraryStoreName}/inventoryitems
 ```
 - Returns:
 ```json
@@ -238,7 +238,7 @@ GET /onlinestores/{arbitraryStoreName}/products
 `product` can have any json, depends on the type.
 ### create
 ```http request
-POST /onlinestores/{arbitraryStoreName}/products
+POST /onlinestores/{arbitraryStoreName}/inventoryitems
 ```
 - Body (can have any json, depends on the type.):
 ```json
@@ -263,7 +263,7 @@ POST /onlinestores/{arbitraryStoreName}/products
 ```
 ### update
 ```http request
-PUT /products/{id}
+PUT /inventoryitems/{id}
 ```
 - Body (can have any json, depends on the type):
 ```json
@@ -288,7 +288,7 @@ PUT /products/{id}
 ```
 ### delete
 ```http request
-DELETE /products/{id}
+DELETE /inventoryitems/{id}
 ```
 - Returns:
 ```json
@@ -299,7 +299,7 @@ DELETE /products/{id}
 ```
 ### merge
 ```http request
-POST /products/merge?id=1,2
+POST /inventoryitems/merge?id=1,2
 ```
 - Body (can have any json):
 ```json
@@ -343,7 +343,7 @@ POST /products/merge?id=1,2
 ```
 ### updateProductList
 ```http request
-POST /products/update
+POST /inventoryitems/update
 ```
 - Returns:
 ```json
