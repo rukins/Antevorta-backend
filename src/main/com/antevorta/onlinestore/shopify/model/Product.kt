@@ -14,7 +14,15 @@ data class Product (
         return this.id!!.toString()
     }
 
+    override fun setId(id: String) {
+        this.id = id.toLong()
+    }
+
     override fun getTitle(): String {
         return this.title!!
+    }
+
+    override fun setTitle(title: String) {
+        this.title = title
     }
 }

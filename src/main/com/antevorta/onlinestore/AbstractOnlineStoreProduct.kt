@@ -5,7 +5,9 @@ import com.antevorta.onlinestore.shopify.model.Product
 
 abstract class AbstractOnlineStoreProduct {
     abstract fun getId(): String
+    abstract fun setId(id: String)
     abstract fun getTitle(): String
+    abstract fun setTitle(title: String)
 
     companion object {
         @JvmStatic
