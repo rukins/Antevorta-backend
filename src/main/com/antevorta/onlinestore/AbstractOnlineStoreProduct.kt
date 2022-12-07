@@ -4,7 +4,7 @@ import com.antevorta.model.OnlineStoreType
 import com.antevorta.onlinestore.shopify.model.Product
 
 abstract class AbstractOnlineStoreProduct {
-    abstract fun getId(): Long
+    abstract fun getId(): String
     abstract fun getTitle(): String
 
     companion object {

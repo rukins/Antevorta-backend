@@ -24,7 +24,7 @@ public class InventoryItemDetails {
     private Long id;
 
     @Getter
-    private Long inventoryId;
+    private String inventoryId;
 
     @Getter
     private String title;
@@ -64,7 +64,7 @@ public class InventoryItemDetails {
         this.isLinker = true;
     }
 
-    public InventoryItemDetails(Long id, Long inventoryId, String title, String inventoryItem, OnlineStoreDetails onlineStoreDetails) {
+    public InventoryItemDetails(Long id, String inventoryId, String title, String inventoryItem, OnlineStoreDetails onlineStoreDetails) {
         this.id = id;
         this.inventoryId = inventoryId;
         this.title = title;

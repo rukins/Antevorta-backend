@@ -10,19 +10,11 @@ data class Product (
     var admin_graphql_api_id: String? = null, var variants: List<Variant>? = null, var options: List<Option>? = null,
     var images: List<Image>? = null, var image: Image? = null
 ) : AbstractOnlineStoreProduct() {
-    override fun getId(): Long {
-        return this.id!!
-    }
-
-    fun setId(id: Long?) {
-        this.id = id
+    override fun getId(): String {
+        return this.id!!.toString()
     }
 
     override fun getTitle(): String {
         return this.title!!
-    }
-
-    fun setTitle(title: String?) {
-        this.title = title
     }
 }

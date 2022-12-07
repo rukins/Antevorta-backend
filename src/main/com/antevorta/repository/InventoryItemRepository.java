@@ -22,15 +22,15 @@ public interface InventoryItemRepository extends JpaRepository<InventoryItemDeta
 
     @Query("select new InventoryItemDetails(p.id, p.inventoryId, p.title, p.inventoryItem, p.onlineStoreDetails) " +
             "from InventoryItemDetails p where p.user = ?1 and p.inventoryId = ?2 and p.onlineStoreDetails.arbitraryStoreName = ?3")
-    Optional<InventoryItemDetails> findByUserAndInventoryIdAndArbitraryStoreName(User user, Long inventoryId, String arbitraryStoreName);
+    Optional<InventoryItemDetails> findByUserAndInventoryIdAndArbitraryStoreName(User user, String inventoryId, String arbitraryStoreName);
 
     @Query("select case when count(p) > 0 then true else false end from InventoryItemDetails p " +
             "where p.user = ?1 and p.inventoryId = ?2 and p.onlineStoreDetails.arbitraryStoreName = ?3"
     )
-    boolean existsByUserAndInventoryIdAndArbitraryStoreName(User user, Long inventoryId, String arbitraryStoreName);
+    boolean existsByUserAndInventoryIdAndArbitraryStoreName(User user, String inventoryId, String arbitraryStoreName);
 
     @Query("select p.inventoryId from InventoryItemDetails p where p.user = ?1 and p.onlineStoreDetails.arbitraryStoreName = ?2")
-    List<Long> findAllInventoryIdsByUserAndArbitraryStoreName(User user, String arbitraryStoreName);
+    List<String> findAllInventoryIdsByUserAndArbitraryStoreName(User user, String arbitraryStoreName);
 
     @Transactional
     @Modifying
@@ -38,5 +38,5 @@ public interface InventoryItemRepository extends JpaRepository<InventoryItemDeta
             "select p from InventoryItemDetails p where p.user = ?1 and p.inventoryId = ?2 and p.onlineStoreDetails.arbitraryStoreName = ?3" +
             ")"
     )
-    void deleteByUserAndInventoryIdAndArbitraryStoreName(User user, Long inventoryId, String arbitraryStoreName);
+    void deleteByUserAndInventoryIdAndArbitraryStoreName(User user, String inventoryId, String arbitraryStoreName);
 }

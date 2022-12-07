@@ -16,7 +16,7 @@ class ShopifyOnlineStore (private var storeName: String, private var accessKey: 
         .decoder(GsonDecoder())
         .target(ShopifyClient::class.java, "https://${storeName}.myshopify.com/admin/api/2022-10")
 
-    override fun getById(id: Long): AbstractOnlineStoreProduct {
+    override fun getById(id: String): AbstractOnlineStoreProduct {
         return client.getById(id, accessKey).product
     }
 
@@ -28,11 +28,11 @@ class ShopifyOnlineStore (private var storeName: String, private var accessKey: 
         return client.post(getWrappedProduct(entity as Product), accessKey).product
     }
 
-    override fun put(entity: AbstractOnlineStoreProduct, id: Long): AbstractOnlineStoreProduct {
-        return client.put(getWrappedProduct(entity as Product),id, accessKey).product
+    override fun put(entity: AbstractOnlineStoreProduct, id: String): AbstractOnlineStoreProduct {
+        return client.put(getWrappedProduct(entity as Product), id, accessKey).product
     }
 
-    override fun delete(id: Long): Void {
+    override fun delete(id: String): Void {
         return client.delete(id, accessKey)
     }
 

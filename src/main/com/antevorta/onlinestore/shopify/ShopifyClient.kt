@@ -4,13 +4,11 @@ import com.antevorta.onlinestore.shopify.model.Product
 import feign.Headers
 import feign.Param
 import feign.RequestLine
-import org.springframework.stereotype.Component
 
-@Component
 interface ShopifyClient {
     @RequestLine("GET /products/{product_id}.json")
     @Headers("X-Shopify-Access-Token: {access_token}")
-    fun getById(@Param("product_id") id: Long, @Param("access_token") accessToken: String): WrappedProduct
+    fun getById(@Param("product_id") id: String, @Param("access_token") accessToken: String): WrappedProduct
 
     @RequestLine("GET /products.json")
     @Headers("X-Shopify-Access-Token: {access_token}")
@@ -22,11 +20,11 @@ interface ShopifyClient {
 
     @RequestLine("PUT /products/{product_id}.json")
     @Headers("Content-Type: application/json", "X-Shopify-Access-Token: {access_token}")
-    fun put(entity: WrappedProduct, @Param("product_id") id: Long, @Param("access_token") accessToken: String): WrappedProduct
+    fun put(entity: WrappedProduct, @Param("product_id") id: String, @Param("access_token") accessToken: String): WrappedProduct
 
     @RequestLine("DELETE /products/{product_id}.json")
     @Headers("X-Shopify-Access-Token: {access_token}")
-    fun delete(@Param("product_id") id: Long, @Param("access_token") accessToken: String): Void
+    fun delete(@Param("product_id") id: String, @Param("access_token") accessToken: String): Void
 }
 
 data class WrappedProducts(var products: List<Product>)

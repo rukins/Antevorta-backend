@@ -192,9 +192,9 @@ public class InventoryItemService {
             AbstractOnlineStore onlineStore = AbstractOnlineStore.create(onlineStoreDetails.getType(),
                     onlineStoreDetails.getStoreName(), encryptor.decrypt(onlineStoreDetails.getAccessKey()));
 
-            Map<Long, String> inventoryIdAndProductMap = onlineStore.getAll().stream()
+            Map<String, String> inventoryIdAndProductMap = onlineStore.getAll().stream()
                     .collect(Collectors.toMap(AbstractOnlineStoreProduct::getId, ProductJsonUtils::getString));
-            List<Long> inventoryIdsFromRepo = inventoryItemRepository
+            List<String> inventoryIdsFromRepo = inventoryItemRepository
                     .findAllInventoryIdsByUserAndArbitraryStoreName(user, onlineStoreDetails.getArbitraryStoreName());
 
             // delete if product doesn't exist in online store

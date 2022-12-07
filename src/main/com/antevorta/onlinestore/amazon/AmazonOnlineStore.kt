@@ -17,11 +17,11 @@ class AmazonOnlineStore(private var storeName: String, private var accessKey: St
         TODO("Not yet implemented")
     }
 
-    override fun put(entity: AbstractOnlineStoreProduct, id: Long): AbstractOnlineStoreProduct {
+    override fun put(entity: AbstractOnlineStoreProduct, id: String): AbstractOnlineStoreProduct {
         TODO("Not yet implemented")
     }
 
-    override fun delete(id: Long): Void {
+    override fun delete(id: String): Void {
         TODO("Not yet implemented")
     }
 
