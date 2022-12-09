@@ -5,7 +5,7 @@ import com.antevorta.onlinestore.AbstractOnlineStore
 import com.antevorta.onlinestore.AbstractOnlineStoreProduct
 
 class AmazonOnlineStore(private var storeName: String, private var accessKey: String) : AbstractOnlineStore()  {
-    override fun getById(id: Long): AbstractOnlineStoreProduct {
+    override fun getById(id: String): AbstractOnlineStoreProduct {
         TODO("Not yet implemented")
     }
 
