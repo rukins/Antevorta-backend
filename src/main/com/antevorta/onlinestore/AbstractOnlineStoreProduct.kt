@@ -1,6 +1,7 @@
 package com.antevorta.onlinestore
 
 import com.antevorta.model.OnlineStoreType
+import com.antevorta.onlinestore.ebay.model.InventoryItem
 import com.antevorta.onlinestore.shopify.model.Product
 
 abstract class AbstractOnlineStoreProduct {
@@ -14,7 +15,7 @@ abstract class AbstractOnlineStoreProduct {
         fun getClassByType(type: OnlineStoreType): Class<out AbstractOnlineStoreProduct> {
             return when (type) {
                 OnlineStoreType.SHOPIFY -> Product::class.java
-                OnlineStoreType.EBAY -> TODO("not implemented")
+                OnlineStoreType.EBAY -> InventoryItem::class.java
             }
         }
     }

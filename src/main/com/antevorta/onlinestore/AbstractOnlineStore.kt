@@ -2,6 +2,7 @@ package com.antevorta.onlinestore
 
 import com.antevorta.model.onlinestorecredentials.OnlineStoreCredentials
 import com.antevorta.model.OnlineStoreType
+import com.antevorta.onlinestore.ebay.EbayOnlineStore
 import com.antevorta.onlinestore.shopify.ShopifyOnlineStore
 
 abstract class AbstractOnlineStore {
@@ -22,7 +23,7 @@ abstract class AbstractOnlineStore {
         fun create(type: OnlineStoreType, credentials: OnlineStoreCredentials): AbstractOnlineStore {
             return when (type) {
                 OnlineStoreType.SHOPIFY -> ShopifyOnlineStore(credentials)
-                OnlineStoreType.EBAY -> TODO("not implemented")
+                OnlineStoreType.EBAY -> EbayOnlineStore(credentials)
             }
         }
     }
