@@ -56,7 +56,7 @@ class EbayOnlineStore(private val credentials: OnlineStoreCredentials) : Abstrac
 
     private fun getAccessToken(): String {
         val encodedCredentials: String = Base64.getEncoder().encodeToString(
-            (credentials.extra.userName + ":" + credentials.extra.password).toByteArray()
+            (credentials.extra.username + ":" + credentials.extra.password).toByteArray()
         )
 
         return client.getAccessToken(encodedCredentials, credentials.token).accessToken
