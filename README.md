@@ -104,10 +104,19 @@ POST /onlinestores
 {
   "type": "SHOPIFY",
   "arbitraryStoreName": "storeName",
-  "storeName": "someStoreName",
-  "accessKey": "someAccessKey"
+  "credentials": {
+    "storeName": "someStoreName",
+    "token": "",
+    "extra": {
+      "username": "username",
+      "password": "password"
+    }
+  }
 }
 ```
+`credentials` depends on inventory item type.
+1. _Shopify_ requires `storeName` and `token`
+2. _Ebay_ requires `token` and all `extra` values (`storeName` is required only if this store is sandbox - _api.sandbox_. Default value - _api_) 
 - Returns:
 ```json
 {
@@ -159,9 +168,9 @@ GET /inventoryitems/{id}
 ```json
 {
   "id": 1,
-  "productId": 999999,
+  "inventoryId": "999999",
   "title": "Some title",
-  "product": {
+  "inventoryItem": {
     "productId": 999999,
     "title": "Some title"
   },
@@ -169,7 +178,7 @@ GET /inventoryitems/{id}
   "arbitraryStoreName": "storeName"
 }
 ```
-`product` can have any json, depends on the type.
+`inventoryItem` can have any json, depends on the type.
 ### getAll
 ```http request
 GET /inventoryitems
@@ -177,13 +186,13 @@ GET /inventoryitems
 - Returns:
 ```json
 {
-  "products": [
+  "inventoryItems": [
     {
       "id": 1,
-      "productId": 999999,
+      "inventoryId": "999999",
       "title": "Some title",
-      "product": {
-        "productId": 999999,
+      "inventoryItem": {
+        "productId": "999999",
         "title": "Some title"
       },
       "type": "SHOPIFY",
@@ -191,16 +200,16 @@ GET /inventoryitems
     },
     {
       "id": 2,
-      "product": {
+      "inventoryItem": {
         "title": "some product linker"
       },
       "mergedProducts": [
         {
           "id": 1,
-          "productId": 999999,
+          "inventoryId": "999999",
           "title": "Some title",
-          "product": {
-            "productId": 999999,
+          "inventoryItem": {
+            "productId": "999999",
             "title": "Some title"
           },
           "type": "SHOPIFY",
@@ -212,7 +221,7 @@ GET /inventoryitems
   ]
 }
 ```
-`product` can have any json, depends on the type.
+`inventoryItem` can have any json, depends on the type.
 ### getAllByArbitraryStoreName
 ```http request
 GET /onlinestores/{arbitraryStoreName}/inventoryitems
@@ -220,13 +229,13 @@ GET /onlinestores/{arbitraryStoreName}/inventoryitems
 - Returns:
 ```json
 {
-  "products": [
+  "inventoryItems": [
     {
       "id": 1,
-      "productId": 999999,
+      "inventoryId": "999999",
       "title": "Some title",
-      "product": {
-        "productId": 999999,
+      "inventoryItem": {
+        "productId": "999999",
         "title": "Some title"
       },
       "type": "SHOPIFY",
@@ -235,7 +244,7 @@ GET /onlinestores/{arbitraryStoreName}/inventoryitems
   ]
 }
 ```
-`product` can have any json, depends on the type.
+`inventoryItem` can have any json, depends on the type.
 ### create
 ```http request
 POST /onlinestores/{arbitraryStoreName}/inventoryitems
@@ -243,7 +252,7 @@ POST /onlinestores/{arbitraryStoreName}/inventoryitems
 - Body (can have any json, depends on the type.):
 ```json
 {
-  "productId": 999999,
+  "productId": "999999",
   "title": "Some title"
 }
 ```
@@ -251,10 +260,10 @@ POST /onlinestores/{arbitraryStoreName}/inventoryitems
 ```json
 {
   "id": 1,
-  "productId": 999999,
+  "inventoryId": "999999",
   "title": "Some title",
-  "product": {
-    "productId": 999999,
+  "inventoryItem": {
+    "productId": "999999",
     "title": "Some title"
   },
   "type": "SHOPIFY",
@@ -268,7 +277,7 @@ PUT /inventoryitems/{id}
 - Body (can have any json, depends on the type):
 ```json
 {
-  "productId": 999999,
+  "productId": "999999",
   "title": "Some updated title"
 }
 ```
@@ -276,10 +285,10 @@ PUT /inventoryitems/{id}
 ```json
 {
   "id": 1,
-  "productId": 999999,
+  "inventoryId": "999999",
   "title": "Some updated title",
-  "product": {
-    "productId": 999999,
+  "inventoryItem": {
+    "productId": "999999",
     "title": "Some updated title"
   },
   "type": "SHOPIFY",
@@ -311,7 +320,7 @@ POST /inventoryitems/merge?id=1,2
 ```json
 {
   "id": 1,
-  "product": {
+  "inventoryItem": {
     "title": "some product linker"
   },
   "mergedProducts": [
@@ -319,7 +328,7 @@ POST /inventoryitems/merge?id=1,2
       "id": 1,
       "productId": 888888,
       "title": "Some title",
-      "product": {
+      "inventoryItem": {
         "productId": 888888,
         "title": "Some title"
       },
@@ -330,7 +339,7 @@ POST /inventoryitems/merge?id=1,2
       "id": 2,
       "productId": 999999,
       "title": "Some title",
-      "product": {
+      "inventoryItem": {
         "productId": 999999,
         "title": "Some title"
       },
