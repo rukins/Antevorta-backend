@@ -1,6 +1,7 @@
 package com.antevorta.onlinestore.shopify
 
 import com.antevorta.onlinestore.shopify.model.Product
+import com.fasterxml.jackson.annotation.JsonProperty
 import feign.Headers
 import feign.Param
 import feign.RequestLine
@@ -27,8 +28,8 @@ interface ShopifyClient {
     fun delete(@Param("product_id") id: String, @Param("access_token") accessToken: String): Void
 }
 
-data class WrappedProducts(var products: List<Product>)
-data class WrappedProduct(var product: Product)
+data class WrappedProducts(@JsonProperty("products") var products: List<Product>)
+data class WrappedProduct(@JsonProperty("product") var product: Product)
 
 fun getWrappedProducts(products: List<Product>): WrappedProducts {
     return WrappedProducts(products)

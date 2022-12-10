@@ -1,6 +1,6 @@
 package com.antevorta.model.converter;
 
-import com.antevorta.model.onlinestorecredentials.OnlineStoreCredentials;
+import com.antevorta.model.OnlineStoreCredentials;
 import com.antevorta.security.encryptor.Encryptor;
 import com.antevorta.utils.JsonUtils;
 import org.springframework.beans.factory.annotation.Autowired;

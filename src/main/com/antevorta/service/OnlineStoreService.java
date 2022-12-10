@@ -5,7 +5,6 @@ import com.antevorta.model.OnlineStoreDetails;
 import com.antevorta.model.OnlineStoreType;
 import com.antevorta.model.User;
 import com.antevorta.repository.OnlineStoreRepository;
-import com.antevorta.security.encryptor.Encryptor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

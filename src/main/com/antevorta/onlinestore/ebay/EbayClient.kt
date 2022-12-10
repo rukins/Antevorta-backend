@@ -1,6 +1,7 @@
 package com.antevorta.onlinestore.ebay
 
 import com.antevorta.onlinestore.ebay.model.InventoryItem
+import com.fasterxml.jackson.annotation.JsonProperty
 import feign.Body
 import feign.Headers
 import feign.Param
@@ -15,11 +16,14 @@ interface EbayClient {
     @Headers("Content-Type: application/json", "Accept: application/json", "Authorization: Bearer {access_token}")
     fun getAll(@Param("access_token") accessToken: String): WrappedInventoryItems
 
-    @RequestLine("GET /sell/inventory/v1/inventory_item/{SKU}")
-    @Headers("Content-Type: application/json", "Accept: application/json", "Authorization: Bearer {access_token}")
+    @RequestLine("PUT /sell/inventory/v1/inventory_item/{SKU}")
+    @Headers(
+        "Content-Type: application/json", "Accept: application/json",
+        "Content-Language: en-US", "Authorization: Bearer {access_token}"
+    )
     fun postOrPut(entity: InventoryItem, @Param("SKU") sku: String, @Param("access_token") accessToken: String): Void
 
-    @RequestLine("GET /sell/inventory/v1/inventory_item/{SKU}")
+    @RequestLine("DELETE /sell/inventory/v1/inventory_item/{SKU}")
     @Headers("Content-Type: application/json", "Accept: application/json", "Authorization: Bearer {access_token}")
     fun delete(@Param("SKU") sku: String, @Param("access_token") accessToken: String): Void
 
@@ -35,10 +39,14 @@ interface EbayClient {
     ): Token
 }
 
-data class WrappedInventoryItems(var inventoryItems: List<InventoryItem>)
+data class WrappedInventoryItems(@JsonProperty("inventoryItems") var inventoryItems: List<InventoryItem>)
 
 fun getWrappedInventoryItems(inventoryItems: List<InventoryItem>): WrappedInventoryItems {
     return WrappedInventoryItems(inventoryItems)
 }
 
-data class Token(val access_token: String, val expires_in: String, val token_type: String)
+data class Token(
+    @JsonProperty("access_token") val accessToken: String,
+    @JsonProperty("expires_in") val expiresIn: String,
+    @JsonProperty("token_type") val tokenType: String
+)

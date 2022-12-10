@@ -1,7 +1,6 @@
 package com.antevorta.model;
 
 import com.antevorta.model.converter.OnlineStoreCredentialsConverter;
-import com.antevorta.model.onlinestorecredentials.OnlineStoreCredentials;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;

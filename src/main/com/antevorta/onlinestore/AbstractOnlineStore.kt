@@ -1,6 +1,6 @@
 package com.antevorta.onlinestore
 
-import com.antevorta.model.onlinestorecredentials.OnlineStoreCredentials
+import com.antevorta.model.OnlineStoreCredentials
 import com.antevorta.model.OnlineStoreType
 import com.antevorta.onlinestore.ebay.EbayOnlineStore
 import com.antevorta.onlinestore.shopify.ShopifyOnlineStore

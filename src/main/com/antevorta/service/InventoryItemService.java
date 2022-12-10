@@ -10,7 +10,6 @@ import com.antevorta.onlinestore.AbstractOnlineStore;
 import com.antevorta.onlinestore.AbstractOnlineStoreProduct;
 import com.antevorta.repository.OnlineStoreRepository;
 import com.antevorta.repository.InventoryItemRepository;
-import com.antevorta.security.encryptor.Encryptor;
 import com.antevorta.utils.JsonUtils;
 import com.antevorta.utils.ProductJsonUtils;
 import org.springframework.beans.factory.annotation.Autowired;

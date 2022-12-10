@@ -1,20 +1,20 @@
 package com.antevorta.onlinestore.shopify
 
-import com.antevorta.model.onlinestorecredentials.OnlineStoreCredentials
+import com.antevorta.model.OnlineStoreCredentials
 import com.antevorta.model.OnlineStoreType
 import com.antevorta.onlinestore.AbstractOnlineStore
 import com.antevorta.onlinestore.AbstractOnlineStoreProduct
 import com.antevorta.onlinestore.shopify.model.Product
 import feign.Feign
-import feign.gson.GsonDecoder
-import feign.gson.GsonEncoder
 import feign.httpclient.ApacheHttpClient
+import feign.jackson.JacksonDecoder
+import feign.jackson.JacksonEncoder
 
 class ShopifyOnlineStore(private val credentials: OnlineStoreCredentials) : AbstractOnlineStore() {
     private val client: ShopifyClient = Feign.builder()
         .client(ApacheHttpClient())
-        .encoder(GsonEncoder())
-        .decoder(GsonDecoder())
+        .encoder(JacksonEncoder())
+        .decoder(JacksonDecoder())
         .target(ShopifyClient::class.java, "https://${credentials.storeName}.myshopify.com/admin/api/2022-10")
 
     override fun getById(id: String): AbstractOnlineStoreProduct {

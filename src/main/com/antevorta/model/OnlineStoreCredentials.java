@@ -1,4 +1,4 @@
-package com.antevorta.model.onlinestorecredentials;
+package com.antevorta.model;
 
 public class OnlineStoreCredentials {
     private String storeName;
@@ -27,5 +27,26 @@ public class OnlineStoreCredentials {
 
     public void setExtra(Extra extra) {
         this.extra = extra;
+    }
+
+    public static class Extra {
+        private String userName;
+        private String password;
+
+        public String getUserName() {
+            return userName;
+        }
+
+        public void setUserName(String userName) {
+            this.userName = userName;
+        }
+
+        public String getPassword() {
+            return password;
+        }
+
+        public void setPassword(String password) {
+            this.password = password;
+        }
     }
 }

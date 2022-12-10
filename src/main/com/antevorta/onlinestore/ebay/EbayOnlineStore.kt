@@ -1,22 +1,22 @@
 package com.antevorta.onlinestore.ebay
 
-import com.antevorta.model.onlinestorecredentials.OnlineStoreCredentials
+import com.antevorta.model.OnlineStoreCredentials
 import com.antevorta.model.OnlineStoreType
 import com.antevorta.onlinestore.AbstractOnlineStore
 import com.antevorta.onlinestore.AbstractOnlineStoreProduct
 import com.antevorta.onlinestore.ebay.model.InventoryItem
 import feign.Feign
-import feign.gson.GsonDecoder
-import feign.gson.GsonEncoder
 import feign.httpclient.ApacheHttpClient
+import feign.jackson.JacksonDecoder
+import feign.jackson.JacksonEncoder
 import java.util.Base64
 import java.util.UUID
 
 class EbayOnlineStore(private val credentials: OnlineStoreCredentials) : AbstractOnlineStore() {
     private val client: EbayClient = Feign.builder()
         .client(ApacheHttpClient())
-        .encoder(GsonEncoder())
-        .decoder(GsonDecoder())
+        .encoder(JacksonEncoder())
+        .decoder(JacksonDecoder())
         .target(
             EbayClient::class.java,
             "https://" + (if (credentials.storeName != null) credentials.storeName else "api") + ".ebay.com"
@@ -59,6 +59,6 @@ class EbayOnlineStore(private val credentials: OnlineStoreCredentials) : Abstrac
             (credentials.extra.userName + ":" + credentials.extra.password).toByteArray()
         )
 
-        return client.getAccessToken(encodedCredentials, credentials.token).access_token
+        return client.getAccessToken(encodedCredentials, credentials.token).accessToken
     }
 }
