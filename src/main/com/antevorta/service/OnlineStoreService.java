@@ -16,13 +16,11 @@ import java.util.Optional;
 public class OnlineStoreService {
     private final OnlineStoreRepository onlineStoreRepository;
     private final CurrentUserService currentUserService;
-    private final Encryptor encryptor;
 
     @Autowired
-    public OnlineStoreService(OnlineStoreRepository onlineStoreRepository, CurrentUserService currentUserService, Encryptor encryptor) {
+    public OnlineStoreService(OnlineStoreRepository onlineStoreRepository, CurrentUserService currentUserService) {
         this.onlineStoreRepository = onlineStoreRepository;
         this.currentUserService = currentUserService;
-        this.encryptor = encryptor;
     }
 
     public List<OnlineStoreDetails> getAll() {
@@ -42,7 +40,6 @@ public class OnlineStoreService {
         checkIfArbitraryStoreNameIsUnique(user, onlineStore.getArbitraryStoreName());
 
         onlineStore.setUser(user);
-        onlineStore.setAccessKey(encryptor.encrypt(onlineStore.getAccessKey()));
         onlineStore.generateId(onlineStoreRepository.countByUser(user));
 
         return onlineStoreRepository.save(onlineStore);

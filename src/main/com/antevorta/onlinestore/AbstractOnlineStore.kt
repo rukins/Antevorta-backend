@@ -1,8 +1,7 @@
 package com.antevorta.onlinestore
 
+import com.antevorta.model.onlinestorecredentials.OnlineStoreCredentials
 import com.antevorta.model.OnlineStoreType
-import com.antevorta.onlinestore.amazon.AmazonOnlineStore
-import com.antevorta.onlinestore.ebay.EbayOnlineStore
 import com.antevorta.onlinestore.shopify.ShopifyOnlineStore
 
 abstract class AbstractOnlineStore {
@@ -20,10 +19,10 @@ abstract class AbstractOnlineStore {
 
     companion object {
         @JvmStatic
-        fun create(type: OnlineStoreType, storeName: String, accessToken: String): AbstractOnlineStore {
+        fun create(type: OnlineStoreType, credentials: OnlineStoreCredentials): AbstractOnlineStore {
             return when (type) {
-                OnlineStoreType.SHOPIFY -> ShopifyOnlineStore(storeName, accessToken)
-                OnlineStoreType.AMAZON -> AmazonOnlineStore(storeName, accessToken)
+                OnlineStoreType.SHOPIFY -> ShopifyOnlineStore(credentials)
+                OnlineStoreType.EBAY -> TODO("not implemented")
             }
         }
     }

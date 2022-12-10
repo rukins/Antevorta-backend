@@ -1,5 +1,6 @@
 package com.antevorta.onlinestore.shopify
 
+import com.antevorta.model.onlinestorecredentials.OnlineStoreCredentials
 import com.antevorta.model.OnlineStoreType
 import com.antevorta.onlinestore.AbstractOnlineStore
 import com.antevorta.onlinestore.AbstractOnlineStoreProduct
@@ -9,31 +10,31 @@ import feign.gson.GsonDecoder
 import feign.gson.GsonEncoder
 import feign.httpclient.ApacheHttpClient
 
-class ShopifyOnlineStore (private var storeName: String, private var accessKey: String) : AbstractOnlineStore() {
+class ShopifyOnlineStore(private val credentials: OnlineStoreCredentials) : AbstractOnlineStore() {
     private val client: ShopifyClient = Feign.builder()
         .client(ApacheHttpClient())
         .encoder(GsonEncoder())
         .decoder(GsonDecoder())
-        .target(ShopifyClient::class.java, "https://${storeName}.myshopify.com/admin/api/2022-10")
+        .target(ShopifyClient::class.java, "https://${credentials.storeName}.myshopify.com/admin/api/2022-10")
 
     override fun getById(id: String): AbstractOnlineStoreProduct {
-        return client.getById(id, accessKey).product
+        return client.getById(id, credentials.token).product
     }
 
     override fun getAll(): List<AbstractOnlineStoreProduct> {
-        return client.getAll(accessKey).products
+        return client.getAll(credentials.token).products
     }
 
     override fun post(entity: AbstractOnlineStoreProduct): AbstractOnlineStoreProduct {
-        return client.post(getWrappedProduct(entity as Product), accessKey).product
+        return client.post(getWrappedProduct(entity as Product), credentials.token).product
     }
 
     override fun put(entity: AbstractOnlineStoreProduct, id: String): AbstractOnlineStoreProduct {
-        return client.put(getWrappedProduct(entity as Product), id, accessKey).product
+        return client.put(getWrappedProduct(entity as Product), id, credentials.token).product
     }
 
     override fun delete(id: String): Void {
-        return client.delete(id, accessKey)
+        return client.delete(id, credentials.token)
     }
 
     override fun getType(): OnlineStoreType {

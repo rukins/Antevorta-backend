@@ -14,7 +14,7 @@ abstract class AbstractOnlineStoreProduct {
         fun getClassByType(type: OnlineStoreType): Class<out AbstractOnlineStoreProduct> {
             return when (type) {
                 OnlineStoreType.SHOPIFY -> Product::class.java
-                OnlineStoreType.AMAZON -> TODO("not implemented")
+                OnlineStoreType.EBAY -> TODO("not implemented")
             }
         }
     }

@@ -25,15 +25,13 @@ public class InventoryItemService {
     private final InventoryItemRepository inventoryItemRepository;
     private final OnlineStoreRepository onlineStoreRepository;
     private final CurrentUserService currentUserService;
-    private final Encryptor encryptor;
 
     @Autowired
     public InventoryItemService(InventoryItemRepository inventoryItemRepository, OnlineStoreRepository onlineStoreRepository,
-                                CurrentUserService currentUserService, Encryptor encryptor) {
+                                CurrentUserService currentUserService) {
         this.inventoryItemRepository = inventoryItemRepository;
         this.onlineStoreRepository = onlineStoreRepository;
         this.currentUserService = currentUserService;
-        this.encryptor = encryptor;
     }
 
     public List<InventoryItemDetails> getAll() {
@@ -69,8 +67,10 @@ public class InventoryItemService {
                 .findByUserAndArbitraryStoreName(user, arbitraryStoreName);
 
         if (onlineStoreDetails.isPresent()) {
-            AbstractOnlineStore onlineStore = AbstractOnlineStore.create(onlineStoreDetails.get().getType(),
-                    onlineStoreDetails.get().getStoreName(), encryptor.decrypt(onlineStoreDetails.get().getAccessKey()));
+            AbstractOnlineStore onlineStore = AbstractOnlineStore.create(
+                    onlineStoreDetails.get().getType(),
+                    onlineStoreDetails.get().getCredentials()
+            );
 
             AbstractOnlineStoreProduct abstractOnlineStoreProduct;
             try {
@@ -103,8 +103,10 @@ public class InventoryItemService {
                     .findByUserAndArbitraryStoreName(user, inventoryItemDetails.get().getArbitraryStoreName());
 
             if (onlineStoreDetails.isPresent()) {
-                AbstractOnlineStore onlineStore = AbstractOnlineStore.create(onlineStoreDetails.get().getType(),
-                        onlineStoreDetails.get().getStoreName(), encryptor.decrypt(onlineStoreDetails.get().getAccessKey()));
+                AbstractOnlineStore onlineStore = AbstractOnlineStore.create(
+                        onlineStoreDetails.get().getType(),
+                        onlineStoreDetails.get().getCredentials()
+                );
 
                 AbstractOnlineStoreProduct abstractOnlineStoreProduct;
                 try {
@@ -139,8 +141,10 @@ public class InventoryItemService {
                     .findByUserAndArbitraryStoreName(user, inventoryItemDetails.get().getArbitraryStoreName());
 
             if (onlineStoreDetails.isPresent()) {
-                AbstractOnlineStore onlineStore = AbstractOnlineStore.create(onlineStoreDetails.get().getType(),
-                        onlineStoreDetails.get().getStoreName(), encryptor.decrypt(onlineStoreDetails.get().getAccessKey()));
+                AbstractOnlineStore onlineStore = AbstractOnlineStore.create(
+                        onlineStoreDetails.get().getType(),
+                        onlineStoreDetails.get().getCredentials()
+                );
 
                 onlineStore.delete(inventoryItemDetails.get().getInventoryId());
                 inventoryItemRepository.deleteById(id);
@@ -189,8 +193,10 @@ public class InventoryItemService {
         List<OnlineStoreDetails> onlineStoreDetailsList = onlineStoreRepository.findAllByUser(user);
 
         for (OnlineStoreDetails onlineStoreDetails : onlineStoreDetailsList) {
-            AbstractOnlineStore onlineStore = AbstractOnlineStore.create(onlineStoreDetails.getType(),
-                    onlineStoreDetails.getStoreName(), encryptor.decrypt(onlineStoreDetails.getAccessKey()));
+            AbstractOnlineStore onlineStore = AbstractOnlineStore.create(
+                    onlineStoreDetails.getType(),
+                    onlineStoreDetails.getCredentials()
+            );
 
             Map<String, String> inventoryIdAndProductMap = onlineStore.getAll().stream()
                     .collect(Collectors.toMap(AbstractOnlineStoreProduct::getId, ProductJsonUtils::getString));

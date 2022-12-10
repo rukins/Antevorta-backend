@@ -1,5 +1,7 @@
 package com.antevorta.model;
 
+import com.antevorta.model.converter.OnlineStoreCredentialsConverter;
+import com.antevorta.model.onlinestorecredentials.OnlineStoreCredentials;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -31,10 +33,9 @@ public class OnlineStoreDetails {
     private OnlineStoreType type;
 
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
-    private String storeName;
-
-    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
-    private String accessKey;
+    @Convert(converter = OnlineStoreCredentialsConverter.class)
+    @Column(columnDefinition = "TEXT")
+    private OnlineStoreCredentials credentials;
 
     @JsonIgnore
     @Getter
