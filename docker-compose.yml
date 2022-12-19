@@ -1,9 +1,9 @@
-version: '3.1'
+version: '3.8'
 services:
   postgres:
     image: 'postgres'
     ports:
-      - "5431:5431"
+      - "5432:5432"
     environment:
       - POSTGRES_PASSWORD=test
       - POSTGRES_USER=test
@@ -13,14 +13,36 @@ services:
       interval: 10s
       timeout: 5s
       retries: 5
+  redis:
+    image: 'redis'
+    ports:
+      - "6379:6379"
+    command:
+      --requirepass "test"
   antevorta:
     image: 'antevorta-docker'
     ports:
       - "8081:8081"
     environment:
-      - SPRING_DATASOURCE_URL=jdbc:postgresql://postgres:5432/test
-      - SPRING_DATASOURCE_USERNAME=test
-      - SPRING_DATASOURCE_PASSWORD=test
-      - SPRING_JPA_HIBERNATE_DDL_AUTO=create-drop
+      - spring.datasource.url=jdbc:postgresql://postgres:5432/test
+      - spring.datasource.username=test
+      - spring.datasource.password=test
+
+      - spring.jpa.hibernate.ddl-auto=create-drop
+      - spring.jpa.open-in-view=false
+
+      - spring.data.redis.repositories.enabled=false
+
+      - spring.redis.host=redis
+      - spring.redis.port=6379
+      - spring.redis.password=test
+      - redis.cache.key-prefix.ebay='antevorta:access-key:ebay:'
+
+      - server.port=8082
+
+      - logging.level.com.antevorta=DEBUG
+      - encryption.secretKey=someSecretKey
+      - encryption.initializationVector=someInitializationVector
     depends_on:
       - postgres
+      - redis
