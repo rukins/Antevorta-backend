@@ -1,16 +1,17 @@
 package com.antevorta.onlinestore.ebay
 
+import com.antevorta.context.SpringContext
 import com.antevorta.model.OnlineStoreCredentials
 import com.antevorta.model.OnlineStoreType
 import com.antevorta.onlinestore.AbstractOnlineStore
 import com.antevorta.onlinestore.AbstractOnlineStoreProduct
 import com.antevorta.onlinestore.ebay.model.InventoryItem
+import com.antevorta.repository.redis.AccessTokenRepository
 import feign.Feign
 import feign.httpclient.ApacheHttpClient
 import feign.jackson.JacksonDecoder
 import feign.jackson.JacksonEncoder
-import java.util.Base64
-import java.util.UUID
+import java.util.*
 
 class EbayOnlineStore(private val credentials: OnlineStoreCredentials) : AbstractOnlineStore() {
     private val client: EbayClient = Feign.builder()
@@ -21,6 +22,10 @@ class EbayOnlineStore(private val credentials: OnlineStoreCredentials) : Abstrac
             EbayClient::class.java,
             "https://" + (if (credentials.storeName != null) credentials.storeName else "api") + ".ebay.com"
         )
+
+    private val accessTokenRepository: AccessTokenRepository = SpringContext.getBean(
+        AccessTokenRepository::class.java)
+    private val accessTokenKeyPrefix: String = SpringContext.getProperty("redis.cache.key-prefix.ebay")
 
     override fun getById(id: String): AbstractOnlineStoreProduct {
         return client.getBySku(id, getAccessToken())
@@ -55,10 +60,19 @@ class EbayOnlineStore(private val credentials: OnlineStoreCredentials) : Abstrac
     }
 
     private fun getAccessToken(): String {
+        val accessToken: String? = accessTokenRepository.getByKeyPrefix(accessTokenKeyPrefix)
+
+        if (accessToken != null)
+            return accessToken
+
         val encodedCredentials: String = Base64.getEncoder().encodeToString(
             (credentials.extra.username + ":" + credentials.extra.password).toByteArray()
         )
 
-        return client.getAccessToken(encodedCredentials, credentials.token).accessToken
+        val ebayAccessToken: EbayAccessToken = client.getAccessToken(encodedCredentials, credentials.token)
+
+        accessTokenRepository.save(accessTokenKeyPrefix, ebayAccessToken.accessToken, ebayAccessToken.expiresIn)
+
+        return ebayAccessToken.accessToken
     }
 }
