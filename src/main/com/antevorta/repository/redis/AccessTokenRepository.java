@@ -39,9 +39,6 @@ public class AccessTokenRepository {
                 keyPrefix + currentUserService.getAuthorizedUser().getEmail()
         );
 
-        if (encryptedAccessToken != null)
-            return encryptor.decrypt(encryptedAccessToken);
-
-        return null;
+        return encryptor.decrypt(encryptedAccessToken);
     }
 }

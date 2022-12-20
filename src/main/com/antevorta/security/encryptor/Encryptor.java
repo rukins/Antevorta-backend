@@ -29,6 +29,10 @@ public class Encryptor {
     }
 
     public String encrypt(String raw)  {
+        if (raw == null) {
+            return null;
+        }
+
         Cipher cipher;
         byte[] cipherText;
         try {
@@ -45,6 +49,10 @@ public class Encryptor {
     }
 
     public String decrypt(String encrypted) {
+        if (encrypted == null) {
+            return null;
+        }
+
         Cipher cipher;
         byte[] plainText;
         try {

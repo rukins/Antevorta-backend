@@ -23,8 +23,7 @@ class EbayOnlineStore(private val credentials: OnlineStoreCredentials) : Abstrac
             "https://" + (if (credentials.storeName != null) credentials.storeName else "api") + ".ebay.com"
         )
 
-    private val accessTokenRepository: AccessTokenRepository = SpringContext.getBean(
-        AccessTokenRepository::class.java)
+    private val accessTokenRepository: AccessTokenRepository = SpringContext.getBean(AccessTokenRepository::class.java)
     private val accessTokenKeyPrefix: String = SpringContext.getProperty("redis.cache.key-prefix.ebay")
 
     override fun getById(id: String): AbstractOnlineStoreProduct {
