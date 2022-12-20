@@ -14,7 +14,7 @@ public class OnlineStoreJsonUtils {
 
         ObjectNode objectNode = objectMapper.createObjectNode();
 
-        objectNode.put("onlineStore", objectMapper.valueToTree(onlineStore));
+        objectNode.putIfAbsent("onlineStore", objectMapper.valueToTree(onlineStore));
 
         return objectNode.toString();
     }
