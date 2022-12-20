@@ -68,7 +68,8 @@ public class InventoryItemService {
         if (onlineStoreDetails.isPresent()) {
             AbstractOnlineStore onlineStore = AbstractOnlineStore.create(
                     onlineStoreDetails.get().getType(),
-                    onlineStoreDetails.get().getCredentials()
+                    onlineStoreDetails.get().getCredentials(),
+                    onlineStoreDetails.get().getArbitraryStoreName()
             );
 
             AbstractOnlineStoreProduct abstractOnlineStoreProduct;
@@ -104,7 +105,8 @@ public class InventoryItemService {
             if (onlineStoreDetails.isPresent()) {
                 AbstractOnlineStore onlineStore = AbstractOnlineStore.create(
                         onlineStoreDetails.get().getType(),
-                        onlineStoreDetails.get().getCredentials()
+                        onlineStoreDetails.get().getCredentials(),
+                        onlineStoreDetails.get().getArbitraryStoreName()
                 );
 
                 AbstractOnlineStoreProduct abstractOnlineStoreProduct;
@@ -142,7 +144,8 @@ public class InventoryItemService {
             if (onlineStoreDetails.isPresent()) {
                 AbstractOnlineStore onlineStore = AbstractOnlineStore.create(
                         onlineStoreDetails.get().getType(),
-                        onlineStoreDetails.get().getCredentials()
+                        onlineStoreDetails.get().getCredentials(),
+                        onlineStoreDetails.get().getArbitraryStoreName()
                 );
 
                 onlineStore.delete(inventoryItemDetails.get().getInventoryId());
@@ -194,7 +197,8 @@ public class InventoryItemService {
         for (OnlineStoreDetails onlineStoreDetails : onlineStoreDetailsList) {
             AbstractOnlineStore onlineStore = AbstractOnlineStore.create(
                     onlineStoreDetails.getType(),
-                    onlineStoreDetails.getCredentials()
+                    onlineStoreDetails.getCredentials(),
+                    onlineStoreDetails.getArbitraryStoreName()
             );
 
             Map<String, String> inventoryIdAndProductMap = onlineStore.getAll().stream()

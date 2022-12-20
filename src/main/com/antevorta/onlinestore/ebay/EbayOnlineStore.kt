@@ -13,7 +13,9 @@ import feign.jackson.JacksonDecoder
 import feign.jackson.JacksonEncoder
 import java.util.*
 
-class EbayOnlineStore(private val credentials: OnlineStoreCredentials) : AbstractOnlineStore() {
+class EbayOnlineStore(
+    private val credentials: OnlineStoreCredentials, private val arbitraryStoreName: String
+) : AbstractOnlineStore() {
     private val client: EbayClient = Feign.builder()
         .client(ApacheHttpClient())
         .encoder(JacksonEncoder())
@@ -24,7 +26,7 @@ class EbayOnlineStore(private val credentials: OnlineStoreCredentials) : Abstrac
         )
 
     private val accessTokenRepository: AccessTokenRepository = SpringContext.getBean(AccessTokenRepository::class.java)
-    private val accessTokenKeyPrefix: String = SpringContext.getProperty("redis.cache.key-prefix.ebay")
+    private val accessTokenKeyPrefix: String = SpringContext.getProperty("redis.key-prefix.ebay")
 
     override fun getById(id: String): AbstractOnlineStoreProduct {
         return client.getBySku(id, getAccessToken())
@@ -59,7 +61,7 @@ class EbayOnlineStore(private val credentials: OnlineStoreCredentials) : Abstrac
     }
 
     private fun getAccessToken(): String {
-        val accessToken: String? = accessTokenRepository.getByKeyPrefix(accessTokenKeyPrefix)
+        val accessToken: String? = accessTokenRepository.getByKeyPrefix(accessTokenKeyPrefix, arbitraryStoreName)
 
         if (accessToken != null)
             return accessToken
@@ -70,7 +72,7 @@ class EbayOnlineStore(private val credentials: OnlineStoreCredentials) : Abstrac
 
         val ebayAccessToken: EbayAccessToken = client.getAccessToken(encodedCredentials, credentials.token)
 
-        accessTokenRepository.save(accessTokenKeyPrefix, ebayAccessToken.accessToken, ebayAccessToken.expiresIn)
+        accessTokenRepository.save(accessTokenKeyPrefix, ebayAccessToken.accessToken, ebayAccessToken.expiresIn, arbitraryStoreName)
 
         return ebayAccessToken.accessToken
     }

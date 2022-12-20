@@ -20,10 +20,10 @@ abstract class AbstractOnlineStore {
 
     companion object {
         @JvmStatic
-        fun create(type: OnlineStoreType, credentials: OnlineStoreCredentials): AbstractOnlineStore {
+        fun create(type: OnlineStoreType, credentials: OnlineStoreCredentials, arbitraryStoreName: String): AbstractOnlineStore {
             return when (type) {
                 OnlineStoreType.SHOPIFY -> ShopifyOnlineStore(credentials)
-                OnlineStoreType.EBAY -> EbayOnlineStore(credentials)
+                OnlineStoreType.EBAY -> EbayOnlineStore(credentials, arbitraryStoreName)
             }
         }
     }

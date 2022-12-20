@@ -24,21 +24,25 @@ public class AccessTokenRepository {
         this.encryptor = encryptor;
     }
 
-    public void save(String keyPrefix, String accessToken, Long timeToLive) {
+    public void save(String keyPrefix, String accessToken, Long timeToLive, String arbitraryStoreName) {
         accessToken = encryptor.encrypt(accessToken);
 
         redisTemplate.opsForValue().set(
-                keyPrefix + currentUserService.getAuthorizedUser().getEmail(),
+                getKeyPrefix(keyPrefix, arbitraryStoreName),
                 accessToken,
                 Duration.ofSeconds(timeToLive)
         );
     }
 
-    public String getByKeyPrefix(String keyPrefix) {
+    public String getByKeyPrefix(String keyPrefix, String arbitraryStoreName) {
         String encryptedAccessToken = redisTemplate.opsForValue().get(
-                keyPrefix + currentUserService.getAuthorizedUser().getEmail()
+                getKeyPrefix(keyPrefix, arbitraryStoreName)
         );
 
         return encryptor.decrypt(encryptedAccessToken);
+    }
+
+    private String getKeyPrefix(String keyPrefix, String arbitraryStoreName) {
+        return keyPrefix + currentUserService.getAuthorizedUser().getEmail() + ":" + arbitraryStoreName;
     }
 }
