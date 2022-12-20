@@ -36,9 +36,9 @@ services:
       - spring.redis.host=redis
       - spring.redis.port=6379
       - spring.redis.password=test
-      - redis.cache.key-prefix.ebay='antevorta:access-key:ebay:'
+      - redis.key-prefix.ebay='antevorta:access-key:ebay:'
 
-      - server.port=8082
+      - server.port=8081
 
       - logging.level.com.antevorta=DEBUG
       - encryption.secretKey=someSecretKey
