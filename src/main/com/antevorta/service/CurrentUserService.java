@@ -41,7 +41,7 @@ public class CurrentUserService {
         return user.orElseThrow(() -> new EntityNotFoundException("User not found"));
     }
 
-    public User updateUser(User user, HttpServletRequest request, String field) throws ServerException {
+    public User updateUser(User user, String field, HttpServletRequest request) throws ServerException {
         User authorizedUser = getAuthorizedUser();
 
         Set<String> fields = Arrays.stream(field.split(",")).map(String::trim).collect(Collectors.toSet());

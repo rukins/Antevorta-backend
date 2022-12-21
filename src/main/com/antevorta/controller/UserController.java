@@ -28,7 +28,7 @@ public class UserController {
     @PutMapping
     public ResponseEntity<?> updateUser(@RequestBody User user, @RequestParam String field, HttpServletRequest request)
             throws ServerException {
-        return ResponseEntity.ok(currentUserService.updateUser(user, request, field));
+        return ResponseEntity.ok(currentUserService.updateUser(user, field, request));
     }
 
     @PostMapping("/verify")
