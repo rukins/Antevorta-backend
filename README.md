@@ -55,7 +55,7 @@ POST /signup
 ## User
 ### getUserinfo
 ```http request
-GET /userinfo
+GET /user
 ```
 - Returns:
 ```json
@@ -63,7 +63,38 @@ GET /userinfo
   "id": 1,
   "email": "email@email.com",
   "firstname": "firstname",
-  "lastname": "lastname"
+  "lastname": "lastname",
+  "verified": false
+}
+```
+### updateUser
+```http request
+PUT /user?field=
+```
+- Parameter _field_ can equal to `firstname, lastname`, `firstname`, `lastname`, `email` or `password` (if it is equal to the last two, the session will be logged out)
+- Body depends on what you want to update
+- Returns:
+```json
+{
+  "id": 1,
+  "email": "new@email.com",
+  "firstname": "new",
+  "lastname": "new",
+  "verified": false
+}
+```
+### verify
+```http request
+POST /user/verify
+```
+- Returns:
+```json
+{
+  "id": 1,
+  "email": "email@email.com",
+  "firstname": "firstname",
+  "lastname": "lastname",
+  "verified": true
 }
 ```
 
