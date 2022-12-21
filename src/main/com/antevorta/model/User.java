@@ -1,28 +1,43 @@
 package com.antevorta.model;
 
 import com.antevorta.exception.serverexception.IncorrectEmailException;
+import com.antevorta.exception.serverexception.MissedFirstOrLastNameException;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import lombok.*;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.SneakyThrows;
 
 import javax.persistence.*;
 import java.util.regex.Pattern;
 
-@Getter
-@Setter
 @NoArgsConstructor
 @Entity
 @Table(name = "users")
 public class User {
+    @Getter
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Getter
     @Column(unique = true)
     private String email;
+
+    @Getter
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private String password;
+
+    @Getter
     private String firstname;
+
+    @Getter
     private String lastname;
+
+    @Getter
+    @Setter
+    @JsonProperty(value = "verified", access = JsonProperty.Access.READ_ONLY)
+    private boolean isVerified;
 
     public User(String email, String password, String firstname, String lastname) {
         this.email = email;
@@ -38,6 +53,33 @@ public class User {
         }
 
         this.email = email;
+    }
+
+    @SneakyThrows
+    public void setPassword(String password) {
+        if (password == null || password.isEmpty()) {
+            throw new MissedFirstOrLastNameException("Password can't be empty");
+        }
+
+        this.password = password;
+    }
+
+    @SneakyThrows
+    public void setFirstname(String firstname) {
+        if (firstname == null || firstname.isEmpty()) {
+            throw new MissedFirstOrLastNameException("Firstname can't be empty");
+        }
+
+        this.firstname = firstname;
+    }
+
+    @SneakyThrows
+    public void setLastname(String lastname) {
+        if (lastname == null || lastname.isEmpty()) {
+            throw new MissedFirstOrLastNameException("Lastname can't be empty");
+        }
+
+        this.lastname = lastname;
     }
 
     private Boolean isEmailCorrect(String email) {

@@ -1,7 +1,6 @@
 package com.antevorta.security.controller;
 
-import com.antevorta.exception.serverexception.EntityAlreadyExistsException;
-import com.antevorta.exception.serverexception.MissedFirstOrLastNameException;
+import com.antevorta.exception.serverexception.ServerException;
 import com.antevorta.model.ResponseBody;
 import com.antevorta.model.User;
 import com.antevorta.security.service.SignupService;
@@ -24,8 +23,7 @@ public class SignupController {
     }
 
     @PostMapping
-    public ResponseEntity<?> signup(@RequestBody User user)
-            throws EntityAlreadyExistsException, MissedFirstOrLastNameException {
+    public ResponseEntity<?> signup(@RequestBody User user) throws ServerException {
         signupService.signup(user);
 
         return new ResponseEntity<>(
