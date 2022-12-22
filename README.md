@@ -60,11 +60,13 @@ GET /user
 - Returns:
 ```json
 {
-  "id": 1,
-  "email": "email@email.com",
-  "firstname": "firstname",
-  "lastname": "lastname",
-  "verified": false
+  "user": {
+    "id": 1,
+    "email": "email@email.com",
+    "firstname": "firstname",
+    "lastname": "lastname",
+    "verified": false
+  }
 }
 ```
 ### updateUser
@@ -76,11 +78,13 @@ PUT /user?field=
 - Returns:
 ```json
 {
-  "id": 1,
-  "email": "new@email.com",
-  "firstname": "new",
-  "lastname": "new",
-  "verified": false
+  "user": {
+    "id": 1,
+    "email": "new@email.com",
+    "firstname": "new",
+    "lastname": "new",
+    "verified": false
+  }
 }
 ```
 ### verify
@@ -90,11 +94,13 @@ POST /user/verify
 - Returns:
 ```json
 {
-  "id": 1,
-  "email": "email@email.com",
-  "firstname": "firstname",
-  "lastname": "lastname",
-  "verified": true
+  "user": {
+    "id": 1,
+    "email": "email@email.com",
+    "firstname": "firstname",
+    "lastname": "lastname",
+    "verified": true
+  }
 }
 ```
 
