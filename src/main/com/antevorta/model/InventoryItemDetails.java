@@ -48,6 +48,7 @@ public class InventoryItemDetails {
     private User user;
 
     @ManyToMany(fetch = FetchType.EAGER)
+    @JoinTable(name = "merged_inventory_items")
     private List<InventoryItemDetails> mergedInventoryItems;
 
     private boolean isLinker = false;
