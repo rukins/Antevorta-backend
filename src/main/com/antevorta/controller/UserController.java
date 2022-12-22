@@ -3,8 +3,10 @@ package com.antevorta.controller;
 import com.antevorta.exception.serverexception.ServerException;
 import com.antevorta.model.User;
 import com.antevorta.service.CurrentUserService;
+import com.antevorta.utils.UserJsonUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -22,13 +24,19 @@ public class UserController {
 
     @GetMapping
     public ResponseEntity<?> getUserinfo() {
-        return ResponseEntity.ok(currentUserService.getAuthorizedUser());
+        return ResponseEntity.status(HttpStatus.OK).contentType(MediaType.APPLICATION_JSON)
+                .body(
+                        UserJsonUtils.getString(currentUserService.getAuthorizedUser())
+                );
     }
 
     @PutMapping
     public ResponseEntity<?> updateUser(@RequestBody User user, @RequestParam String field, HttpServletRequest request)
             throws ServerException {
-        return ResponseEntity.ok(currentUserService.updateUser(user, field, request));
+        return ResponseEntity.status(HttpStatus.OK).contentType(MediaType.APPLICATION_JSON)
+                .body(
+                        currentUserService.updateUser(user, field, request)
+                );
     }
 
     @PostMapping("/verify")
