@@ -4,7 +4,7 @@ import com.antevorta.model.User;
 import com.antevorta.repository.UserRepository;
 import com.antevorta.security.encryptor.Encryptor;
 import com.antevorta.security.provider.CustomAuthenticationProvider;
-import com.antevorta.security.service.CustomUserDetailsService;
+import com.antevorta.security.service.JpaUserDetailsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.ApplicationRunner;
 import org.springframework.context.annotation.Bean;
@@ -18,12 +18,12 @@ import org.springframework.security.web.SecurityFilterChain;
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig {
-    private final CustomUserDetailsService userDetailsService;
+    private final JpaUserDetailsService userDetailsService;
     private final CustomAuthenticationProvider authenticationProvider;
     private final AuthenticationEntryPoint authenticationEntryPoint;
 
     @Autowired
-    public SecurityConfig(CustomUserDetailsService userDetailsService, CustomAuthenticationProvider authenticationProvider,
+    public SecurityConfig(JpaUserDetailsService userDetailsService, CustomAuthenticationProvider authenticationProvider,
                           AuthenticationEntryPoint authenticationEntryPoint) {
         this.userDetailsService = userDetailsService;
         this.authenticationProvider = authenticationProvider;

@@ -2,7 +2,7 @@ package com.antevorta.security.provider;
 
 import com.antevorta.exception.authexception.WrongPasswordException;
 import com.antevorta.security.encryptor.Encryptor;
-import com.antevorta.security.service.CustomUserDetailsService;
+import com.antevorta.security.service.JpaUserDetailsService;
 import lombok.SneakyThrows;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationProvider;
@@ -14,10 +14,10 @@ import org.springframework.stereotype.Component;
 @Component
 public class CustomAuthenticationProvider implements AuthenticationProvider {
     private final Encryptor encryptor;
-    private final CustomUserDetailsService userDetailsService;
+    private final JpaUserDetailsService userDetailsService;
 
     @Autowired
-    public CustomAuthenticationProvider(Encryptor encryptor, CustomUserDetailsService userDetailsService) {
+    public CustomAuthenticationProvider(Encryptor encryptor, JpaUserDetailsService userDetailsService) {
         this.encryptor = encryptor;
         this.userDetailsService = userDetailsService;
     }
