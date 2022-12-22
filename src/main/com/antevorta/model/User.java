@@ -1,7 +1,7 @@
 package com.antevorta.model;
 
 import com.antevorta.exception.serverexception.IncorrectEmailException;
-import com.antevorta.exception.serverexception.MissedFirstOrLastNameException;
+import com.antevorta.exception.serverexception.MissedValueException;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -58,7 +58,7 @@ public class User {
     @SneakyThrows
     public void setPassword(String password) {
         if (password == null || password.isEmpty()) {
-            throw new MissedFirstOrLastNameException("Password can't be empty");
+            throw new MissedValueException("Password can't be empty");
         }
 
         this.password = password;
@@ -67,7 +67,7 @@ public class User {
     @SneakyThrows
     public void setFirstname(String firstname) {
         if (firstname == null || firstname.isEmpty()) {
-            throw new MissedFirstOrLastNameException("Firstname can't be empty");
+            throw new MissedValueException("Firstname can't be empty");
         }
 
         this.firstname = firstname;
@@ -76,7 +76,7 @@ public class User {
     @SneakyThrows
     public void setLastname(String lastname) {
         if (lastname == null || lastname.isEmpty()) {
-            throw new MissedFirstOrLastNameException("Lastname can't be empty");
+            throw new MissedValueException("Lastname can't be empty");
         }
 
         this.lastname = lastname;
