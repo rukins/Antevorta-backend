@@ -20,7 +20,7 @@ import java.util.List;
 public class InventoryItemDetails {
     @Getter
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @Getter
