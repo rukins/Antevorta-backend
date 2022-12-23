@@ -1,6 +1,6 @@
 package com.antevorta.security.service;
 
-import com.antevorta.exception.serverexception.EntityNotFoundException;
+import com.antevorta.security.exception.authexception.UserNotAuthenticatedException;
 import com.antevorta.model.User;
 import com.antevorta.repository.UserRepository;
 import com.antevorta.security.model.SecurityUser;
@@ -28,6 +28,6 @@ public class JpaUserDetailsService implements UserDetailsService {
         Optional<User> user = userRepository.findByEmail(email);
 
         return user.map(SecurityUser::new)
-                .orElseThrow(() -> new EntityNotFoundException(String.format("User with '%s' email not found", email)));
+                .orElseThrow(() -> new UserNotAuthenticatedException(String.format("User with '%s' email not authenticated", email)));
     }
 }

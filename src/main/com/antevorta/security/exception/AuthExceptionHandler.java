@@ -1,6 +1,6 @@
-package com.antevorta.exception;
+package com.antevorta.security.exception;
 
-import com.antevorta.exception.serverexception.ServerException;
+import com.antevorta.security.exception.authexception.AuthException;
 import com.antevorta.model.ResponseBody;
 import com.antevorta.utils.RequestUtils;
 import org.slf4j.Logger;
@@ -13,18 +13,17 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import javax.servlet.http.HttpServletRequest;
 
 @ControllerAdvice
-public class ServerExceptionHandler {
+public class AuthExceptionHandler {
+    private static final Logger logger = LoggerFactory.getLogger(AuthExceptionHandler.class);
 
-    private static final Logger logger = LoggerFactory.getLogger(ServerExceptionHandler.class);
-
-    @ExceptionHandler({ServerException.class})
-    public ResponseEntity<?> handleServerException(ServerException ex, HttpServletRequest request) {
-        ResponseBody body = new ResponseBody(HttpStatus.BAD_REQUEST.value(), ex.getMessage());
+    @ExceptionHandler({AuthException.class})
+    public ResponseEntity<?> handleAuthException(AuthException ex, HttpServletRequest request) {
+        ResponseBody body = new ResponseBody(HttpStatus.FORBIDDEN.value(), ex.getMessage());
 
         logger.debug(request.getMethod());
         logger.debug(RequestUtils.getHeadersString(request));
         logger.debug(body.toString(), ex);
 
-        return new ResponseEntity<>(body, HttpStatus.BAD_REQUEST);
+        return new ResponseEntity<>(body, HttpStatus.FORBIDDEN);
     }
 }

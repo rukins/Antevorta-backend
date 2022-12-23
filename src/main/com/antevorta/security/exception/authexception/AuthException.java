@@ -1,8 +1,5 @@
-package com.antevorta.exception.authexception;
+package com.antevorta.security.exception.authexception;
 
-import lombok.Getter;
-
-@Getter
 public class AuthException extends Exception {
     public AuthException(String message) {
         super(message);

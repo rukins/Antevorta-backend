@@ -1,6 +1,6 @@
 package com.antevorta.security.provider;
 
-import com.antevorta.exception.authexception.WrongPasswordException;
+import com.antevorta.security.exception.authexception.WrongPasswordException;
 import com.antevorta.security.encryptor.Encryptor;
 import com.antevorta.security.service.JpaUserDetailsService;
 import lombok.SneakyThrows;
