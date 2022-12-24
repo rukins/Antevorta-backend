@@ -1,21 +1,17 @@
 package com.antevorta.model;
 
+import com.antevorta.exception.serverexception.EmptyArbitraryStoreNameException;
 import com.antevorta.model.converter.OnlineStoreCredentialsConverter;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Objects;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
-@Setter
-@Getter
 @NoArgsConstructor
 @Entity
 @Table(name = "online_stores")
@@ -29,8 +25,10 @@ public class OnlineStoreDetails {
     private String arbitraryStoreName;
 
     @Getter
+    @Setter
     private OnlineStoreType type;
 
+    @Getter
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     @Convert(converter = OnlineStoreCredentialsConverter.class)
     @Column(columnDefinition = "TEXT")
@@ -38,6 +36,7 @@ public class OnlineStoreDetails {
 
     @JsonIgnore
     @Getter
+    @Setter
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(
             name = "USER_ID",
@@ -45,10 +44,13 @@ public class OnlineStoreDetails {
     )
     private User user;
 
-    public OnlineStoreDetails(Id id, String arbitraryStoreName, OnlineStoreType type) {
-        this.id = id;
+    @SneakyThrows
+    public void setArbitraryStoreName(String arbitraryStoreName) {
+        if (arbitraryStoreName == null || arbitraryStoreName.isEmpty()) {
+            throw new EmptyArbitraryStoreNameException("Arbitrary store name shouldn't be empty");
+        }
+
         this.arbitraryStoreName = arbitraryStoreName;
-        this.type = type;
     }
 
     public void generateId(Long count) {

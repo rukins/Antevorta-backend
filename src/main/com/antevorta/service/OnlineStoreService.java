@@ -31,8 +31,6 @@ public class OnlineStoreService {
     }
 
     public OnlineStoreDetails addToUser(OnlineStoreDetails onlineStore) throws ServerException {
-        checkIfArbitraryStoreNameIsNotNull(onlineStore.getArbitraryStoreName());
-
         User user = currentUserService.getAuthorizedUser();
 
         checkIfUserHasOneOnlineStoreByType(user, onlineStore.getType());
@@ -45,8 +43,6 @@ public class OnlineStoreService {
     }
 
     public OnlineStoreDetails updateArbitraryStoreName(String currentName, String newName) throws ServerException {
-        checkIfArbitraryStoreNameIsNotNull(newName);
-
         User user = currentUserService.getAuthorizedUser();
 
         checkIfArbitraryStoreNameIsUnique(user, newName);
@@ -74,12 +70,6 @@ public class OnlineStoreService {
         }
 
         throw new EntityNotFoundException(String.format("Online store with '%s' name not found", name));
-    }
-
-    private void checkIfArbitraryStoreNameIsNotNull(String arbitraryStoreName) throws EmptyArbitraryStoreNameException {
-        if (arbitraryStoreName == null || arbitraryStoreName.isEmpty()) {
-            throw new EmptyArbitraryStoreNameException("Arbitrary store name shouldn't be empty");
-        }
     }
 
     private void checkIfArbitraryStoreNameIsUnique(User user, String arbitraryName) throws ArbitraryStoreNameNotUniqueException {
