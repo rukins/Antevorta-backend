@@ -65,7 +65,12 @@ GET /user
     "email": "email@email.com",
     "firstname": "firstname",
     "lastname": "lastname",
-    "verified": false
+    "verified": false,
+    "authorities": [
+      {
+        "name": "someAuthority"
+      }
+    ]
   }
 }
 ```
@@ -73,7 +78,7 @@ GET /user
 ```http request
 PUT /user?field=
 ```
-- Parameter _field_ can equal to `firstname, lastname`, `firstname`, `lastname`, `email` or `password` (if it is equal to the last two, the session will be logged out)
+- Parameter _field_ can be equal to `firstname, lastname`, `firstname`, `lastname`, `email` or `password` (if it is equal to the last two, the session will be logged out)
 - Body depends on what you want to update
 - Returns:
 ```json
@@ -83,7 +88,8 @@ PUT /user?field=
     "email": "new@email.com",
     "firstname": "new",
     "lastname": "new",
-    "verified": false
+    "verified": false,
+    "authorities": []
   }
 }
 ```
@@ -99,7 +105,8 @@ POST /user/verify
     "email": "email@email.com",
     "firstname": "firstname",
     "lastname": "lastname",
-    "verified": true
+    "verified": true,
+    "authorities": []
   }
 }
 ```
