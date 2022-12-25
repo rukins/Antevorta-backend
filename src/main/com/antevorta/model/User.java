@@ -3,14 +3,17 @@ package com.antevorta.model;
 import com.antevorta.exception.serverexception.IncorrectEmailException;
 import com.antevorta.exception.serverexception.MissedValueException;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.SneakyThrows;
 
 import javax.persistence.*;
+import java.util.Set;
 import java.util.regex.Pattern;
 
+@JsonPropertyOrder({ "id", "email", "password", "firstname", "lastname", "verified", "authorities" })
 @NoArgsConstructor
 @Entity
 @Table(name = "users")
@@ -38,6 +41,16 @@ public class User {
     @Setter
     @JsonProperty(value = "verified", access = JsonProperty.Access.READ_ONLY)
     private boolean isVerified;
+
+    @Getter
+    @Setter
+    @ManyToMany(fetch = FetchType.EAGER)
+    @JoinTable(
+            name = "users_authorities",
+            joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "authority_id")
+    )
+    private Set<Authority> authorities;
 
     public User(String email, String password, String firstname, String lastname) {
         this.email = email;
