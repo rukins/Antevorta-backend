@@ -29,6 +29,6 @@ public class CustomAuthenticationEntryPoint implements AuthenticationEntryPoint 
 
         logger.debug(request.getMethod());
         logger.debug(RequestUtils.getHeadersString(request));
-        logger.debug(body.toString());
+        logger.debug(body.toString(), authException);
     }
 }

@@ -5,6 +5,7 @@ import com.antevorta.model.OnlineStoreDetails;
 import com.antevorta.model.OnlineStoreType;
 import com.antevorta.model.User;
 import com.antevorta.repository.OnlineStoreRepository;
+import com.antevorta.security.exception.authexception.MultipleOnlineStoresByTypeException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -82,9 +83,9 @@ public class OnlineStoreService {
         }
     }
 
-    public boolean hasUserOneOnlineStoreByType(OnlineStoreType type) throws MultipleOnlineStoresException {
+    public boolean hasUserOneOnlineStoreByType(OnlineStoreType type) throws MultipleOnlineStoresByTypeException {
         if (onlineStoreRepository.existsByUserAndType(currentUserService.getAuthorizedUser(), type)) {
-            throw new MultipleOnlineStoresException(String.format("Store with '%s' type already exists", type));
+            throw new MultipleOnlineStoresByTypeException(String.format("Store with '%s' type already exists", type));
         }
 
         return true;

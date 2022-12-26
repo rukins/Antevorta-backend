@@ -1,8 +1,8 @@
 package com.antevorta.security.exception;
 
 import com.antevorta.model.ResponseBody;
-import com.antevorta.security.exception.authexception.UserNotAuthenticatedException;
-import com.antevorta.security.exception.authexception.WrongPasswordException;
+import com.antevorta.security.exception.authexception.AuthenticationException;
+import com.antevorta.security.exception.authexception.AuthorizationException;
 import com.antevorta.utils.RequestUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -17,8 +17,8 @@ import javax.servlet.http.HttpServletRequest;
 public class AuthExceptionHandler {
     private static final Logger logger = LoggerFactory.getLogger(AuthExceptionHandler.class);
 
-    @ExceptionHandler({UserNotAuthenticatedException.class})
-    public ResponseEntity<?> handleUserNotAuthenticatedException(UserNotAuthenticatedException ex, HttpServletRequest request) {
+    @ExceptionHandler({AuthenticationException.class})
+    public ResponseEntity<?> handleAuthenticationException(AuthenticationException ex, HttpServletRequest request) {
         ResponseBody body = new ResponseBody(HttpStatus.UNAUTHORIZED.value(), ex.getMessage());
 
         logger.debug(request.getMethod());
@@ -28,8 +28,8 @@ public class AuthExceptionHandler {
         return new ResponseEntity<>(body, HttpStatus.UNAUTHORIZED);
     }
 
-    @ExceptionHandler({WrongPasswordException.class})
-    public ResponseEntity<?> handleWrongPasswordException(WrongPasswordException ex, HttpServletRequest request) {
+    @ExceptionHandler({AuthorizationException.class})
+    public ResponseEntity<?> handleAuthorizationException(AuthorizationException ex, HttpServletRequest request) {
         ResponseBody body = new ResponseBody(HttpStatus.FORBIDDEN.value(), ex.getMessage());
 
         logger.debug(request.getMethod());
