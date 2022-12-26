@@ -33,7 +33,6 @@ public class OnlineStoreService {
     public OnlineStoreDetails addToUser(OnlineStoreDetails onlineStore) throws ServerException {
         User user = currentUserService.getAuthorizedUser();
 
-        checkIfUserHasOneOnlineStoreByType(user, onlineStore.getType());
         checkIfArbitraryStoreNameIsUnique(user, onlineStore.getArbitraryStoreName());
 
         onlineStore.setUser(user);
@@ -83,11 +82,11 @@ public class OnlineStoreService {
         }
     }
 
-    private void checkIfUserHasOneOnlineStoreByType(User user, OnlineStoreType type) throws MultipleOnlineStoresException {
-        List<OnlineStoreDetails> onlineStoreProjectionList = onlineStoreRepository.findAllByUserAndType(user, type);
-
-        if (onlineStoreProjectionList.size() == 1) {
+    public boolean hasUserOneOnlineStoreByType(OnlineStoreType type) throws MultipleOnlineStoresException {
+        if (onlineStoreRepository.existsByUserAndType(currentUserService.getAuthorizedUser(), type)) {
             throw new MultipleOnlineStoresException(String.format("Store with '%s' type already exists", type));
         }
+
+        return true;
     }
 }

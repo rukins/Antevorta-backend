@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -43,8 +44,10 @@ public class OnlineStoreController {
     }
 
     @PostMapping("")
-    public ResponseEntity<?> addToUser(@RequestBody OnlineStoreDetails onlineStoreDetails)
-            throws ServerException {
+    @PreAuthorize(
+            "hasAuthority('haveMultipleStoresByType') or @onlineStoreService.hasUserOneOnlineStoreByType(#onlineStoreDetails.type)"
+    )
+    public ResponseEntity<?> addToUser(@RequestBody OnlineStoreDetails onlineStoreDetails) throws ServerException {
         return ResponseEntity.status(HttpStatus.OK).contentType(MediaType.APPLICATION_JSON)
                 .body(
                         OnlineStoreJsonUtils.getString(onlineStoreService.addToUser(onlineStoreDetails))
@@ -52,8 +55,8 @@ public class OnlineStoreController {
     }
 
     @PutMapping("/{currentName}")
-    public ResponseEntity<?> updateArbitraryStoreName(@PathVariable String currentName, @RequestParam("new") String newName)
-            throws ServerException {
+    public ResponseEntity<?> updateArbitraryStoreName(@PathVariable String currentName,
+                                                      @RequestParam("new") String newName) throws ServerException {
         return ResponseEntity.status(HttpStatus.OK).contentType(MediaType.APPLICATION_JSON)
                 .body(
                         OnlineStoreJsonUtils.getString(onlineStoreService.updateArbitraryStoreName(currentName, newName))
@@ -61,8 +64,7 @@ public class OnlineStoreController {
     }
 
     @DeleteMapping("/{arbitraryStoreName}")
-    public ResponseEntity<?> deleteByArbitraryStoreName(@PathVariable String arbitraryStoreName)
-            throws ServerException {
+    public ResponseEntity<?> deleteByArbitraryStoreName(@PathVariable String arbitraryStoreName) throws ServerException {
         onlineStoreService.deleteByArbitraryStoreName(arbitraryStoreName);
 
         return ResponseEntity.ok(
@@ -80,8 +82,8 @@ public class OnlineStoreController {
     }
 
     @PostMapping("/{arbitraryStoreName}/inventoryitems")
-    public ResponseEntity<?> createProduct(@RequestBody String requestBody, @PathVariable String arbitraryStoreName)
-            throws ServerException {
+    public ResponseEntity<?> createProduct(@RequestBody String requestBody,
+                                           @PathVariable String arbitraryStoreName) throws ServerException {
         return ResponseEntity.ok(inventoryItemService.create(requestBody, arbitraryStoreName));
     }
 }
