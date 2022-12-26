@@ -15,4 +15,5 @@ public interface OnlineStoreRepository extends JpaRepository<OnlineStoreDetails,
     List<OnlineStoreDetails> findAllByUser(User user);
     List<OnlineStoreDetails> findAllByUserAndType(User user, OnlineStoreType type);
     Optional<OnlineStoreDetails> findByUserAndArbitraryStoreName(User user, String arbitraryStoreName);
+    boolean existsByUserAndType(User user, OnlineStoreType type);
 }
