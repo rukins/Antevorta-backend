@@ -1,6 +1,8 @@
 package com.antevorta.security.config;
 
+import com.antevorta.model.Authority;
 import com.antevorta.model.User;
+import com.antevorta.repository.AuthorityRepository;
 import com.antevorta.repository.UserRepository;
 import com.antevorta.security.encryptor.Encryptor;
 import com.antevorta.security.provider.CustomAuthenticationProvider;
@@ -15,6 +17,8 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.security.web.SecurityFilterChain;
+
+import java.util.Set;
 
 @Configuration
 @EnableWebSecurity
@@ -65,10 +69,14 @@ public class SecurityConfig {
     }
 
     @Bean
-    public ApplicationRunner dataLoader(UserRepository userRepository, Encryptor encryptor) {
+    public ApplicationRunner dataLoader(UserRepository userRepository, AuthorityRepository authorityRepository, Encryptor encryptor) {
         return args -> {
+            Authority hasMultipleStoresByTypeAuthority = new Authority("hasMultipleStoresByType");
+
+            authorityRepository.save(hasMultipleStoresByTypeAuthority);
+
             userRepository.save(new User("first@gmail.com", encryptor.encrypt("password"), "firstname", "lastname"));
-            userRepository.save(new User("second@icloud.com", encryptor.encrypt("password"), "firstname", "lastname"));
+            userRepository.save(new User("second@icloud.com", encryptor.encrypt("password"), "firstname", "lastname", Set.of(hasMultipleStoresByTypeAuthority)));
         };
     }
 }
