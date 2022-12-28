@@ -14,14 +14,15 @@ import java.util.Set;
 @Entity
 @Table(name = "authorities")
 public class Authority {
-    @JsonIgnore
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-
+    @Column(unique = true, updatable = false, nullable = false)
     private String name;
 
     @JsonIgnore
     @ManyToMany(mappedBy = "authorities")
     private Set<User> users;
+
+    public Authority(String name) {
+        this.name = name;
+    }
 }
