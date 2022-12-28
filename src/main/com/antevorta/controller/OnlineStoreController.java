@@ -45,7 +45,7 @@ public class OnlineStoreController {
 
     @PostMapping("")
     @PreAuthorize(
-            "hasAuthority('haveMultipleStoresByType') or @onlineStoreService.hasUserOneOnlineStoreByType(#onlineStoreDetails.type)"
+            "hasAuthority('hasMultipleStoresByType') or @onlineStoreService.hasUserOneOnlineStoreByType(#onlineStoreDetails.type)"
     )
     public ResponseEntity<?> addToUser(@RequestBody OnlineStoreDetails onlineStoreDetails) throws ServerException {
         return ResponseEntity.status(HttpStatus.OK).contentType(MediaType.APPLICATION_JSON)
