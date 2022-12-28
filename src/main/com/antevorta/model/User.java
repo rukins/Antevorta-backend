@@ -44,6 +44,7 @@ public class User {
 
     @Getter
     @Setter
+    @JsonProperty(value = "authorities", access = JsonProperty.Access.READ_ONLY)
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
             name = "users_authorities",
@@ -57,6 +58,14 @@ public class User {
         this.password = password;
         this.firstname = firstname;
         this.lastname = lastname;
+    }
+
+    public User(String email, String password, String firstname, String lastname, Set<Authority> authorities) {
+        this.email = email;
+        this.password = password;
+        this.firstname = firstname;
+        this.lastname = lastname;
+        this.authorities = authorities;
     }
 
     @SneakyThrows
