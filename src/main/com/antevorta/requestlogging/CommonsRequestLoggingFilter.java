@@ -4,7 +4,7 @@ import com.antevorta.utils.RequestUtils;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.AbstractRequestLoggingFilter;
 
-import javax.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletRequest;
 
 @Component
 public class CommonsRequestLoggingFilter extends AbstractRequestLoggingFilter {

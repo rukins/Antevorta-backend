@@ -12,7 +12,7 @@ import org.springframework.boot.ApplicationRunner;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
-import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
+import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.web.AuthenticationEntryPoint;
@@ -22,7 +22,7 @@ import java.util.Set;
 
 @Configuration
 @EnableWebSecurity
-@EnableGlobalMethodSecurity(prePostEnabled = true)
+@EnableMethodSecurity
 public class SecurityConfig {
     private final JpaUserDetailsService userDetailsService;
     private final CustomAuthenticationProvider authenticationProvider;
@@ -45,11 +45,12 @@ public class SecurityConfig {
 
                     .and()
 
-                    .authorizeRequests()
-                    .antMatchers(
+                    .authorizeHttpRequests()
+                    .requestMatchers(
                             HttpMethod.POST,
                             "/auth/login", "auth/logout", "/signup"
                     )
+
                     .permitAll()
 
                     .anyRequest()

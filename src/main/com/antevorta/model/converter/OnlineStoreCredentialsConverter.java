@@ -3,11 +3,10 @@ package com.antevorta.model.converter;
 import com.antevorta.model.OnlineStoreCredentials;
 import com.antevorta.security.encryptor.Encryptor;
 import com.antevorta.utils.JsonUtils;
+import jakarta.persistence.AttributeConverter;
+import jakarta.persistence.Converter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-
-import javax.persistence.AttributeConverter;
-import javax.persistence.Converter;
 
 @Converter
 @Component

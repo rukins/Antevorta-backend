@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.SneakyThrows;
 
-import javax.persistence.*;
+import jakarta.persistence.*;
 import java.util.Set;
 import java.util.regex.Pattern;
 

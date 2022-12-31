@@ -5,7 +5,7 @@
 	<parent>
 		<groupId>org.springframework.boot</groupId>
 		<artifactId>spring-boot-starter-parent</artifactId>
-		<version>2.7.3</version>
+		<version>3.0.1</version>
 		<relativePath/>
 	</parent>
 	<groupId>com.antevorta</groupId>
@@ -17,7 +17,9 @@
 		<java.version>17</java.version>
 		<kotlin.version>1.7.20</kotlin.version>
 
+		<jedis.version>4.3.1</jedis.version>
 		<feign.version>12.1</feign.version>
+		<postgresql.version>42.5.1</postgresql.version>
 	</properties>
 	<dependencies>
 
@@ -34,16 +36,23 @@
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-data-jpa</artifactId>
 		</dependency>
+
+		<!--	Redis	-->
 		<dependency>
-			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter-data-redis</artifactId>
+			<groupId>org.springframework.data</groupId>
+			<artifactId>spring-data-redis</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>redis.clients</groupId>
+			<artifactId>jedis</artifactId>
+			<version>${jedis.version}</version>
 		</dependency>
 
 		<!--	Database	-->
 		<dependency>
 			<groupId>org.postgresql</groupId>
 			<artifactId>postgresql</artifactId>
-			<version>42.5.0</version>
+			<version>${postgresql.version}</version>
 			<scope>runtime</scope>
 		</dependency>
 

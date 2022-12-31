@@ -3,21 +3,21 @@ package com.antevorta.repository.redis;
 import com.antevorta.security.encryptor.Encryptor;
 import com.antevorta.service.CurrentUserService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Repository;
 
 import java.time.Duration;
 
 @Repository
 public class AccessTokenRepository {
-    private final RedisTemplate<String, String> redisTemplate;
+    private final StringRedisTemplate redisTemplate;
 
     private final CurrentUserService currentUserService;
 
     private final Encryptor encryptor;
 
     @Autowired
-    public AccessTokenRepository(RedisTemplate<String, String> redisTemplate,
+    public AccessTokenRepository(StringRedisTemplate redisTemplate,
                                  CurrentUserService currentUserService, Encryptor encryptor) {
         this.redisTemplate = redisTemplate;
         this.currentUserService = currentUserService;
