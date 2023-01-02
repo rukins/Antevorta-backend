@@ -1,20 +1,31 @@
 package com.antevorta.onlinestore
 
+import com.antevorta.exception.serverexception.NotImplementedException
 import com.antevorta.model.OnlineStoreCredentials
 import com.antevorta.model.OnlineStoreType
 import com.antevorta.onlinestore.ebay.EbayOnlineStore
 import com.antevorta.onlinestore.shopify.ShopifyOnlineStore
 
 abstract class AbstractOnlineStore {
-    abstract fun getById(id: String): AbstractOnlineStoreProduct
+    open fun getById(id: String): AbstractOnlineStoreProduct {
+        throw NotImplementedException("Not implemented yet")
+    }
 
-    abstract fun getAll(): List<AbstractOnlineStoreProduct>
+    open fun getAll(): List<AbstractOnlineStoreProduct> {
+        throw NotImplementedException("Not implemented yet")
+    }
 
-    abstract fun post(entity: AbstractOnlineStoreProduct): AbstractOnlineStoreProduct
+    open fun post(entity: AbstractOnlineStoreProduct): AbstractOnlineStoreProduct {
+        throw NotImplementedException("Not implemented yet")
+    }
 
-    abstract fun put(entity: AbstractOnlineStoreProduct, id: String): AbstractOnlineStoreProduct
+    open fun put(entity: AbstractOnlineStoreProduct, id: String): AbstractOnlineStoreProduct {
+        throw NotImplementedException("Not implemented yet")
+    }
 
-    abstract fun delete(id: String): Void
+    open fun delete(id: String): Void {
+        throw NotImplementedException("Not implemented yet")
+    }
 
     abstract fun getType(): OnlineStoreType
 
