@@ -1,0 +1,34 @@
+spring:
+  datasource:
+    driver-class-name: org.postgresql.Driver
+    url: jdbc:postgresql://localhost:5432/test
+    username: test
+    password: test
+  jpa:
+    open-in-view: false
+    hibernate:
+      ddl-auto: create-drop
+  data:
+    redis:
+      repositories:
+        enabled: true
+
+redis:
+  host: localhost
+  port: 6379
+  password: test
+  key-prefix:
+    ebay: 'antevorta:access-key:ebay:'
+
+#Encryptor (preferably both 16 characters long)
+encryption:
+  secretKey: someSecretKey
+  initializationVector: someInitializationVector
+
+server:
+  port: 8081
+
+logging:
+  level:
+    com:
+      antevorta: DEBUG
