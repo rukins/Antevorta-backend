@@ -26,7 +26,7 @@ class EbayOnlineStore(
         )
 
     private val accessTokenRepository: AccessTokenRepository = SpringContext.getBean(AccessTokenRepository::class.java)
-    private val accessTokenKeyPrefix: String = SpringContext.getProperty("redis.key-prefix.ebay")
+    private val accessTokenKeyPrefix: String = SpringContext.getProperty("redis.key-prefix.onlinestores.ebay")
 
     override fun getById(id: String): AbstractOnlineStoreProduct {
         return client.getBySku(id, getAccessToken())
