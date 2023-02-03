@@ -17,9 +17,17 @@ redis:
   host: localhost
   port: 6379
   password: test
+  time-to-live:
+    verification-code: 600
   key-prefix:
+    verification-code: 'antevorta:verification-code:'
     onlinestores:
       ebay: 'antevorta:access-key:ebay:'
+
+mailgun:
+  base-url: 'https://api.mailgun.net/'
+  domain: ''
+  private-api-key: ''
 
 #Encryptor (preferably both 16 characters long)
 encryption:

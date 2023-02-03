@@ -1,25 +1,28 @@
 package com.antevorta.controller;
 
 import com.antevorta.exception.serverexception.ServerException;
+import com.antevorta.model.ResponseBody;
 import com.antevorta.model.User;
 import com.antevorta.service.CurrentUserService;
+import com.antevorta.service.EmailVerificationService;
 import com.antevorta.utils.UserJsonUtils;
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import jakarta.servlet.http.HttpServletRequest;
-
 @RestController
 @RequestMapping("/user")
 public class UserController {
     private final CurrentUserService currentUserService;
+    private final EmailVerificationService emailVerificationService;
 
     @Autowired
-    public UserController(CurrentUserService currentUserService) {
+    public UserController(CurrentUserService currentUserService, EmailVerificationService emailVerificationService) {
         this.currentUserService = currentUserService;
+        this.emailVerificationService = emailVerificationService;
     }
 
     @GetMapping
@@ -39,10 +42,37 @@ public class UserController {
                 );
     }
 
-    @PostMapping("/verify")
-    public ResponseEntity<?> verify() {
-        currentUserService.verify();
+    @PostMapping("/verification/verify")
+    public ResponseEntity<?> verify(@RequestParam("verificationCode") Integer verificationCode) throws ServerException {
+        if (currentUserService.isUserVerified()) {
+            return new ResponseEntity<>(
+                    new ResponseBody(HttpStatus.BAD_REQUEST.value(),"User email has already been verified"),
+                    HttpStatus.BAD_REQUEST
+            );
+        }
 
-        return ResponseEntity.status(HttpStatus.OK).build();
+        emailVerificationService.verifyUserIfVerificationCodeIsCorrect(verificationCode);
+
+        return ResponseEntity.ok(
+                new ResponseBody(HttpStatus.OK.value(),
+                        "User email has been successfully verified")
+        );
+    }
+
+    @PostMapping("/verification/mail")
+    public ResponseEntity<?> sendVerificationCode() {
+        if (currentUserService.isUserVerified()) {
+            return new ResponseEntity<>(
+                    new ResponseBody(HttpStatus.BAD_REQUEST.value(),"User email has already been verified"),
+                    HttpStatus.BAD_REQUEST
+            );
+        }
+
+        emailVerificationService.sendVerificationCode();
+
+        return ResponseEntity.ok(
+                new ResponseBody(HttpStatus.OK.value(),
+                        "Verification code has been successfully sent")
+        );
     }
 }

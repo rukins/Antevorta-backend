@@ -82,11 +82,15 @@ public class CurrentUserService {
         };
     }
 
-    public void verify() {
+    public void verifyUser() {
         User authorizedUser = getAuthorizedUser();
 
         authorizedUser.setVerified(true);
 
         userRepository.save(authorizedUser);
+    }
+
+    public boolean isUserVerified() {
+        return getAuthorizedUser().isVerified();
     }
 }

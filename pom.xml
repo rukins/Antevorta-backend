@@ -20,6 +20,7 @@
 		<jedis.version>4.3.1</jedis.version>
 		<feign.version>12.1</feign.version>
 		<postgresql.version>42.5.1</postgresql.version>
+		<mailgun.version>1.0.6</mailgun.version>
 	</properties>
 	<dependencies>
 
@@ -73,6 +74,13 @@
 			<groupId>io.github.openfeign</groupId>
 			<artifactId>feign-jackson</artifactId>
 			<version>${feign.version}</version>
+		</dependency>
+
+		<!--	Mailgun 	-->
+		<dependency>
+			<groupId>com.mailgun</groupId>
+			<artifactId>mailgun-java</artifactId>
+			<version>${mailgun.version}</version>
 		</dependency>
 
 		<!--	Testing		-->
