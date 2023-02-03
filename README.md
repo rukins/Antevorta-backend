@@ -95,19 +95,24 @@ PUT /user?field=
 ```
 ### verify
 ```http request
-POST /user/verify
+POST /user/verification/verify
 ```
 - Returns:
 ```json
 {
-  "user": {
-    "id": 1,
-    "email": "email@email.com",
-    "firstname": "firstname",
-    "lastname": "lastname",
-    "verified": true,
-    "authorities": []
-  }
+  "status": 200,
+  "message": "User email has been successfully verified"
+}
+```
+### sendVerificationCode
+```http request
+POST /user/verification/mail
+```
+- Returns:
+```json
+{
+  "status": 200,
+  "message": "Verification code has been successfully sent"
 }
 ```
 
