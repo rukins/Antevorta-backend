@@ -2,8 +2,9 @@ package com.antevorta.service;
 
 import com.antevorta.exception.serverexception.ServerException;
 import com.antevorta.exception.serverexception.WrongVerificationCodeException;
-import com.antevorta.repository.redis.VerificationCodeRepository;
+import com.antevorta.repository.redis.StringRepository;
 import com.antevorta.service.email.EmailSender;
+import com.antevorta.utils.RedisKeyUtils;
 import com.mailgun.model.message.Message;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -14,9 +15,6 @@ import java.util.stream.Collectors;
 
 @Service
 public class EmailVerificationService {
-    @Value("${redis.key-prefix.verification-code}")
-    private String keyPrefix;
-
     @Value("${redis.time-to-live.verification-code}")
     private Long timeToLive;
 
@@ -24,23 +22,23 @@ public class EmailVerificationService {
 
     private final CurrentUserService currentUserService;
 
-    private final VerificationCodeRepository verificationCodeRepository;
+    private final StringRepository stringRepository;
 
     @Autowired
     public EmailVerificationService(EmailSender emailSender,
                                     CurrentUserService currentUserService,
-                                    VerificationCodeRepository verificationCodeRepository) {
+                                    StringRepository stringRepository) {
         this.emailSender = emailSender;
         this.currentUserService = currentUserService;
-        this.verificationCodeRepository = verificationCodeRepository;
+        this.stringRepository = stringRepository;
     }
 
     public void sendVerificationCode() {
         String email = currentUserService.getAuthorizedUser().getEmail();
 
-        Integer verificationCode = generateVerificationCode();
+        String verificationCode = generateVerificationCode();
 
-        verificationCodeRepository.save(keyPrefix, verificationCode, timeToLive, email);
+        stringRepository.save(RedisKeyUtils.getForVerificationCode(), verificationCode, timeToLive);
 
         emailSender.send(
                 Message.builder()
@@ -54,19 +52,19 @@ public class EmailVerificationService {
         );
     }
 
-    public void verifyUserIfVerificationCodeIsCorrect(Integer receivedVerificationCode) throws ServerException {
+    public void verifyUserIfVerificationCodeIsCorrect(String receivedVerificationCode) throws ServerException {
         if (isCorrect(receivedVerificationCode)) {
             currentUserService.verifyUser();
-
             return;
         }
 
         throw new WrongVerificationCodeException("Wrong verification code");
     }
 
-    private boolean isCorrect(Integer receivedVerificationCode) {
-        Integer realVerificationCode = verificationCodeRepository
-                .getByKeyPrefix(keyPrefix, currentUserService.getAuthorizedUser().getEmail());
+    private boolean isCorrect(String receivedVerificationCode) {
+        String realVerificationCode = stringRepository.get(
+                RedisKeyUtils.getForVerificationCode()
+        );
 
         if (receivedVerificationCode.equals(realVerificationCode)) {
             return true;
@@ -75,11 +73,12 @@ public class EmailVerificationService {
         return false;
     }
 
-    private Integer generateVerificationCode() {
+    private String generateVerificationCode() {
         Random random = new Random();
 
-        return Integer.parseInt(
-                random.ints(6, 0, 10).mapToObj(String::valueOf).collect(Collectors.joining())
-        );
+        return random
+                .ints(6, 0, 10)
+                .mapToObj(String::valueOf)
+                .collect(Collectors.joining());
     }
 }

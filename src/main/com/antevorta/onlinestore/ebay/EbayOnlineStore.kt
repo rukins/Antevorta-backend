@@ -6,7 +6,8 @@ import com.antevorta.model.OnlineStoreType
 import com.antevorta.onlinestore.AbstractOnlineStore
 import com.antevorta.onlinestore.AbstractOnlineStoreProduct
 import com.antevorta.onlinestore.ebay.model.InventoryItem
-import com.antevorta.repository.redis.AccessTokenRepository
+import com.antevorta.repository.redis.StringRepository
+import com.antevorta.utils.RedisKeyUtils
 import feign.Feign
 import feign.httpclient.ApacheHttpClient
 import feign.jackson.JacksonDecoder
@@ -25,8 +26,7 @@ class EbayOnlineStore(
             "https://" + (if (credentials.storeName != null) credentials.storeName else "api") + ".ebay.com"
         )
 
-    private val accessTokenRepository: AccessTokenRepository = SpringContext.getBean(AccessTokenRepository::class.java)
-    private val accessTokenKeyPrefix: String = SpringContext.getProperty("redis.key-prefix.onlinestores.ebay")
+    private val stringRepository: StringRepository = SpringContext.getBean(StringRepository::class.java)
 
     override fun getById(id: String): AbstractOnlineStoreProduct {
         return client.getBySku(id, getAccessToken())
@@ -61,7 +61,9 @@ class EbayOnlineStore(
     }
 
     private fun getAccessToken(): String {
-        val accessToken: String? = accessTokenRepository.getByKeyPrefix(accessTokenKeyPrefix, arbitraryStoreName)
+        val accessToken: String? = stringRepository.get(
+            RedisKeyUtils.getForOnlineStoreAccessKey(arbitraryStoreName)
+        )
 
         if (accessToken != null)
             return accessToken
@@ -72,7 +74,11 @@ class EbayOnlineStore(
 
         val ebayAccessToken: EbayAccessToken = client.getAccessToken(encodedCredentials, credentials.token)
 
-        accessTokenRepository.save(accessTokenKeyPrefix, ebayAccessToken.accessToken, ebayAccessToken.expiresIn, arbitraryStoreName)
+        stringRepository.save(
+            RedisKeyUtils.getForOnlineStoreAccessKey(arbitraryStoreName),
+            ebayAccessToken.accessToken,
+            ebayAccessToken.expiresIn
+        )
 
         return ebayAccessToken.accessToken
     }

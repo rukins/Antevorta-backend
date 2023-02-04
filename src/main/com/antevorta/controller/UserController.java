@@ -43,7 +43,7 @@ public class UserController {
     }
 
     @PostMapping("/verification/verify")
-    public ResponseEntity<?> verify(@RequestParam("verificationCode") Integer verificationCode) throws ServerException {
+    public ResponseEntity<?> verify(@RequestParam("verificationCode") String verificationCode) throws ServerException {
         if (currentUserService.isUserVerified()) {
             return new ResponseEntity<>(
                     new ResponseBody(HttpStatus.BAD_REQUEST.value(),"User email has already been verified"),
