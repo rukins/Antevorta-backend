@@ -76,7 +76,7 @@ public class SecurityConfig {
 
             authorityRepository.save(hasMultipleStoresByTypeAuthority);
 
-            userRepository.save(new User("sergey.rukin1425@gmail.com", encryptor.encrypt("password"), "firstname", "lastname"));
+            userRepository.save(new User("first@gmail.com", encryptor.encrypt("password"), "firstname", "lastname"));
             userRepository.save(new User("second@icloud.com", encryptor.encrypt("password"), "firstname", "lastname", Set.of(hasMultipleStoresByTypeAuthority)));
         };
     }
