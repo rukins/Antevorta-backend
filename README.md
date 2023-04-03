@@ -1,6 +1,31 @@
-# Inventory_Management_System. Backend side
+# Inventory Management System (Training project). Backend side
 
-## Authorization
+## General info
+Inventory management system for e-commerce. 
+The API allows you to manage data from different online stores 
+like Amazon, Walmart, Etsy, Shopify, Ebay etc. and stores it in one place.
+
+Initially the user creates an account, 
+then they connect their e-commerce stores, 
+and then when the stores are connected the data populates the app, 
+showing the inventory items(products)' data (title, price, quantity, etc.). 
+Through the API you can read, create, update and delete inventory items(products).
+All data is pulled from online store's API.
+
+For now the following stores are available:
+- Shopify
+- Ebay
+
+What improvements can be made:
+- More e-commerce stores (Amazon, Walmart, Etsy, etc.)
+- Update the method of user authorization, maybe integrate OAuth2. 
+Now it doesn't provide very good protection
+- Use hashing instead of encryption for user passwords
+- Inventory item reports
+- Webhooks for inventory items
+- More data to manage in the app (for example, orders)
+
+## Auth
 ### Login
 ```http request
 POST /auth/login
