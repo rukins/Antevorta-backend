@@ -6,13 +6,12 @@ import com.antevorta.model.User;
 import com.antevorta.repository.UserRepository;
 import com.antevorta.security.encryptor.Encryptor;
 import com.antevorta.security.service.AuthService;
-import lombok.SneakyThrows;
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
-import jakarta.servlet.http.HttpServletRequest;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
@@ -32,7 +31,6 @@ public class CurrentUserService {
         this.encryptor = encryptor;
     }
 
-    @SneakyThrows
     public User getAuthorizedUser() {
         String email = (String) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 

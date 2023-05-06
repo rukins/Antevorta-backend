@@ -1,10 +1,9 @@
 package com.antevorta.security.service;
 
-import com.antevorta.security.exception.authexception.UserNotAuthenticatedException;
 import com.antevorta.model.User;
 import com.antevorta.repository.UserRepository;
+import com.antevorta.security.exception.authexception.UserNotAuthenticatedException;
 import com.antevorta.security.model.SecurityUser;
-import lombok.SneakyThrows;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -22,7 +21,6 @@ public class JpaUserDetailsService implements UserDetailsService {
         this.userRepository = userRepository;
     }
 
-    @SneakyThrows
     @Override
     public UserDetails loadUserByUsername(String email) {
         Optional<User> user = userRepository.findByEmail(email);

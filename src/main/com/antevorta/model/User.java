@@ -4,12 +4,11 @@ import com.antevorta.exception.serverexception.IncorrectEmailException;
 import com.antevorta.exception.serverexception.MissedValueException;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
+import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import lombok.SneakyThrows;
 
-import jakarta.persistence.*;
 import java.util.Set;
 import java.util.regex.Pattern;
 
@@ -68,7 +67,6 @@ public class User {
         this.authorities = authorities;
     }
 
-    @SneakyThrows
     public void setEmail(String email) {
         if (email == null || !isEmailCorrect(email)) {
             throw new IncorrectEmailException("Incorrect email");
@@ -77,7 +75,6 @@ public class User {
         this.email = email;
     }
 
-    @SneakyThrows
     public void setPassword(String password) {
         if (password == null || password.isEmpty()) {
             throw new MissedValueException("Password can't be empty");
@@ -86,7 +83,6 @@ public class User {
         this.password = password;
     }
 
-    @SneakyThrows
     public void setFirstname(String firstname) {
         if (firstname == null || firstname.isEmpty()) {
             throw new MissedValueException("Firstname can't be empty");
@@ -95,7 +91,6 @@ public class User {
         this.firstname = firstname;
     }
 
-    @SneakyThrows
     public void setLastname(String lastname) {
         if (lastname == null || lastname.isEmpty()) {
             throw new MissedValueException("Lastname can't be empty");

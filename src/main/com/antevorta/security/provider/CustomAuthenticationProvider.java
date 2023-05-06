@@ -1,9 +1,8 @@
 package com.antevorta.security.provider;
 
-import com.antevorta.security.exception.authexception.WrongPasswordException;
 import com.antevorta.security.encryptor.Encryptor;
+import com.antevorta.security.exception.authexception.WrongPasswordException;
 import com.antevorta.security.service.JpaUserDetailsService;
-import lombok.SneakyThrows;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -22,7 +21,6 @@ public class CustomAuthenticationProvider implements AuthenticationProvider {
         this.userDetailsService = userDetailsService;
     }
 
-    @SneakyThrows
     @Override
     public Authentication authenticate(Authentication authentication) {
         String username = authentication.getName();

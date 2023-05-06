@@ -44,7 +44,6 @@ public class OnlineStoreDetails {
     )
     private User user;
 
-    @SneakyThrows
     public void setArbitraryStoreName(String arbitraryStoreName) {
         if (arbitraryStoreName == null || arbitraryStoreName.isEmpty()) {
             throw new EmptyArbitraryStoreNameException("Arbitrary store name shouldn't be empty");
